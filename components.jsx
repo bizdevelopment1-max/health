@@ -50,7 +50,6 @@ function Trend({ v, small, animate }) {
 // ---- Sidebar (Samsung blue board) ------------------------------
 const NAV = [
   { id: "overview", ko: "오버뷰", en: "Overview", icon: "grid" },
-  { id: "factcheck", ko: "팩트체크", en: "Fact Check", icon: "spark" },
   { id: "device", ko: "디바이스 헬스", en: "Device Health", icon: "device" },
   { id: "ai", ko: "AI 네이티브", en: "AI Native", icon: "ai" },
   { id: "startup", ko: "체중·피트니스", en: "Weight & Fitness", icon: "spark" },
@@ -60,7 +59,7 @@ const NAV = [
   { id: "reports", ko: "리서치 리포트", en: "Research", icon: "report" },
 ];
 
-function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, hallCount }) {
+function Sidebar({ active, onNav, brand, onCycleBrand, articleCount }) {
   return (
     <aside className="sidebar" style={{ background: brand.bg }}>
       <div className="sb-head">
@@ -79,9 +78,6 @@ function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, hallCount }
             <span className="sb-label">{n.ko}</span>
             {n.id === "articles" && articleCount > 0 && (
               <span className="sb-badge">{articleCount}</span>
-            )}
-            {n.id === "factcheck" && hallCount > 0 && (
-              <span className="sb-badge" style={{ background: "#D23B3B", color: "#fff" }}>{hallCount}</span>
             )}
             {active === n.id && <span className="sb-active-bar" />}
           </button>

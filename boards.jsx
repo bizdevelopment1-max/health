@@ -2,6 +2,20 @@
    boards.jsx — content sections
    ============================================================ */
 
+// ---- Company logo (real favicon, falls back to initial) ---------
+function CoLogo({ name, domain, accent }) {
+  const [failed, setFailed] = React.useState(false);
+  if (!domain || failed) {
+    return <span className="ct-logo" style={{ background: accent }}>{name[0]}</span>;
+  }
+  return (
+    <span className="ct-logo ct-logo-img">
+      <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`}
+        alt={name} loading="lazy" onError={() => setFailed(true)} />
+    </span>
+  );
+}
+
 // ---- Category company board (dense table) ----------------------
 function CompanyBoard({ cat, companies, density, sectionRef, query }) {
   const inView = useInView(sectionRef);
@@ -31,7 +45,7 @@ function CompanyBoard({ cat, companies, density, sectionRef, query }) {
         {rows.map((c, i) => (
           <a className="ct-row" key={i} href={c.url} target="_blank" rel="noopener" style={{ "--accent": cat.accent }}>
             <span className="ct-name">
-              <span className="ct-logo" style={{ background: cat.accent }}>{c.name[0]}</span>
+              <CoLogo name={c.name} domain={c.domain} accent={cat.accent} />
               <b>{c.name}</b>
               <Icon name="ext" size={11} />
             </span>
@@ -136,55 +150,6 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
   );
 }
 
-// ---- Hallucination / Fact-check board --------------------------
-function HallucinationBoard({ hallucinations, sectionRef }) {
-  const inView = useInView(sectionRef);
-  const severityColor = { high: "var(--down)", medium: "#E9A100", low: "var(--muted)" };
-  const severityLabel = { high: "오류", medium: "미검증", low: "경미" };
-  return (
-    <section className="board" ref={sectionRef} data-screen-label="Fact Check">
-     <AnimCtx.Provider value={inView}>
-      <div className="board-head">
-        <span className="board-tab" style={{ background: "var(--down)" }} />
-        <div className="board-titles">
-          <h2>팩트체크 <span className="board-en">Hallucination Findings · {hallucinations.length}건</span></h2>
-          <p>이전 버전에서 발견된 할루시네이션·미검증 데이터를 수정 반영했습니다</p>
-        </div>
-        <div className="board-count" style={{ color: "var(--down)", background: "color-mix(in srgb, var(--down) 10%, var(--panel))" }}>{hallucinations.length}건 발견</div>
-      </div>
-      <div className="hall-list">
-        {hallucinations.map((h, i) => {
-          const sColor = severityColor[h.severity];
-          return (
-            <div className="hall-item" key={h.id}>
-              <div className="hall-num" style={{ background: sColor }}>
-                <CountUp value={String(h.id)} active={inView} dur={600} />
-              </div>
-              <div className="hall-body">
-                <div className="hall-top">
-                  <span className="hall-company">{h.company}</span>
-                  <span className="hall-severity" style={{ color: sColor, borderColor: sColor }}>{severityLabel[h.severity]}</span>
-                  {h.source && <span className="hall-source">{h.source}</span>}
-                </div>
-                <div className="hall-claim">"{h.claim}"</div>
-                <div className="hall-row err">
-                  <span className="hall-icon">&#10060;</span>
-                  <span>{h.error}</span>
-                </div>
-                <div className="hall-row fix">
-                  <span className="hall-icon">&#9989;</span>
-                  <span>{h.fact}</span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-     </AnimCtx.Provider>
-    </section>
-  );
-}
-
 // ---- Insights board -------------------------------------------
 function InsightsBoard({ insights, sectionRef }) {
   const inView = useInView(sectionRef);
@@ -195,7 +160,7 @@ function InsightsBoard({ insights, sectionRef }) {
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
           <h2>핵심 인사이트 <span className="board-en">Key Insights · 2026.06</span></h2>
-          <p>팩트체크 데이터 기반 시장 핵심 동향 6선</p>
+          <p>검증 데이터 기반 시장 핵심 동향 6선 · Statista · CB Insights · 공식 발표</p>
         </div>
       </div>
       <div className="insight-grid">
@@ -291,4 +256,4 @@ function ReportsBoard({ reports, sectionRef, query }) {
   );
 }
 
-Object.assign(window, { CompanyBoard, ArticleFeed, HallucinationBoard, InsightsBoard, ChartsBoard, ReportsBoard });
+Object.assign(window, { CoLogo, CompanyBoard, ArticleFeed, InsightsBoard, ChartsBoard, ReportsBoard });

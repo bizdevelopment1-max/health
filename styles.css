@@ -217,7 +217,9 @@ b, strong { font-weight: 700; }
 .ct-name b { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ct-name svg { color: var(--muted); opacity: 0; flex-shrink: 0; transition: opacity .12s; }
 .ct-row:hover .ct-name svg { opacity: 1; }
-.ct-logo { width: 24px; height: 24px; border-radius: 6px; color: #fff; font-weight: 800; font-size: 12px; display: grid; place-items: center; flex-shrink: 0; }
+.ct-logo { width: 24px; height: 24px; border-radius: 6px; color: #fff; font-weight: 800; font-size: 12px; display: grid; place-items: center; flex-shrink: 0; overflow: hidden; }
+.ct-logo-img { background: #fff; border: 1px solid var(--line); }
+.ct-logo-img img { width: 17px; height: 17px; object-fit: contain; display: block; }
 .ct-seg { font-size: 12px; color: var(--ink-2); font-weight: 500; }
 .ct-val { text-align: right; font-weight: 600; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
 .ct-valcell { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
@@ -311,35 +313,6 @@ b, strong { font-weight: 700; }
 .rep-rating.r-overweight { color: var(--up); border-color: color-mix(in srgb, var(--up) 40%, transparent); background: color-mix(in srgb, var(--up) 8%, transparent); }
 .rep-rating.r-neutral { color: var(--ink-2); }
 .rep-date { font-size: 12px; color: var(--muted); font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
-
-/* ---------- hallucination / fact-check board ---------- */
-.hall-list { display: flex; flex-direction: column; }
-.hall-item {
-  display: flex; gap: 14px; padding: 14px 20px;
-  border-bottom: 1px solid var(--line-2); transition: background .12s;
-}
-.hall-item:last-child { border-bottom: 0; }
-.hall-item { position: relative; }
-.hall-item::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--down); transition: width .18s cubic-bezier(.4,0,.2,1), opacity .18s; opacity: 0; }
-.hall-item:hover::before { width: 4px; opacity: 1; }
-.hall-item:hover { background: color-mix(in srgb, var(--down) 6%, var(--panel)); }
-.hall-num {
-  width: 30px; height: 30px; border-radius: 8px; color: #fff;
-  font-size: 13px; font-weight: 800; display: grid; place-items: center; flex-shrink: 0;
-}
-.hall-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
-.hall-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.hall-company { font-size: 13px; font-weight: 800; color: var(--ink); }
-.hall-severity {
-  font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 4px;
-  border: 1px solid; letter-spacing: .02em;
-}
-.hall-source { font-size: 11px; color: var(--muted); font-weight: 500; }
-.hall-claim { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4; }
-.hall-row { display: flex; gap: 6px; font-size: 12px; line-height: 1.45; font-weight: 500; }
-.hall-row.err { color: var(--down); }
-.hall-row.fix { color: var(--up); }
-.hall-icon { flex-shrink: 0; font-size: 12px; }
 
 /* ---------- insights board ---------- */
 .insight-grid {

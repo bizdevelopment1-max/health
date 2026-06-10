@@ -47,7 +47,7 @@ function App() {
   // section refs
   const scrollRef = uR(null);
   const refs = {
-    overview: uR(null), factcheck: uR(null), device: uR(null), ai: uR(null), startup: uR(null),
+    overview: uR(null), device: uR(null), ai: uR(null), startup: uR(null),
     articles: uR(null), charts: uR(null), insights: uR(null), reports: uR(null),
   };
 
@@ -88,7 +88,7 @@ function App() {
     <div className={"app d-" + t.density}>
       <Sidebar
         active={active} onNav={navTo} brand={brand} onCycleBrand={cycleBrand}
-        articleCount={articleCount} hallCount={D.HALLUCINATIONS ? D.HALLUCINATIONS.length : 0}
+        articleCount={articleCount}
       />
 
       <div className="shell">
@@ -99,7 +99,7 @@ function App() {
             {/* Overview */}
             <section ref={refs.overview} data-screen-label="Overview">
               <div className="ov-head">
-                <h2 className="ov-title">마켓 오버뷰 <span>Market Overview · v2 팩트체크판</span></h2>
+                <h2 className="ov-title">마켓 오버뷰 <span>Market Overview · 검증 데이터 기준</span></h2>
                 <div className="ov-legend">
                   {cats.map(c => (
                     <span key={c.id} className="ov-leg"><i style={{ background: c.accent }} />{c.ko}</span>
@@ -120,8 +120,6 @@ function App() {
               </div>
             </section>
 
-            <HallucinationBoard hallucinations={D.HALLUCINATIONS} sectionRef={refs.factcheck} />
-
             <CompanyBoard cat={cats[0]} companies={D.COMPANIES} density={t.density} sectionRef={refs.device} query={query} />
             <CompanyBoard cat={cats[1]} companies={D.COMPANIES} density={t.density} sectionRef={refs.ai} query={query} />
             <CompanyBoard cat={cats[2]} companies={D.COMPANIES} density={t.density} sectionRef={refs.startup} query={query} />
@@ -135,8 +133,8 @@ function App() {
             <ReportsBoard reports={D.REPORTS} sectionRef={refs.reports} query={query} />
 
             <footer className="foot">
-              <span>Health Intelligence Dashboard v2 · 팩트체크판</span>
-              <span>소스: Statista, CB Insights, 공식 발표 기준 · 최종 업데이트 2026.06.10</span>
+              <span>Health Intelligence Dashboard v2</span>
+              <span>소스: Statista · CB Insights · 공식 발표 기준 · 최종 업데이트 2026.06.10</span>
             </footer>
           </div>
         </main>

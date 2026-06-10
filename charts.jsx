@@ -71,32 +71,41 @@ function MarketGrowthChart({ data, accent, ink, grid, muted }) {
   );
 }
 
-// ---- Horizontal bars (funding / users): widths grow, labels count ----
+// easeOutBack: slight overshoot then settle — gives bars a "spring" feel
+function easeOutBack(p) {
+  const c1 = 1.70158, c3 = c1 + 1;
+  return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2);
+}
+
+// ---- Horizontal bars (funding / users): spring widths, staggered, labels count ----
 function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
   const inView = useCtxC(AnimCtx);
-  const prog = useProgress(inView, 1100);
+  const prog = useProgress(inView, 1300);
 
   const rowH = 28, padL = 4, padT = 6;
   const labelW = 108, barMaxW = 300;
   const W = labelW + barMaxW + 64, H = padT * 2 + data.length * rowH;
   const max = Math.max(...data.map(d => d.value));
   const pre = valuePrefix || "";
+  const stagger = 0.08;
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block" }}>
       {data.map((d, i) => {
-        const stagger = Math.min(prog * data.length / (i + 1), 1);
-        const barProg = Math.max(0, Math.min((prog - i * 0.06) / (1 - i * 0.06), 1));
-        const w = (barMaxW * d.value) / max * barProg;
+        const t0 = i * stagger;
+        const local = Math.max(0, Math.min((prog - t0) / (1 - t0 || 1), 1));
+        const spring = local >= 1 ? 1 : easeOutBack(local);
+        const w = Math.max((barMaxW * d.value) / max * spring, 0);
         const yy = padT + i * rowH;
         const c = colorOf(d);
         const dec = (String(d.value).split(".")[1] || "").length;
-        const shown = dec ? (d.value * barProg).toFixed(dec) : Math.round(d.value * barProg);
+        const shown = dec ? (d.value * Math.min(local * 1.15, 1)).toFixed(dec) : Math.round(d.value * Math.min(local * 1.15, 1));
         return (
-          <g key={i}>
+          <g key={i} style={{ opacity: local > 0 ? 1 : 0.35, transition: "opacity .2s" }}>
             <text x={padL} y={yy + rowH / 2 + 3.5} fontSize="11.5" fill={ink} fontWeight="600">{d.name}</text>
             <rect x={labelW} y={yy + 5} width={barMaxW} height={rowH - 13} rx="2.5" fill={grid} />
             <rect x={labelW} y={yy + 5} width={Math.max(w, 0.5)} height={rowH - 13} rx="2.5" fill={c} />
-            <text x={labelW + Math.max(w, 0.5) + 8} y={yy + rowH / 2 + 3.5} fontSize="11.5" fontWeight="800" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{pre}{shown}{unit}</text>
+            <text x={labelW + Math.max(w, 0.5) + 8} y={yy + rowH / 2 + 3.5} fontSize="11.5" fontWeight="800" fill={ink}
+              style={{ fontVariantNumeric: "tabular-nums", opacity: Math.min(local * 2, 1) }}>{pre}{shown}{unit}</text>
           </g>
         );
       })}
@@ -104,10 +113,10 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
   );
 }
 
-// ---- Donut (category share): sweeps in clockwise, center & legend count up ----
+// ---- Donut (category share): clockwise sweep + scale-in pop, center & legend count up ----
 function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
   const inView = useCtxC(AnimCtx);
-  const prog = useProgress(inView, 1200);
+  const prog = useProgress(inView, 1400);
 
   const size = 184, cx = size / 2, cy = size / 2, r = 64, sw = 27;
   const total = data.reduce((s, d) => s + d.value, 0);
@@ -131,27 +140,43 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
 
   const centerParsed = parseNum(centerLabel);
   const centerShown = centerParsed.ok ? fmtNum(centerParsed.num * prog, centerParsed) : centerLabel;
+  const ringScale = 0.86 + 0.14 * Math.min(prog * 1.6, 1);
+  const ringSpin = (1 - Math.min(prog * 1.4, 1)) * -14;
+  const centerPop = 0.7 + 0.3 * Math.min(prog * 1.8, 1);
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
       <svg viewBox={`0 0 ${size} ${size}`} width="150" height="150" style={{ flexShrink: 0 }}>
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke={ink} strokeOpacity="0.06" strokeWidth={sw} />
-        {segs.map((s, i) => s.path && (
-          <path key={i} d={s.path} fill="none" stroke={s.color} strokeWidth={sw} strokeLinecap="butt" />
-        ))}
-        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="22" fontWeight="800" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{centerShown}</text>
-        <text x={cx} y={cy + 15} textAnchor="middle" fontSize="9.5" fill={muted}>{centerSub}</text>
+        <g transform={`rotate(${ringSpin} ${cx} ${cy}) translate(${cx} ${cy}) scale(${ringScale}) translate(${-cx} ${-cy})`}
+          style={{ opacity: Math.min(prog * 3 + 0.15, 1) }}>
+          <circle cx={cx} cy={cy} r={r} fill="none" stroke={ink} strokeOpacity="0.06" strokeWidth={sw} />
+          {segs.map((s, i) => s.path && (
+            <path key={i} d={s.path} fill="none" stroke={s.color} strokeWidth={sw} strokeLinecap="butt" />
+          ))}
+        </g>
+        <g transform={`translate(${cx} ${cy}) scale(${centerPop}) translate(${-cx} ${-cy})`}
+          style={{ opacity: Math.min(prog * 2.2, 1) }}>
+          <text x={cx} y={cy - 2} textAnchor="middle" fontSize="22" fontWeight="800" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{centerShown}</text>
+          <text x={cx} y={cy + 15} textAnchor="middle" fontSize="9.5" fill={muted}>{centerSub}</text>
+        </g>
       </svg>
       <div style={{ display: "flex", flexDirection: "column", gap: 9, flex: 1 }}>
-        {segs.map((s, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
-            <span style={{ width: 10, height: 10, borderRadius: 2, background: s.color, flexShrink: 0 }}></span>
-            <span style={{ color: ink, fontWeight: 500, whiteSpace: "nowrap" }}>{s.d.label}</span>
-            <span style={{ color: muted, marginLeft: "auto", fontWeight: 800, fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
-              {Math.round(s.d.value * prog)}%
-            </span>
-          </div>
-        ))}
+        {segs.map((s, i) => {
+          const t0 = 0.15 + i * 0.18;
+          const local = Math.max(0, Math.min((prog - t0) / 0.3, 1));
+          return (
+            <div key={i} style={{
+              display: "flex", alignItems: "center", gap: 8, fontSize: 12,
+              opacity: 0.25 + 0.75 * local, transform: `translateX(${(1 - local) * 14}px)`,
+            }}>
+              <span style={{ width: 10, height: 10, borderRadius: 2, background: s.color, flexShrink: 0 }}></span>
+              <span style={{ color: ink, fontWeight: 500, whiteSpace: "nowrap" }}>{s.d.label}</span>
+              <span style={{ color: muted, marginLeft: "auto", fontWeight: 800, fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
+                {Math.round(s.d.value * prog)}%
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
