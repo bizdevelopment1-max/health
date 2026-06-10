@@ -66,7 +66,7 @@ function Sidebar({ active, onNav, brand, onCycleBrand, articleCount }) {
         <button className="sb-logo" onClick={onCycleBrand} title="클릭하여 색상 변경">
           <span className="sb-logo-mark" style={{ color: brand.bg }}><Icon name="pulse" size={18} sw={2.4} /></span>
           <span className="sb-logo-txt">
-            <b>HEALTH</b><span>INTELLIGENCE v2</span>
+            <b>HEALTH</b><span>INTELLIGENCE</span>
           </span>
         </button>
       </div>
@@ -104,7 +104,7 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel }) {
   return (
     <header className="topbar">
       <div className="tb-title">
-        <h1>헬스케어 인텔리전스 v2 <span className="tb-sub">팩트체크판 · 데일리 브리핑 · 정량분석</span></h1>
+        <h1>헬스케어 인텔리전스 <span className="tb-sub">데일리 브리핑 · 경쟁 트렌드 · 정량분석</span></h1>
       </div>
       <div className="tb-tools">
         <div className="tb-search">
@@ -113,7 +113,7 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel }) {
         </div>
         <div className="tb-date">
           <Icon name="dot" size={9} />
-          <span>{todayLabel} 기준</span>
+          <span>{todayLabel} 업데이트</span>
         </div>
         <button className="tb-theme" onClick={onTheme} title="다크모드 토글">
           <Icon name={dark ? "sun" : "moon"} size={16} />

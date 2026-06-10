@@ -1,5 +1,5 @@
 /* ============================================================
-   Health Intelligence Dashboard v2 — 팩트체크 반영판
+   Health Intelligence Dashboard — 팩트체크 반영판
    소스: Statista, CB Insights, 공식 발표 기준
    plain script → window.DASH
    ============================================================ */

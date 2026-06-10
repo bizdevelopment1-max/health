@@ -82,7 +82,9 @@ function App() {
   };
 
   const articleCount = D.ARTICLES.filter(a => a.date === "2026-06-10").length;
-  const today = "2026. 6. 10";
+  // 페이지 로드(업데이트) 시각 — "M/D H:MM" 형식
+  const now = new Date();
+  const today = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
 
   return (
     <div className={"app d-" + t.density}>
@@ -133,7 +135,7 @@ function App() {
             <ReportsBoard reports={D.REPORTS} sectionRef={refs.reports} query={query} />
 
             <footer className="foot">
-              <span>Health Intelligence Dashboard v2</span>
+              <span>Health Intelligence Dashboard</span>
               <span>소스: Statista · CB Insights · 공식 발표 기준 · 최종 업데이트 2026.06.10</span>
             </footer>
           </div>
