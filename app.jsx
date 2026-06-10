@@ -24,6 +24,7 @@ function App() {
   const [active, setActive] = uS("overview");
   const [query, setQuery] = uS("");
   const [feedFilter, setFeedFilter] = uS("all");
+  const [selected, setSelected] = uS(null); // 상세 보기 중인 기업
 
   const D = window.DASH;
   const dark = t.dark;
@@ -90,7 +91,7 @@ function App() {
     <div className={"app d-" + t.density}>
       <Sidebar
         active={active} onNav={navTo} brand={brand} onCycleBrand={cycleBrand}
-        articleCount={articleCount}
+        articleCount={articleCount} companies={D.COMPANIES} cats={cats} onSelectCompany={setSelected}
       />
 
       <div className="shell">
@@ -122,9 +123,9 @@ function App() {
               </div>
             </section>
 
-            <CompanyBoard cat={cats[0]} companies={D.COMPANIES} density={t.density} sectionRef={refs.device} query={query} />
-            <CompanyBoard cat={cats[1]} companies={D.COMPANIES} density={t.density} sectionRef={refs.ai} query={query} />
-            <CompanyBoard cat={cats[2]} companies={D.COMPANIES} density={t.density} sectionRef={refs.startup} query={query} />
+            <CompanyBoard cat={cats[0]} companies={D.COMPANIES} density={t.density} sectionRef={refs.device} query={query} onSelect={setSelected} />
+            <CompanyBoard cat={cats[1]} companies={D.COMPANIES} density={t.density} sectionRef={refs.ai} query={query} onSelect={setSelected} />
+            <CompanyBoard cat={cats[2]} companies={D.COMPANIES} density={t.density} sectionRef={refs.startup} query={query} onSelect={setSelected} />
 
             <ArticleFeed articles={D.ARTICLES} cats={cats} sectionRef={refs.articles} filter={feedFilter} onFilter={setFeedFilter} query={query} />
 
@@ -141,6 +142,8 @@ function App() {
           </div>
         </main>
       </div>
+
+      <CompanyDetail company={selected} cats={cats} articles={D.ARTICLES} onClose={() => setSelected(null)} />
 
       <TweaksPanel>
         <TweakSection label="테마 · 밀도" />

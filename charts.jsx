@@ -4,7 +4,21 @@
    replaying every time it scrolls back into view.
    Labels count up alongside their chart elements.
    ============================================================ */
-const { useRef: useRefC, useContext: useCtxC } = React;
+const { useRef: useRefC, useContext: useCtxC, useState: useStateC } = React;
+
+// Re-fire a chart's animation as the pointer moves over it. Throttled so the
+// 0→target ramp is actually visible (a fresh restart at most ~every 500ms),
+// rather than freezing at 0 under a constant stream of mousemove events.
+function useHoverReplay() {
+  const [nonce, setNonce] = useStateC(0);
+  const last = useRefC(0);
+  const bump = () => {
+    const now = (typeof performance !== "undefined" ? performance.now() : Date.now());
+    if (now - last.current > 500) { last.current = now; setNonce(n => n + 1); }
+  };
+  return [nonce, bump];
+}
+
 function niceTicks(max, count) {
   const step = max / count;
   const mag = Math.pow(10, Math.floor(Math.log10(step)));
@@ -20,7 +34,8 @@ function niceTicks(max, count) {
 // ---- Combo: market size (area+line draws L→R) + growth markers count up ---
 function MarketGrowthChart({ data, accent, ink, grid, muted }) {
   const inView = useCtxC(AnimCtx);
-  const prog = useProgress(inView, 1400);
+  const [nonce, bump] = useHoverReplay();
+  const prog = useProgress(inView, 1400, 0, nonce);
 
   const W = 520, H = 235, padL = 46, padR = 16, padT = 22, padB = 30;
   const iw = W - padL - padR, ih = H - padT - padB;
@@ -35,7 +50,8 @@ function MarketGrowthChart({ data, accent, ink, grid, muted }) {
   const n = data.length;
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block" }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
+      onMouseMove={bump} onMouseEnter={bump}>
       <defs>
         <linearGradient id="mg-fill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={accent} stopOpacity="0.30" />
@@ -80,7 +96,8 @@ function easeOutBack(p) {
 // ---- Horizontal bars (funding / users): spring widths, staggered, labels count ----
 function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
   const inView = useCtxC(AnimCtx);
-  const prog = useProgress(inView, 1300);
+  const [nonce, bump] = useHoverReplay();
+  const prog = useProgress(inView, 1300, 0, nonce);
 
   const rowH = 28, padL = 4, padT = 6;
   const labelW = 108, barMaxW = 300;
@@ -89,7 +106,8 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
   const pre = valuePrefix || "";
   const stagger = 0.08;
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block" }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
+      onMouseMove={bump} onMouseEnter={bump}>
       {data.map((d, i) => {
         const t0 = i * stagger;
         const local = Math.max(0, Math.min((prog - t0) / (1 - t0 || 1), 1));
@@ -116,7 +134,8 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
 // ---- Donut (category share): clockwise sweep + scale-in pop, center & legend count up ----
 function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
   const inView = useCtxC(AnimCtx);
-  const prog = useProgress(inView, 1400);
+  const [nonce, bump] = useHoverReplay();
+  const prog = useProgress(inView, 1400, 0, nonce);
 
   const size = 184, cx = size / 2, cy = size / 2, r = 64, sw = 27;
   const total = data.reduce((s, d) => s + d.value, 0);
@@ -145,7 +164,8 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
   const centerPop = 0.7 + 0.3 * Math.min(prog * 1.8, 1);
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 16, cursor: "pointer" }}
+      onMouseMove={bump} onMouseEnter={bump}>
       <svg viewBox={`0 0 ${size} ${size}`} width="150" height="150" style={{ flexShrink: 0 }}>
         <g transform={`rotate(${ringSpin} ${cx} ${cy}) translate(${cx} ${cy}) scale(${ringScale}) translate(${-cx} ${-cy})`}
           style={{ opacity: Math.min(prog * 3 + 0.15, 1) }}>

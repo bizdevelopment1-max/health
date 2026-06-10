@@ -23,6 +23,7 @@ function Icon({ name, size = 16, sw = 1.6 }) {
     up: "M6 15l6-6 6 6",
     down: "M6 9l6 6 6-6",
     dot: "M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0",
+    x: "M6 6l12 12M18 6L6 18",
   };
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
@@ -59,9 +60,22 @@ const NAV = [
   { id: "reports", ko: "리서치 리포트", en: "Research", icon: "report" },
 ];
 
-function Sidebar({ active, onNav, brand, onCycleBrand, articleCount }) {
+// gradient background for the sidebar, derived from a single brand color
+function sbBg(hex) {
+  const n = hex.replace("#", "");
+  const r = parseInt(n.slice(0, 2), 16), g = parseInt(n.slice(2, 4), 16), b = parseInt(n.slice(4, 6), 16);
+  const sh = (f) => {
+    const m = (c) => f >= 0 ? Math.round(c + (255 - c) * f) : Math.round(c * (1 + f));
+    return `rgb(${m(r)},${m(g)},${m(b)})`;
+  };
+  return `linear-gradient(168deg, ${sh(0.16)} 0%, ${hex} 40%, ${sh(-0.46)} 100%)`;
+}
+
+function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, cats, onSelectCompany }) {
+  const [openCat, setOpenCat] = useState(null);
+  const isCat = id => id === "device" || id === "ai" || id === "startup";
   return (
-    <aside className="sidebar" style={{ background: brand.bg }}>
+    <aside className="sidebar" style={{ background: sbBg(brand.bg) }}>
       <div className="sb-head">
         <button className="sb-logo" onClick={onCycleBrand} title="클릭하여 색상 변경">
           <span className="sb-logo-mark" style={{ color: brand.bg }}><Icon name="pulse" size={18} sw={2.4} /></span>
@@ -72,16 +86,37 @@ function Sidebar({ active, onNav, brand, onCycleBrand, articleCount }) {
       </div>
 
       <nav className="sb-nav">
-        {NAV.map(n => (
-          <button key={n.id} className={"sb-item" + (active === n.id ? " on" : "")} onClick={() => onNav(n.id)} title={n.ko}>
-            <span className="sb-ic"><Icon name={n.icon} size={17} /></span>
-            <span className="sb-label">{n.ko}</span>
-            {n.id === "articles" && articleCount > 0 && (
-              <span className="sb-badge">{articleCount}</span>
-            )}
-            {active === n.id && <span className="sb-active-bar" />}
-          </button>
-        ))}
+        {NAV.map(n => {
+          const cat = isCat(n.id) ? (cats || []).find(c => c.id === n.id) : null;
+          const subs = cat ? (companies || []).filter(c => c.cat === n.id) : [];
+          const open = openCat === n.id;
+          return (
+            <React.Fragment key={n.id}>
+              <button className={"sb-item" + (active === n.id ? " on" : "")} title={n.ko}
+                onClick={() => { onNav(n.id); if (cat) setOpenCat(open ? null : n.id); }}>
+                <span className="sb-ic"><Icon name={n.icon} size={17} /></span>
+                <span className="sb-label">{n.ko}</span>
+                {n.id === "articles" && articleCount > 0 && (
+                  <span className="sb-badge">{articleCount}</span>
+                )}
+                {cat && <span className={"sb-caret" + (open ? " open" : "")}><Icon name="chevron" size={13} sw={2.2} /></span>}
+                {active === n.id && <span className="sb-active-bar" />}
+              </button>
+              {cat && open && (
+                <div className="sb-sub">
+                  {subs.map((c, i) => (
+                    <button key={i} className="sb-subitem" title={c.name + " 상세 보기"}
+                      onClick={() => onSelectCompany && onSelectCompany(c)}>
+                      <span className="sb-sub-dot" style={{ background: cat.accent }} />
+                      <span className="sb-sub-name">{c.name}</span>
+                      <span className="sb-sub-val">{c.value}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </React.Fragment>
+          );
+        })}
       </nav>
 
       <div className="sb-foot">

@@ -17,10 +17,11 @@ function CoLogo({ name, domain, accent }) {
 }
 
 // ---- Category company board (dense table) ----------------------
-function CompanyBoard({ cat, companies, density, sectionRef, query }) {
+function CompanyBoard({ cat, companies, density, sectionRef, query, onSelect }) {
   const inView = useInView(sectionRef);
   const rows = companies.filter(c => c.cat === cat.id)
     .filter(c => !query || (c.name + c.unit + c.note).toLowerCase().includes(query.toLowerCase()));
+  const open = c => onSelect && onSelect(c);
   return (
     <section className="board" ref={sectionRef} data-screen-label={cat.en}>
      <AnimCtx.Provider value={inView}>
@@ -28,7 +29,7 @@ function CompanyBoard({ cat, companies, density, sectionRef, query }) {
         <span className="board-tab" style={{ background: cat.accent }} />
         <div className="board-titles">
           <h2>{cat.ko} <span className="board-en">{cat.en}</span></h2>
-          <p>{cat.desc}</p>
+          <p>{cat.desc} · 기업 클릭 시 상세 정보</p>
         </div>
         <div className="board-count" style={{ color: cat.accent, background: cat.accentSoft }}>{rows.length} 社</div>
       </div>
@@ -43,11 +44,12 @@ function CompanyBoard({ cat, companies, density, sectionRef, query }) {
           <span>코멘트</span>
         </div>
         {rows.map((c, i) => (
-          <a className="ct-row" key={i} href={c.url} target="_blank" rel="noopener" style={{ "--accent": cat.accent }}>
+          <div className="ct-row" key={i} role="button" tabIndex={0} style={{ "--accent": cat.accent }}
+            onClick={() => open(c)} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c); } }}>
             <span className="ct-name">
               <CoLogo name={c.name} domain={c.domain} accent={cat.accent} />
               <b>{c.name}</b>
-              <Icon name="ext" size={11} />
+              <Icon name="chevron" size={12} />
             </span>
             <span className="ct-seg">{c.unit}</span>
             <span className="num ct-valcell">
@@ -64,11 +66,106 @@ function CompanyBoard({ cat, companies, density, sectionRef, query }) {
               <TrendBar v={c.trend} />
             </span>
             <span className="ct-note">{c.note}</span>
-          </a>
+          </div>
         ))}
       </div>
      </AnimCtx.Provider>
     </section>
+  );
+}
+
+// ---- Company detail modal (overview + all info + related news) --
+function CompanyDetail({ company, cats, articles, onClose }) {
+  React.useEffect(() => {
+    if (!company) return;
+    const onKey = e => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [company]);
+  if (!company) return null;
+  const c = company;
+  const cat = (cats.find(x => x.id === c.cat) || {});
+  const token = c.name.split(" (")[0].toLowerCase();
+  // related news: same category, name-mentioning articles surfaced first
+  const rel = (articles || [])
+    .filter(a => a.cat === c.cat)
+    .sort((a, b) => {
+      const am = (a.title + a.summary).toLowerCase().includes(token) ? 0 : 1;
+      const bm = (b.title + b.summary).toLowerCase().includes(token) ? 0 : 1;
+      return am - bm || (a.date < b.date ? 1 : -1);
+    })
+    .slice(0, 6);
+  const fmtD = ds => `${+ds.slice(5, 7)}/${+ds.slice(8, 10)}`;
+  return (
+    <div className="cd-overlay" onClick={onClose}>
+     <AnimCtx.Provider value={true}>
+      <div className="cd-modal" onClick={e => e.stopPropagation()} style={{ "--accent": cat.accent }}>
+        <button className="cd-close" onClick={onClose} aria-label="닫기"><Icon name="x" size={16} sw={2} /></button>
+
+        <div className="cd-head">
+          <CoLogo name={c.name} domain={c.domain} accent={cat.accent} />
+          <div className="cd-head-txt">
+            <h3>{c.name}</h3>
+            <div className="cd-sub">
+              <span className="cd-cat" style={{ color: cat.accent, background: cat.accentSoft }}>{cat.ko}</span>
+              <span>{c.unit}</span>
+            </div>
+          </div>
+          <div className="cd-trend">
+            <Trend v={c.trend} animate />
+            <TrendBar v={c.trend} />
+          </div>
+        </div>
+
+        <div className="cd-stats">
+          <div className="cd-stat">
+            <em>밸류에이션</em>
+            <b><AnimatedNumber value={c.valuation} /></b>
+            {c.valAsof && c.valAsof !== "—" && <span>'{c.valAsof} 기준</span>}
+          </div>
+          <div className="cd-stat">
+            <em>{c.metric}</em>
+            <b><AnimatedNumber value={c.value} /></b>
+            {c.metricAsof && c.metricAsof !== "—" && <span>'{c.metricAsof} 기준</span>}
+          </div>
+          <div className="cd-stat">
+            <em>펀딩 단계</em>
+            <b>{c.funding}</b>
+          </div>
+          <div className="cd-stat">
+            <em>분기 추이</em>
+            <b><Trend v={c.trend} animate /></b>
+          </div>
+        </div>
+
+        <div className="cd-section">
+          <h4>개요</h4>
+          <p>{c.note}</p>
+        </div>
+
+        <div className="cd-section">
+          <h4>관련 뉴스 <em>{rel.length}건</em></h4>
+          <div className="cd-news">
+            {rel.length === 0 && <span className="cd-empty">관련 기사가 없습니다</span>}
+            {rel.map((a, i) => (
+              <a key={i} className="cd-art" href={a.url} target="_blank" rel="noopener">
+                <span className="cd-art-dot" style={{ background: cat.accent }} />
+                <span className="cd-art-body">
+                  <span className="cd-art-meta"><em>{a.source}</em><span className="cd-art-date">{fmtD(a.date)}</span><span className="cd-art-tag" style={{ color: cat.accent, background: cat.accentSoft }}>{a.tag}</span></span>
+                  <span className="cd-art-title">{a.title}</span>
+                  {a.summary && <span className="cd-art-sum">{a.summary}</span>}
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <a className="cd-source" href={c.url} target="_blank" rel="noopener">
+          공식 출처 보기 <Icon name="ext" size={13} />
+        </a>
+      </div>
+     </AnimCtx.Provider>
+    </div>
   );
 }
 
@@ -256,4 +353,4 @@ function ReportsBoard({ reports, sectionRef, query }) {
   );
 }
 
-Object.assign(window, { CoLogo, CompanyBoard, ArticleFeed, InsightsBoard, ChartsBoard, ReportsBoard });
+Object.assign(window, { CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, ReportsBoard });

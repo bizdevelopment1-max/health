@@ -57,12 +57,15 @@ function useInView(ref, opts) {
   return inView;
 }
 
-function useProgress(active, dur, delay) {
+// `replayKey` (optional): bump it to restart the 0→1 ramp from scratch even
+// while `active` stays true — used by charts to re-fire on mouse movement.
+function useProgress(active, dur, delay, replayKey) {
   dur = dur || 1150;
   const [p, setP] = useStateA(0);
   useEffectA(() => {
     if (!active) { setP(0); return; }
     if (REDUCED) { setP(1); return; }
+    setP(0); // (re)start from zero — also handles replayKey changes
     let raf, start, to, done = false;
     const snapFn = () => { if (!done) { done = true; setP(1); } };
     _snapCallbacks.add(snapFn);
@@ -80,7 +83,7 @@ function useProgress(active, dur, delay) {
     };
     if (delay) to = setTimeout(run, delay); else run();
     return () => { cancelAnimationFrame(raf); clearTimeout(to); clearTimeout(finish); _snapCallbacks.delete(snapFn); };
-  }, [active]);
+  }, [active, replayKey]);
   return p;
 }
 
