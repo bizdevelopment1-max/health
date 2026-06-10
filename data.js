@@ -35,8 +35,8 @@
         "Android Central — 2026-05 — https://www.androidcentral.com/wearables/fitbit/google-fitbit-air-launch-specs-price",
       ] },
 
-    { cat: "device", name: "Garmin", domain: "garmin.com", unit: "Fitness · Outdoor", valuation: "$33B+ 시총", valAsof: "26.6", funding: "Public", metric: "피트니스 매출(FY)", value: "$2.36B", metricAsof: "FY25 확정", trend: +33.0,
-      note: "FY2025 피트니스 세그먼트 $2.36B 확정 · +33% YoY (피트니스 세그먼트) · 공식 미발표 · 리크 기준 CIRQA 스크린리스 밴드 $509(소매)/$454(프리오더) · 프리미엄 멀티스포츠 강세",
+    { cat: "device", name: "Garmin", domain: "garmin.com", unit: "Fitness · Outdoor", valuation: "$33B+ 시총", valAsof: "26.6", funding: "Public", metric: "피트니스 매출(FY)", value: "$2.36B", metricAsof: "FY25 확정", trend: +12.8, trendBasis: "피트니스 세그먼트 매출 YoY",
+      note: "FY2025 피트니스 세그먼트 $2.36B 확정 · +12.8% YoY · 프리미엄 라인 일부 +33% 상회 · CIRQA 스크린리스 밴드 $509(소매)/$454(프리오더, 리크) · 프리미엄 멀티스포츠 강세",
       vp: "프리미엄 멀티스포츠 특화 — 최장 배터리·내구성·정밀 GPS로 진지한 운동인(serious athlete) 시장 독점적 지위",
       direction: "공식 미발표 · 리크 기준 CIRQA $509 스크린리스 밴드로 회복·웰니스 시장 진입 · 구독 의존 없는 하드웨어 마진 모델 유지 · 아웃도어·마린 동반 성장",
       url: "https://www.garmin.com/en-US/newsroom/",
@@ -47,7 +47,7 @@
         "TechRadar — CIRQA — 2026-05 — https://www.techradar.com/health-fitness/smartwatches/garmins-cashing-in-on-the-screenless-whoop-style-smart-band-trend-with-its-upcoming-cirqa-heres-the-proof",
       ] },
 
-    { cat: "device", name: "Oura", domain: "ouraring.com", unit: "Smart Ring", valuation: "$11B", valAsof: "25.10 Series E", funding: "Series E $900M", metric: "매출 전망", value: "$2B(26E)", metricAsof: "26E 전망", trend: +28.0,
+    { cat: "device", name: "Oura", domain: "ouraring.com", unit: "Smart Ring", valuation: "$11B", valAsof: "25.10 Series E", funding: "Series E $900M", metric: "매출 전망", value: "$2B(26E)", metricAsof: "26E 전망", trend: +28.0, trendBasis: "밸류 YoY (Series D→E)",
       note: "Series E $9억 조달 밸류 $11B(CNBC 2025.10) · IPO S-1 비밀 제출(2026.05.21) · 유럽 헬스테크 최초 데카콘 · 스마트링 점유율 74%(2025 H1 Omdia) · 2025 매출 ~$1B · 2026 매출 $2B 전망",
       vp: "반지 폼팩터로 수면·회복 데이터 업계 최고 정확도 — 화면·알림 없는 '조용한 웨어러블'로 24/7 착용률 극대화",
       direction: "IPO 상장 추진 · 대사(혈당)·여성 건강 지표 확장 · 자체 AI 모델 개발 · B2B 기업 웰니스 및 방위 분야 진출",
@@ -59,7 +59,7 @@
         "TechCrunch S-1 — 2026-05-22 — https://techcrunch.com/2026/05/22/oura-ipo-s1-filing/",
       ] },
 
-    { cat: "device", name: "Whoop", domain: "whoop.com", unit: "Recovery Band", valuation: "$10.1B", valAsof: "26.3 Series G", funding: "Series G $575M", metric: "매출 런레이트", value: "$1.1B+", metricAsof: "26.3", trend: +14.5,
+    { cat: "device", name: "Whoop", domain: "whoop.com", unit: "Recovery Band", valuation: "$10.1B", valAsof: "26.3 Series G", funding: "Series G $575M", metric: "매출 런레이트", value: "$1.1B+", metricAsof: "26.3", trend: +14.5, trendBasis: "매출 런레이트 YoY",
       note: "Series G $5.75억 조달 밸류 $10.1B 데카콘(TechCrunch 2026.03) · 매출 런레이트 $11억+ · 600명 채용 계획 · Whoop Labs Doha · Whoop MG ECG FDA clearance 획득(2025.05) · 3티어 구독: $199~$359/yr (One·Peak·Life)",
       vp: "기기 무료 + 구독 모델로 '회복 코칭 서비스'를 판매 — 하드웨어가 아닌 데이터 해석과 행동 변화가 상품",
       direction: "헬스스팬(healthspan·건강수명) 플랫폼으로 확장 · Advanced Labs 혈액검사 통합 · Abbott·Mayo Clinic 투자 유치로 임상 신뢰 확보",
@@ -71,8 +71,8 @@
       ] },
 
     // ── AI Native ──
-    { cat: "ai", name: "OpenAI Health", domain: "openai.com", unit: "Health Agent", valuation: "$300B+", valAsof: "25", funding: "내부 투자", metric: "헬스 파일럿", value: "S-1 제출", metricAsof: "26.6", trend: +0,
-      note: "S-1 비밀 제출(2026.06.08) · 개인 헬스 어시스턴트 개발 · 의료기관 파트너십 확대",
+    { cat: "ai", name: "OpenAI Health", domain: "openai.com", unit: "Health Agent", valuation: "$300B+ (IPO 준비)", valAsof: "26.6 S-1 제출", funding: "내부 투자", metric: "헬스 파일럿", value: "S-1 제출", metricAsof: "26.6", trend: +0,
+      note: "S-1 비밀 제출(2026.06.08) · 최근 세컨더리 $340B+ 보도 · 공모 전 밸류 미확정 · 개인 헬스 어시스턴트 개발 · 의료기관 파트너십 확대",
       vp: "범용 LLM의 추론 능력을 개인 건강 데이터에 연결 — 파편화된 웨어러블·진료 기록을 통합 해석하는 단일 에이전트",
       direction: "의료기관·보험사 데이터 파트너십 확보 · HIPAA 준수 파이프라인 구축 · ChatGPT Health로 소비자 접점 선점",
       url: "https://openai.com/news/",
@@ -80,8 +80,8 @@
         "Bloomberg — 2026-06 — https://www.bloomberg.com/technology",
       ] },
 
-    { cat: "ai", name: "Anthropic Claude", domain: "anthropic.com", unit: "Clinical · Wellness", valuation: "$61B", valAsof: "25.3", funding: "Enterprise", metric: "헬스 API 채택", value: "확대", metricAsof: "26.6", trend: +0,
-      note: "Claude 헬스케어 엔터프라이즈 확대 · 임상 문서화 파일럿 · 구체 병원 수 공식 미확인",
+    { cat: "ai", name: "Anthropic Claude", domain: "anthropic.com", unit: "Clinical · Wellness", valuation: "$61B", valAsof: "25.03 Series E", funding: "Enterprise", metric: "헬스 API 채택", value: "확대", metricAsof: "26.6", trend: +0,
+      note: "2025.03 Series E $61B · S-1 제출 준비 보도 · 추가 라운드 미발표 · 임상 문서화 파일럿 확대 · 구체 병원 수 공식 미확인",
       vp: "안전성·신뢰성 우선(safety-first) 설계로 임상 문서화 등 고위험 의료 워크로드에 특화 — 환각 최소화가 핵심 차별점",
       direction: "엔터프라이즈 의료 워크플로 침투 · 임상 문서 자동화 파일럿 확대 · 의료 AI 안전성 프레임워크 표준화 주도",
       url: "https://www.anthropic.com/news",
@@ -96,6 +96,16 @@
       url: "https://www.aboutamazon.com/news/health",
       sources: [
         "Amazon 공식 — 2023-02 — https://www.aboutamazon.com/news/health",
+      ] },
+
+    { cat: "ai", name: "Google DeepMind", domain: "deepmind.google", unit: "MedGemini · MedPaLM", valuation: "Google 자회사", valAsof: "26.6", funding: "Public", metric: "의료 AI 모델", value: "MedGemini", metricAsof: "26.6", trend: +0,
+      note: "MedGemini 의료 멀티모달 추론 · MedPaLM 2 USMLE 전문의 수준 · Fitbit Air+MedGemini 수직 통합 — 데이터(디바이스)→추론(AI) 유일한 양축 보유 플레이어",
+      vp: "Fitbit 웨어러블 데이터 + MedGemini 의료 추론을 결합한 수직 통합 — Apple과 대조되는 개방형 생태계 접근",
+      direction: "MedGemini → 임상 의사결정 지원 · Fitbit 데이터 파이프라인 통합 · Gemini 기반 소비자 건강 인사이트 자동화",
+      url: "https://deepmind.google/discover/blog/",
+      sources: [
+        "Google DeepMind Blog — 2026 — https://deepmind.google/discover/blog/",
+        "Nature — MedPaLM 2 — 2023 — https://www.nature.com/articles/s41586-023-06291-2",
       ] },
 
     // ── Startups ──
@@ -173,6 +183,33 @@
       url: "https://finchcare.com/",
       sources: [
         "Crunchbase — 2022 — https://www.crunchbase.com/",
+      ] },
+
+    { cat: "device", name: "Ultrahuman Ring", domain: "ultrahuman.com", unit: "Smart Ring · CGM", valuation: "$1B+ 추정", valAsof: "26.6", funding: "Series D", metric: "누적 판매", value: "비공개", metricAsof: "26.6", trend: +18.0,
+      note: "Oura 직접 경쟁 · Ring AIR 출시 · CGM 패치 M1 Live 연동 · 인도 기반 · 대사 데이터+링 결합 차별화",
+      vp: "스마트링 + CGM(연속혈당측정) 통합으로 생체 데이터의 범위를 확장 — Oura에 없는 대사 데이터가 차별점",
+      direction: "Ring AIR + M1 Live CGM 크로스셀 · 글로벌 확장 · 가격 경쟁력으로 Oura 점유율 도전",
+      url: "https://www.ultrahuman.com/",
+      sources: [
+        "TechCrunch — 2024 — https://techcrunch.com/",
+      ] },
+
+    { cat: "startup", name: "WeightWatchers", domain: "weightwatchers.com", unit: "GLP-1 피벗", valuation: "~$0.5B 시총", valAsof: "26.6", funding: "Public", metric: "회원 수", value: "3.5M", metricAsof: "26.3", trend: -12.0,
+      note: "GLP-1 원격 처방 플랫폼 피벗 · 2024 Sequence 인수(GLP-1 텔레헬스) · 전통 다이어트 → 처방 연계 모델 전환 · 구독 회원 감소세",
+      vp: "60년 브랜드 인지도 + GLP-1 원격 처방을 결합하여 약물 치료의 행동 변화 동반자 포지셔닝",
+      direction: "Sequence 기반 GLP-1 원격 처방 스케일업 · 디지털 코칭+약물 번들 · 브랜드 리포지셔닝",
+      url: "https://www.weightwatchers.com/",
+      sources: [
+        "CNBC — 2024 — https://www.cnbc.com/",
+      ] },
+
+    { cat: "startup", name: "Headspace", domain: "headspace.com", unit: "Mental Health", valuation: "비공개 (합병)", valAsof: "24", funding: "합병 후 PE", metric: "구독자", value: "2M+", metricAsof: "25.12", trend: -2.0,
+      note: "Headspace+Ginger 합병 → Headspace Health · B2B 기업복지 EAP 확장 · Calm과 명상 양강 구도 · 임상 검증 확대",
+      vp: "과학 기반 명상·마인드풀니스 + 원격 상담(Ginger)을 결합한 정신건강 올인원 플랫폼",
+      direction: "B2B EAP(직원지원프로그램) 성장 · 임상 연구 기반 DTx 진입 · Calm 대비 의료 채널 차별화",
+      url: "https://www.headspace.com/",
+      sources: [
+        "TechCrunch — 2024 — https://techcrunch.com/",
       ] },
 
     { cat: "startup", name: "Ladder", domain: "joinladder.com", unit: "Strength Coaching", valuation: "Series B", valAsof: "24.9", funding: "Series B", metric: "구독 성장", value: "고성장", metricAsof: "26.5", trend: +22.0,
@@ -296,6 +333,8 @@
     { year: "2024", size: 300, growth: 20 },
     { year: "2025", size: 347, growth: 16 },
     { year: "2026E", size: 420, growth: 21 },
+    { year: "2028E", size: 640, growth: 23 },
+    { year: "2030E", size: 970, growth: 23 },
     { year: "2033E", size: 1830, growth: 23 },
   ];
 
@@ -324,7 +363,7 @@
     { name: "Flo", value: 77, cat: "startup" },
     { name: "AllTrails", value: 65, cat: "startup" },
     { name: "Apple Watch", value: 33, cat: "device" },
-    { name: "Oura Ring", value: 5.5, cat: "device" },
+    { name: "Oura Ring (누적판매)", value: 5.5, cat: "device" },
     { name: "Peloton", value: 2.66, cat: "startup" },
   ];
 
@@ -332,8 +371,8 @@
   const BAND_PRICE = [
     { name: "Garmin CIRQA(소매)", value: 509, cat: "device" },
     { name: "Oura Ring 4(기기)", value: 349, cat: "device" },
-    { name: "Whoop(One 연)", value: 199, cat: "ai" },
-    { name: "Fitbit Air", value: 99.99, cat: "startup" },
+    { name: "Whoop(One 연)", value: 199, cat: "device" },
+    { name: "Fitbit Air", value: 99.99, cat: "device" },
   ];
 
   /* ---- Q1'26 펀딩 집계 비교 (Rock Health vs CB Insights) ---- */

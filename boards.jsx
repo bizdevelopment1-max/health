@@ -61,7 +61,7 @@ function CompanyBoard({ cat, companies, density, sectionRef, query, onSelect }) 
               <AnimatedNumber className="ct-mval" value={c.value} />
               {c.metricAsof && c.metricAsof !== "—" && <em className="ct-asof">'{c.metricAsof}월 기준</em>}
             </span>
-            <span className="num ct-trend">
+            <span className="num ct-trend" title={c.trendBasis || "YoY 또는 밸류 변화율"}>
               <Trend v={c.trend} small animate />
               <TrendBar v={c.trend} />
             </span>
@@ -517,27 +517,39 @@ function DynamicsBoard({ companies, cats, sectionRef }) {
       dims: [
         { label: "접근 방식", values: ["범용 에이전트 → 헬스", "Gemini + Fitbit", "온디바이스 + HealthKit"] },
         { label: "데이터 소스", values: ["API 파트너십", "Fitbit+Pixel", "Watch+iPhone+HealthKit"] },
-        { label: "차별화", values: ["S-1 filed · $157B", "대중 시장 접근", "프라이버시 + 생태계"] },
+        { label: "차별화", values: ["S-1 filed · $340B+", "대중 시장 접근", "프라이버시 + 생태계"] },
       ],
     },
     {
       title: "GLP-1 + 디지털 코칭 스택",
-      en: "GLP-1 & Digital Coaching",
-      desc: "Noom · Cal AI · MFP — 체중관리 앱이 GLP-1 시대를 맞아 재편",
-      players: ["Noom", "Cal AI", "MFP"],
+      en: "GLP-1 & Digital Coaching · $82B Market",
+      desc: "GLP-1 시장 $82B(2026E) — 체중관리 앱이 약물 치료 동반자로 재편",
+      players: ["Noom", "WeightWatchers", "MFP"],
       dims: [
-        { label: "포지셔닝", values: ["GLP-1 동반 코칭", "AI 칼로리 스캔", "MyFitnessPal 전통 강자"] },
-        { label: "매출/규모", values: ["ARR $600M+", "ARR $30M", "$1B+(매각 검토)"] },
-        { label: "전략", values: ["임상 파트너십", "AI-first 성장", "Under Armour 분리"] },
+        { label: "포지셔닝", values: ["GLP-1 동반 코칭", "GLP-1 원격 처방", "AI 칼로리 비전"] },
+        { label: "매출/규모", values: ["ARR $600M+", "~$0.5B 시총", "$1B+(매각 검토)"] },
+        { label: "전략", values: ["CBT+임상 파트너십", "Sequence 인수·처방 번들", "Cal AI 인수·AI-first"] },
+        { label: "GLP-1 연계", values: ["원격의료 병행", "직접 처방 플랫폼", "영양 추적 보완재"] },
+      ],
+    },
+    {
+      title: "스마트링 시장 경쟁",
+      en: "Smart Ring Battle",
+      desc: "Oura 74% 점유율 방어 vs Ultrahuman·Samsung 도전",
+      players: ["Oura", "Ultrahuman Ring", "Samsung"],
+      dims: [
+        { label: "점유율", values: ["74% (Omdia '25)", "성장 중", "Galaxy Ring 지연"] },
+        { label: "차별화", values: ["수면 정확도 1위", "CGM 연동 대사", "Samsung 생태계"] },
+        { label: "가격", values: ["$349+구독 $6/월", "$349 구독 없음", "$399 (1세대)"] },
       ],
     },
     {
       title: "IPO 파이프라인",
       en: "IPO Pipeline 2026–27",
       desc: "헬스케어 유니콘들의 상장 경쟁 — 투자자 주목 포인트",
-      players: ["Oura ($11B)", "Whoop ($10.1B)", "Strava ($2.2B+)"],
+      players: ["Oura ($11B)", "Whoop ($10.1B)", "Strava ($2.2B)"],
       dims: [
-        { label: "단계", values: ["Series E 완료", "Series F 완료", "Series G 완료"] },
+        { label: "단계", values: ["Series E 완료", "Series G 완료", "Series G 완료"] },
         { label: "매출", values: ["$2B(26E 전망)", "$1.1B(추정)", "$0.5B(추정)"] },
         { label: "전망", values: ["Ring 5 발표·IPO 유력", "MG ECG FDA 차별화", "130M 사용자 기반"] },
       ],
