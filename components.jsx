@@ -24,6 +24,7 @@ function Icon({ name, size = 16, sw = 1.6 }) {
     down: "M6 9l6 6 6-6",
     dot: "M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0",
     x: "M6 6l12 12M18 6L6 18",
+    target: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 11.2a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6z",
   };
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
@@ -54,6 +55,7 @@ const NAV = [
   { id: "device", ko: "디바이스 헬스", en: "Device Health", icon: "device" },
   { id: "ai", ko: "AI 네이티브", en: "AI Native", icon: "ai" },
   { id: "startup", ko: "체중·피트니스", en: "Weight & Fitness", icon: "spark" },
+  { id: "vp", ko: "밸류 프로포지션", en: "Value Proposition", icon: "target" },
   { id: "articles", ko: "데일리 기사", en: "Daily Articles", icon: "news" },
   { id: "charts", ko: "정량 분석", en: "Quant Charts", icon: "chart" },
   { id: "insights", ko: "핵심 인사이트", en: "Insights", icon: "pulse" },
@@ -119,9 +121,7 @@ function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, 
         })}
       </nav>
 
-      <div className="sb-foot">
-        <div className="sb-brand-name">{brand.name}</div>
-      </div>
+      <div className="sb-foot" />
     </aside>
   );
 }
