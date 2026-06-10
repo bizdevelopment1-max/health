@@ -1,7 +1,7 @@
 /* ============================================================
    anim.jsx — scroll-triggered animation primitives
    ============================================================ */
-const { useState: useStateA, useRef: useRefA, useEffect: useEffectA, useCallback: useCbA, useContext: useCtxA, createContext: createCtxA } = React;
+const { useState: useStateA, useRef: useRefA, useEffect: useEffectA, useContext: useCtxA, createContext: createCtxA } = React;
 
 const AnimCtx = createCtxA(false);
 
@@ -26,19 +26,13 @@ function findScrollParent(el) {
 
 function useInView(ref) {
   const [inView, setInView] = useStateA(false);
-  const stateRef = useRefA({ el: null, io: null, unsub: null });
+  const [tick, setTick] = useStateA(0);
+
+  // force a second pass so ref.current is guaranteed set
+  useEffectA(() => { if (tick === 0) setTick(1); }, [tick]);
 
   useEffectA(() => {
     const el = ref && ref.current;
-    const s = stateRef.current;
-
-    if (el === s.el) return;
-
-    if (s.unsub) s.unsub();
-    s.el = el;
-    s.io = null;
-    s.unsub = null;
-
     if (!el) return;
 
     const scrollEl = findScrollParent(el);
@@ -66,25 +60,17 @@ function useInView(ref) {
       { root: scrollEl || null, threshold: [0, 0.1, 0.2], rootMargin: "0px 0px -5% 0px" }
     );
     io.observe(el);
-    s.io = io;
 
     const target = scrollEl || window;
     target.addEventListener("scroll", check, { passive: true });
     window.addEventListener("resize", check);
 
-    s.unsub = () => {
+    return () => {
       io.disconnect();
       target.removeEventListener("scroll", check);
       window.removeEventListener("resize", check);
     };
-  });
-
-  useEffectA(() => {
-    return () => {
-      const s = stateRef.current;
-      if (s.unsub) { s.unsub(); s.unsub = null; s.el = null; }
-    };
-  }, []);
+  }, [tick]);
 
   return inView;
 }
