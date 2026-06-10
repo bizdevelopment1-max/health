@@ -2,6 +2,7 @@
    charts.jsx — lightweight animated SVG charts (no deps)
    Each chart observes its own visibility and fills 0→100,
    replaying every time it scrolls back into view.
+   Labels count up alongside their chart elements.
    ============================================================ */
 const { useRef: useRefC, useContext: useCtxC } = React;
 function niceTicks(max, count) {
@@ -16,7 +17,7 @@ function niceTicks(max, count) {
   return ticks;
 }
 
-// ---- Combo: market size (area+line draws in) + growth markers ---
+// ---- Combo: market size (area+line draws L→R) + growth markers count up ---
 function MarketGrowthChart({ data, accent, ink, grid, muted }) {
   const inView = useCtxC(AnimCtx);
   const prog = useProgress(inView, 1400);
@@ -53,11 +54,15 @@ function MarketGrowthChart({ data, accent, ink, grid, muted }) {
         <polyline points={linePts} fill="none" stroke={accent} strokeWidth="2.5" strokeLinejoin="round" />
       </g>
       {data.map((d, i) => {
-        const reveal = prog >= i / (n - 1) - 0.001;
+        const frac = i / (n - 1);
+        const reveal = prog >= frac - 0.001;
+        const localProg = reveal ? Math.min((prog - frac) / (1 / (n - 1)), 1) : 0;
+        const shownGrowth = Math.round(d.growth * (reveal ? Math.min(localProg * 3, 1) : 0));
+        const shownSize = Math.round(d.size * (reveal ? Math.min(localProg * 3, 1) : 0));
         return (
           <g key={i} style={{ opacity: reveal ? 1 : 0, transition: "opacity .25s" }}>
             <circle cx={x(i)} cy={y(d.size)} r="3.4" fill="#fff" stroke={accent} strokeWidth="2" />
-            <text x={x(i)} y={y(d.size) - 11} textAnchor="middle" fontSize="9.5" fontWeight="700" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{d.growth}%</text>
+            <text x={x(i)} y={y(d.size) - 11} textAnchor="middle" fontSize="9.5" fontWeight="700" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{shownGrowth}%</text>
             <text x={x(i)} y={padT + ih + 18} textAnchor="middle" fontSize="9.5" fill={muted}>{d.year}</text>
           </g>
         );
@@ -79,11 +84,13 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block" }}>
       {data.map((d, i) => {
-        const w = (barMaxW * d.value) / max * prog;
+        const stagger = Math.min(prog * data.length / (i + 1), 1);
+        const barProg = Math.max(0, Math.min((prog - i * 0.06) / (1 - i * 0.06), 1));
+        const w = (barMaxW * d.value) / max * barProg;
         const yy = padT + i * rowH;
         const c = colorOf(d);
         const dec = (String(d.value).split(".")[1] || "").length;
-        const shown = dec ? (d.value * prog).toFixed(dec) : Math.round(d.value * prog);
+        const shown = dec ? (d.value * barProg).toFixed(dec) : Math.round(d.value * barProg);
         return (
           <g key={i}>
             <text x={padL} y={yy + rowH / 2 + 3.5} fontSize="11.5" fill={ink} fontWeight="600">{d.name}</text>
@@ -97,7 +104,7 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
   );
 }
 
-// ---- Donut (category share): sweeps in clockwise, center counts ----
+// ---- Donut (category share): sweeps in clockwise, center & legend count up ----
 function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
   const inView = useCtxC(AnimCtx);
   const prog = useProgress(inView, 1200);
@@ -121,6 +128,10 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
     }
     return { d, path, color: colorOf(d) };
   });
+
+  const centerParsed = parseNum(centerLabel);
+  const centerShown = centerParsed.ok ? fmtNum(centerParsed.num * prog, centerParsed) : centerLabel;
+
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
       <svg viewBox={`0 0 ${size} ${size}`} width="150" height="150" style={{ flexShrink: 0 }}>
@@ -128,7 +139,7 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
         {segs.map((s, i) => s.path && (
           <path key={i} d={s.path} fill="none" stroke={s.color} strokeWidth={sw} strokeLinecap="butt" />
         ))}
-        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="22" fontWeight="800" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{centerLabel}</text>
+        <text x={cx} y={cy - 2} textAnchor="middle" fontSize="22" fontWeight="800" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{centerShown}</text>
         <text x={cx} y={cy + 15} textAnchor="middle" fontSize="9.5" fill={muted}>{centerSub}</text>
       </svg>
       <div style={{ display: "flex", flexDirection: "column", gap: 9, flex: 1 }}>

@@ -5,6 +5,9 @@
    - CountUp: number string that counts 0→target (replays)
    - TrendBar: diverging mini bar for ± percentages
    - AnimCtx: lets rows inherit their board's in-view state
+   Background-tab safety: visibilitychange snaps all running
+   animations to final values when the tab goes hidden, so
+   screenshots/captures always show completed numbers.
    ============================================================ */
 const { useState: useStateA, useRef: useRefA, useEffect: useEffectA, useContext: useCtxA, createContext: createCtxA } = React;
 
@@ -12,7 +15,15 @@ const AnimCtx = createCtxA(true);
 
 const REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// Observe an element; toggle true/false as it enters/leaves the viewport.
+// Global registry: every running animation registers a "snap to final" callback.
+// When the tab hides (background, screenshot, print) we call them all.
+const _snapCallbacks = new Set();
+(function initVisSnap() {
+  const snap = () => { if (document.hidden) _snapCallbacks.forEach(fn => fn()); };
+  document.addEventListener("visibilitychange", snap);
+  window.addEventListener("beforeprint", () => _snapCallbacks.forEach(fn => fn()));
+})();
+
 function useInView(ref, opts) {
   const o = opts || {};
   const [inView, setInView] = useStateA(false);
@@ -22,7 +33,7 @@ function useInView(ref, opts) {
     const check = () => {
       const r = el.getBoundingClientRect();
       const vh = window.innerHeight || document.documentElement.clientHeight;
-      const vis = r.top < vh * 0.9 && r.bottom > vh * 0.06;
+      const vis = r.top < vh * 0.92 && r.bottom > vh * 0.04;
       setInView(prev => (prev === vis ? prev : vis));
     };
     check();
@@ -30,12 +41,10 @@ function useInView(ref, opts) {
     if (typeof IntersectionObserver !== "undefined") {
       io = new IntersectionObserver(
         ([e]) => { if (e.isIntersecting) setInView(true); else if (!o.once) setInView(false); },
-        { threshold: o.threshold != null ? o.threshold : 0.18, rootMargin: o.margin || "0px 0px -8% 0px" }
+        { threshold: o.threshold != null ? o.threshold : 0.12, rootMargin: o.margin || "0px 0px -6% 0px" }
       );
       io.observe(el);
     }
-    // Scroll/resize fallback — fires even when IO is throttled, and catches
-    // inner scroll containers (capture phase). Enables replay on scroll.
     const onScroll = () => check();
     window.addEventListener("scroll", onScroll, true);
     window.addEventListener("resize", onScroll);
@@ -48,7 +57,6 @@ function useInView(ref, opts) {
   return inView;
 }
 
-// Eased 0→1 ramp while `active`; snaps back to 0 when inactive (enables replay).
 function useProgress(active, dur, delay) {
   dur = dur || 1150;
   const [p, setP] = useStateA(0);
@@ -56,24 +64,26 @@ function useProgress(active, dur, delay) {
     if (!active) { setP(0); return; }
     if (REDUCED) { setP(1); return; }
     let raf, start, to, done = false;
-    const finish = setTimeout(() => { if (!done) { done = true; setP(1); } }, (delay || 0) + dur + 140);
+    const snapFn = () => { if (!done) { done = true; setP(1); } };
+    _snapCallbacks.add(snapFn);
+    const safetyMs = (delay || 0) + dur + 200;
+    const finish = setTimeout(snapFn, safetyMs);
     const run = () => {
       const step = (t) => {
         if (done) return;
         if (!start) start = t;
         const k = Math.min((t - start) / dur, 1);
-        setP(1 - Math.pow(1 - k, 3)); // easeOutCubic
-        if (k < 1) raf = requestAnimationFrame(step); else done = true;
+        setP(1 - Math.pow(1 - k, 3));
+        if (k < 1) raf = requestAnimationFrame(step); else { done = true; setP(1); }
       };
       raf = requestAnimationFrame(step);
     };
     if (delay) to = setTimeout(run, delay); else run();
-    return () => { cancelAnimationFrame(raf); clearTimeout(to); clearTimeout(finish); };
+    return () => { cancelAnimationFrame(raf); clearTimeout(to); clearTimeout(finish); _snapCallbacks.delete(snapFn); };
   }, [active]);
   return p;
 }
 
-// Split "$486B" → { prefix:"$", num:486, suffix:"B" }, preserving decimals/commas.
 function parseNum(str) {
   const m = String(str).match(/^([^\d-]*)(-?\d[\d,]*\.?\d*)(.*)$/);
   if (!m) return { ok: false, raw: String(str) };
@@ -87,7 +97,6 @@ function fmtNum(n, p) {
   return p.prefix + s + p.suffix;
 }
 
-// Counts a numeric string up from 0; non-numeric strings render as-is.
 function CountUp({ value, active, dur }) {
   const ctx = useCtxA(AnimCtx);
   const on = active === undefined ? ctx : active;
@@ -101,22 +110,23 @@ function CountUp({ value, active, dur }) {
     if (REDUCED) { setDisp(fmtNum(p.num, p)); return; }
     let raf, start, done = false;
     const d = dur || 1100;
-    const finish = setTimeout(() => { if (!done) { done = true; setDisp(fmtNum(p.num, p)); } }, d + 140);
+    const snapFn = () => { if (!done) { done = true; setDisp(fmtNum(p.num, p)); } };
+    _snapCallbacks.add(snapFn);
+    const finish = setTimeout(snapFn, d + 200);
     const step = (t) => {
       if (done) return;
       if (!start) start = t;
       const k = Math.min((t - start) / d, 1);
       const e = 1 - Math.pow(1 - k, 3);
       setDisp(fmtNum(p.num * e, p));
-      if (k < 1) raf = requestAnimationFrame(step); else done = true;
+      if (k < 1) raf = requestAnimationFrame(step); else { done = true; setDisp(fmtNum(p.num, p)); }
     };
     raf = requestAnimationFrame(step);
-    return () => { cancelAnimationFrame(raf); clearTimeout(finish); };
+    return () => { cancelAnimationFrame(raf); clearTimeout(finish); _snapCallbacks.delete(snapFn); };
   }, [on, value]);
   return disp;
 }
 
-// Diverging ± bar around a center line. Scale: |v| capped at 25%.
 function TrendBar({ v, max }) {
   const ctx = useCtxA(AnimCtx);
   const prog = useProgress(ctx, 900);
@@ -132,12 +142,10 @@ function TrendBar({ v, max }) {
   );
 }
 
-// Span wrapper around CountUp, so existing call sites keep their className.
 function AnimatedNumber({ value, active, className, dur }) {
   return <span className={className}><CountUp value={value} active={active} dur={dur} /></span>;
 }
 
-// Horizontal fill bar (0→frac); animates with its section's in-view state.
 function MiniBar({ frac, color, height, active }) {
   const ctx = useCtxA(AnimCtx);
   const on = active === undefined ? ctx : active;
