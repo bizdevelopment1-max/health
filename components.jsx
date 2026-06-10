@@ -25,6 +25,8 @@ function Icon({ name, size = 16, sw = 1.6 }) {
     dot: "M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0",
     x: "M6 6l12 12M18 6L6 18",
     target: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 11.2a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6z",
+    menu: "M3 6h18M3 12h18M3 18h18",
+    palette: "M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.1-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H16c3.3 0 6-2.7 6-6 0-5.5-4.5-9.7-10-9.7z",
   };
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
@@ -59,6 +61,7 @@ const NAV = [
   { id: "articles", ko: "데일리 기사", en: "Daily Articles", icon: "news" },
   { id: "charts", ko: "정량 분석", en: "Quant Charts", icon: "chart" },
   { id: "insights", ko: "핵심 인사이트", en: "Insights", icon: "pulse" },
+  { id: "dynamics", ko: "경쟁 다이내믹스", en: "Competitive Map", icon: "target" },
   { id: "reports", ko: "리서치 리포트", en: "Research", icon: "report" },
 ];
 
@@ -73,11 +76,13 @@ function sbBg(hex) {
   return `linear-gradient(168deg, ${sh(0.16)} 0%, ${hex} 40%, ${sh(-0.46)} 100%)`;
 }
 
-function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, cats, onSelectCompany }) {
+function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, cats, onSelectCompany, open, onToggle }) {
   const [openCat, setOpenCat] = useState(null);
   const isCat = id => id === "device" || id === "ai" || id === "startup";
   return (
-    <aside className="sidebar" style={{ background: sbBg(brand.bg) }}>
+    <>
+    {open && <div className="sb-backdrop" onClick={onToggle} />}
+    <aside className={"sidebar" + (open ? " sb-open" : "")} style={{ background: sbBg(brand.bg) }}>
       <div className="sb-head">
         <button className="sb-logo" onClick={onCycleBrand} title="클릭하여 색상 변경">
           <span className="sb-logo-mark" style={{ color: brand.bg }}><Icon name="pulse" size={18} sw={2.4} /></span>
@@ -123,6 +128,7 @@ function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, 
 
       <div className="sb-foot" />
     </aside>
+    </>
   );
 }
 
@@ -135,9 +141,12 @@ const BRANDS = [
 ];
 
 // ---- Top bar ----------------------------------------------------
-function TopBar({ dark, onTheme, query, onQuery, todayLabel }) {
+function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onColorCycle }) {
   return (
     <header className="topbar">
+      <button className="tb-menu" onClick={onMenuToggle} title="메뉴">
+        <Icon name="menu" size={18} sw={2} />
+      </button>
       <div className="tb-title">
         <h1>헬스케어 인텔리전스 <span className="tb-sub">데일리 브리핑 · 경쟁 트렌드 · 정량분석</span></h1>
       </div>
@@ -150,6 +159,9 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel }) {
           <Icon name="dot" size={9} />
           <span>{todayLabel} 업데이트</span>
         </div>
+        <button className="tb-color" onClick={onColorCycle} title="색상 변경">
+          <Icon name="palette" size={16} />
+        </button>
         <button className="tb-theme" onClick={onTheme} title="다크모드 토글">
           <Icon name={dark ? "sun" : "moon"} size={16} />
         </button>
@@ -181,4 +193,4 @@ function KpiStrip({ kpis }) {
   );
 }
 
-Object.assign(window, { Icon, Trend, Sidebar, TopBar, KpiStrip, NAV, BRANDS });
+Object.assign(window, { Icon, Trend, Sidebar, TopBar, KpiStrip, NAV, BRANDS, sbBg });

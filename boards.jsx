@@ -462,4 +462,109 @@ function ReportsBoard({ reports, sectionRef, query }) {
   );
 }
 
-Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard });
+// ---- Dynamics Board (competitive landscape visualization) ------
+function DynamicsBoard({ companies, cats, sectionRef }) {
+  const inView = useInView(sectionRef);
+  const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
+
+  const arenas = [
+    {
+      title: "스크린리스 밴드 3파전",
+      en: "Screenless Band Battle",
+      desc: "Whoop 4.0 vs Fitbit Air vs Garmin CIRQA — 구독 vs 일회성 vs 프리미엄 하드웨어",
+      players: ["Whoop", "Fitbit Air", "Garmin"],
+      dims: [
+        { label: "가격 모델", values: ["구독 $199~$359/yr", "$99.99 일회성", "$509 일회성(리크)"] },
+        { label: "FDA 인증", values: ["MG ECG clearance", "AFib 감지", "미확인"] },
+        { label: "배터리", values: ["4~5일", "7일", "미공개"] },
+        { label: "AI 코칭", values: ["스트레인 코치", "Gemini 기반", "Body Battery"] },
+      ],
+    },
+    {
+      title: "AI 헬스 에이전트 경쟁",
+      en: "AI Health Agent Layer",
+      desc: "OpenAI · Google · 애플 — 누가 건강 데이터 AI를 지배할 것인가",
+      players: ["OpenAI", "Google Health", "Apple Intelligence"],
+      dims: [
+        { label: "접근 방식", values: ["범용 에이전트 → 헬스", "Gemini + Fitbit", "온디바이스 + HealthKit"] },
+        { label: "데이터 소스", values: ["API 파트너십", "Fitbit+Pixel", "Watch+iPhone+HealthKit"] },
+        { label: "차별화", values: ["S-1 filed · $157B", "대중 시장 접근", "프라이버시 + 생태계"] },
+      ],
+    },
+    {
+      title: "GLP-1 + 디지털 코칭 스택",
+      en: "GLP-1 & Digital Coaching",
+      desc: "Noom · Cal AI · MFP — 체중관리 앱이 GLP-1 시대를 맞아 재편",
+      players: ["Noom", "Cal AI", "MFP"],
+      dims: [
+        { label: "포지셔닝", values: ["GLP-1 동반 코칭", "AI 칼로리 스캔", "MyFitnessPal 전통 강자"] },
+        { label: "매출/규모", values: ["ARR $600M+", "ARR $30M", "$1B+(매각 검토)"] },
+        { label: "전략", values: ["임상 파트너십", "AI-first 성장", "Under Armour 분리"] },
+      ],
+    },
+    {
+      title: "IPO 파이프라인",
+      en: "IPO Pipeline 2026–27",
+      desc: "헬스케어 유니콘들의 상장 경쟁 — 투자자 주목 포인트",
+      players: ["Oura ($11B)", "Whoop ($10.1B)", "Strava ($2.2B+)"],
+      dims: [
+        { label: "단계", values: ["Series E 완료", "Series F 완료", "Series G 완료"] },
+        { label: "매출", values: ["$2B(26E 전망)", "$1.1B(추정)", "$0.5B(추정)"] },
+        { label: "전망", values: ["Ring 5 발표·IPO 유력", "MG ECG FDA 차별화", "130M 사용자 기반"] },
+      ],
+    },
+  ];
+
+  return (
+    <section className="board" ref={sectionRef} data-screen-label="Competitive Map">
+     <AnimCtx.Provider value={inView}>
+      <div className="board-head">
+        <span className="board-tab" style={{ background: "var(--accent)" }} />
+        <div className="board-titles">
+          <h2>경쟁 다이내믹스 <span className="board-en">Competitive Dynamics Map · 2026.06</span></h2>
+          <p>주요 경쟁 구도와 전략적 포지셔닝 한눈에 보기</p>
+        </div>
+      </div>
+      <div className="dyn-grid">
+        {arenas.map((arena, ai) => {
+          const prog = useProgress(inView, 800, ai * 120);
+          return (
+            <div className="dyn-arena" key={ai} style={{ opacity: prog, transform: `translateY(${(1 - prog) * 20}px)` }}>
+              <div className="dyn-arena-head">
+                <h3>{arena.title}</h3>
+                <span className="dyn-arena-en">{arena.en}</span>
+              </div>
+              <p className="dyn-arena-desc">{arena.desc}</p>
+              <div className="dyn-table">
+                <div className="dyn-thead">
+                  <span className="dyn-dim-label"></span>
+                  {arena.players.map((p, pi) => {
+                    const co = companies.find(c => p.startsWith(c.name.split(" (")[0]));
+                    const cat = co ? catMap[co.cat] : null;
+                    return (
+                      <span key={pi} className="dyn-player" style={{ color: cat ? cat.accent : 'var(--ink)' }}>
+                        {co && <CoLogo name={co.name} domain={co.domain} accent={cat ? cat.accent : 'var(--accent)'} />}
+                        <b>{p}</b>
+                      </span>
+                    );
+                  })}
+                </div>
+                {arena.dims.map((dim, di) => (
+                  <div className="dyn-trow" key={di}>
+                    <span className="dyn-dim-label">{dim.label}</span>
+                    {dim.values.map((v, vi) => (
+                      <span key={vi} className="dyn-cell">{v}</span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+     </AnimCtx.Provider>
+    </section>
+  );
+}
+
+Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard, DynamicsBoard });

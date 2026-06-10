@@ -18,13 +18,23 @@ const PALETTE = {
   dark: { ink: "#E8ECF4", muted: "#6F7B90", grid: "#1E2636" },
 };
 
+const COLOR_PRESETS = [
+  { sidebar: "#1428A0", colDevice: "#1428A0", colAi: "#7A38D6", colStartup: "#0E8F6E" },
+  { sidebar: "#0B1F4D", colDevice: "#0F62FE", colAi: "#9333EA", colStartup: "#0A9D8E" },
+  { sidebar: "#4322A8", colDevice: "#2D6BFF", colAi: "#C026D3", colStartup: "#16A34A" },
+  { sidebar: "#0A6E63", colDevice: "#1668E3", colAi: "#6D28D9", colStartup: "#0891B2" },
+  { sidebar: "#10131C", colDevice: "#1428A0", colAi: "#7A38D6", colStartup: "#0E8F6E" },
+];
+
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [brandIdx, setBrandIdx] = uS(0);
+  const [colorIdx, setColorIdx] = uS(0);
   const [active, setActive] = uS("overview");
   const [query, setQuery] = uS("");
   const [feedFilter, setFeedFilter] = uS("all");
-  const [selected, setSelected] = uS(null); // 상세 보기 중인 기업
+  const [selected, setSelected] = uS(null);
+  const [sidebarOpen, setSidebarOpen] = uS(false);
 
   const D = window.DASH;
   const dark = t.dark;
@@ -49,7 +59,7 @@ function App() {
   const scrollRef = uR(null);
   const refs = {
     overview: uR(null), device: uR(null), ai: uR(null), startup: uR(null),
-    vp: uR(null), articles: uR(null), charts: uR(null), insights: uR(null), reports: uR(null),
+    vp: uR(null), articles: uR(null), charts: uR(null), insights: uR(null), dynamics: uR(null), reports: uR(null),
   };
 
   uE(() => { document.documentElement.dataset.theme = dark ? "dark" : "light"; }, [dark]);
@@ -82,6 +92,17 @@ function App() {
     setBrandIdx(p => (p + 1) % BRANDS.length);
   };
 
+  const cycleColor = () => {
+    const next = (colorIdx + 1) % COLOR_PRESETS.length;
+    setColorIdx(next);
+    const p = COLOR_PRESETS[next];
+    setTweak("sidebar", p.sidebar);
+    setTweak("colDevice", p.colDevice);
+    setTweak("colAi", p.colAi);
+    setTweak("colStartup", p.colStartup);
+    setBrandIdx(0);
+  };
+
   const articleCount = D.ARTICLES.filter(a => a.date === "2026-06-10").length;
   // 페이지 로드(업데이트) 시각 — "M/D H:MM" 형식
   const now = new Date();
@@ -90,12 +111,14 @@ function App() {
   return (
     <div className={"app d-" + t.density}>
       <Sidebar
-        active={active} onNav={navTo} brand={brand} onCycleBrand={cycleBrand}
-        articleCount={articleCount} companies={D.COMPANIES} cats={cats} onSelectCompany={setSelected}
+        active={active} onNav={id => { navTo(id); setSidebarOpen(false); }} brand={brand} onCycleBrand={cycleBrand}
+        articleCount={articleCount} companies={D.COMPANIES} cats={cats} onSelectCompany={c => { setSelected(c); setSidebarOpen(false); }}
+        open={sidebarOpen} onToggle={() => setSidebarOpen(o => !o)}
       />
 
       <div className="shell">
-        <TopBar dark={dark} onTheme={() => setTweak("dark", !dark)} query={query} onQuery={setQuery} todayLabel={today} />
+        <TopBar dark={dark} onTheme={() => setTweak("dark", !dark)} query={query} onQuery={setQuery} todayLabel={today}
+          onMenuToggle={() => setSidebarOpen(o => !o)} onColorCycle={cycleColor} />
 
         <main className="main" ref={scrollRef}>
           <div className="main-inner">
@@ -135,6 +158,8 @@ function App() {
 
             <InsightsBoard insights={D.INSIGHTS} sectionRef={refs.insights} />
 
+            <DynamicsBoard companies={D.COMPANIES} cats={cats} sectionRef={refs.dynamics} />
+
             <ReportsBoard reports={D.REPORTS} sectionRef={refs.reports} query={query} />
 
             <footer className="foot">
@@ -147,17 +172,7 @@ function App() {
 
       <CompanyDetail company={selected} cats={cats} articles={D.ARTICLES} onClose={() => setSelected(null)} />
 
-      <TweaksPanel>
-        <TweakSection label="테마 · 밀도" />
-        <TweakToggle label="다크 모드 (Bloomberg)" value={t.dark} onChange={v => setTweak("dark", v)} />
-        <TweakRadio label="카드 밀도" value={t.density} options={["compact", "regular", "comfy"]} onChange={v => setTweak("density", v)} />
-        <TweakSection label="사이드바 보드 색상" />
-        <TweakColor label="사이드바" value={t.sidebar} options={["#1428A0", "#0B1F4D", "#10131C", "#4322A8", "#0A6E63"]} onChange={v => { setTweak("sidebar", v); setBrandIdx(0); }} />
-        <TweakSection label="카테고리 색상" />
-        <TweakColor label="디바이스 헬스" value={t.colDevice} options={["#1428A0", "#0F62FE", "#1668E3", "#2D6BFF"]} onChange={v => setTweak("colDevice", v)} />
-        <TweakColor label="AI 네이티브" value={t.colAi} options={["#7A38D6", "#9333EA", "#6D28D9", "#C026D3"]} onChange={v => setTweak("colAi", v)} />
-        <TweakColor label="체중·피트니스" value={t.colStartup} options={["#0E8F6E", "#0A9D8E", "#16A34A", "#0891B2"]} onChange={v => setTweak("colStartup", v)} />
-      </TweaksPanel>
+      {/* Color change via palette button in TopBar */}
     </div>
   );
 }
