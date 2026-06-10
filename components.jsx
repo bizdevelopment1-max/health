@@ -179,7 +179,7 @@ function KpiStrip({ kpis }) {
     <AnimCtx.Provider value={inView}>
       <div className="kpi-strip" ref={ref}>
         {kpis.map((k, i) => (
-          <div className="kpi" key={i}>
+          <div className="kpi" key={i} title={k.src || ""}>
             <div className="kpi-label">{k.label}</div>
             <div className="kpi-row">
               <AnimatedNumber className="kpi-val" value={k.value} active={inView} />
@@ -187,6 +187,7 @@ function KpiStrip({ kpis }) {
             </div>
             <MiniBar frac={k.fill} color="var(--accent)" />
             <div className="kpi-sub">{k.sub}</div>
+            {k.src && <div className="kpi-src">{k.src}</div>}
           </div>
         ))}
       </div>

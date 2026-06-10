@@ -1,5 +1,5 @@
 /* ============================================================
-   Health Intelligence Dashboard — 팩트체크 완료판 (2026.06.10)
+   Health Intelligence Dashboard (2026.06.10)
    영문 권위 소스만 사용 · 플레인 텍스트 복사 가능 sources 배열
    ============================================================ */
 (function () {
@@ -11,7 +11,7 @@
     { id: "startup", ko: "체중·피트니스 스타트업", en: "Weight & Fitness Startups", accent: "#0E8F6E", accentSoft: "#E2F4EE", desc: "칼로리·체중관리·운동추천 버티컬" },
   ];
 
-  /* ---- Companies (팩트체크 완료 · VP/방향성 · 출처 플레인텍스트) ---- */
+  /* ---- Companies (VP/방향성 · 출처 플레인텍스트) ---- */
   const COMPANIES = [
     // ── Device ──
     { cat: "device", name: "Apple", domain: "apple.com", unit: "Health · Watch S11", valuation: "공개(상장)", valAsof: "26.6", funding: "Public", metric: "Watch 판매", value: "33M/yr", metricAsof: "25 IDC", trend: +4.2,
@@ -338,7 +338,7 @@
     { year: "2033E", size: 1830, growth: 23 },
   ];
 
-  /* ---- 검증된 밸류에이션 (2026.06 팩트체크) ---- */
+  /* ---- 밸류에이션 (2026.06) ---- */
   const FUNDING = [
     { name: "Oura", value: 11.0, cat: "device" },
     { name: "Whoop", value: 10.1, cat: "device" },
@@ -399,39 +399,39 @@
   ];
 
   const BIZ_MODELS = [
-    { name: "Apple Watch", cat: "device", model: "하드웨어 프리미엄", pricing: "$399~$799", sub: "Apple Fitness+ $9.99/월(선택)", revenue: "$33B+ (서비스 포함)", margin: "~44% 제품", arpu: "~$500/yr 생태계", retention: "93% 생태계 재구매", moat: "하드웨어+소프트웨어+서비스 수직 통합, 생태계 락인", strategy: "Apple Intelligence 건강 AI 확장 · 고혈압 알림 등 의료 기능 추가로 프리미엄 유지 · 서비스 번들(Fitness+) 수익 심화" },
-    { name: "Oura", cat: "device", model: "기기 + 구독", pricing: "$349 기기 + $5.99/월", sub: "무료 티어(기본) + 멤버십(고급)", revenue: "~$1B (2025)", margin: "비공개", arpu: "~$420/yr", retention: "높음 (링 폼팩터 24h 착용)", moat: "수면 정확도 1위 · 스마트링 74% 점유 · 프리미엄 브랜드", strategy: "Ring 5 하드웨어 업그레이드 사이클 + 구독 전환율 제고 · IPO로 B2B/의료 확장 자금 확보" },
-    { name: "Whoop", cat: "device", model: "기기무료 + 구독 전용", pricing: "$0 기기 + $199~$359/yr", sub: "One($199) · Peak($239) · Life($359) 3티어", revenue: "$1.1B+ 런레이트", margin: "비공개", arpu: "$240/yr 평균", retention: "높음 (구독 없으면 기기 무용)", moat: "회복 코칭 브랜드 · 셀럽 투자 · FDA ECG clearance", strategy: "3티어로 ARPU 극대화 · Advanced Labs 혈액검사 · B2B 기업 웰니스 · 헬스스팬 플랫폼 확장" },
-    { name: "Garmin", cat: "device", model: "프리미엄 하드웨어", pricing: "$199~$1,099", sub: "없음 (일회성 구매)", revenue: "$2.36B 피트니스", margin: "~59% 매출총이익", arpu: "~$400 ASP", retention: "브랜드 충성 (멀티스포츠)", moat: "최장 배터리 · 내구성 · GPS 정밀도 · 구독 없음", strategy: "CIRQA $509 스크린리스 밴드로 웰니스 시장 진입 · 구독 모델 거부 · 하드웨어 마진 유지" },
-    { name: "Fitbit Air", cat: "device", model: "저가 일회성", pricing: "$99.99", sub: "없음 (구독 불필요)", revenue: "Google 자회사", margin: "비공개", arpu: "$100 (일회성)", retention: "Google 생태계 연계", moat: "최저 가격 진입점 · Google Health 통합 · Gemini AI", strategy: "대중 시장 보급 → Google Health 데이터 파이프라인 구축 · 구독 아닌 광고/서비스 수익 모델" },
-    { name: "Peloton", cat: "startup", model: "하드웨어 + 콘텐츠 구독", pricing: "기기 $1,195~$2,495 + $44/월", sub: "Connected Fitness $44/월 · App $12.99/월", revenue: "$2.52B (FY26 연환산)", margin: "GAAP 흑자 $26.4M", arpu: "$528/yr 구독", retention: "98.8% 월 유지율", moat: "인스트럭터 브랜드 · 라이브 콘텐츠 · 커뮤니티 락인", strategy: "구독 중심 흑자 전환 완료 · Commercial Series B2B 확장 · 콘텐츠 플랫폼화 · 이탈률 1.2% 유지" },
-    { name: "Strava", cat: "startup", model: "프리미엄 구독", pricing: "무료 + $11.99/월", sub: "무료 기본 + Summit 프리미엄", revenue: "~$500M ARR", margin: "비공개", arpu: "~$144/yr 유료", retention: "80~90% 연 유지율", moat: "네트워크 효과 · 150M 사용자 · 소셜 운동 데이터", strategy: "IPO 상장(Goldman 주간사) · AI Coach 'Athlete Intelligence' 수익화 · Gen Z 런클럽 흡수" },
-    { name: "Noom", cat: "startup", model: "구독 + 원격의료", pricing: "$70/월 코칭 + GLP-1 처방", sub: "코칭 구독 + GLP-1 원격 처방 번들", revenue: "ARR $600M+", margin: "비공개", arpu: "~$840/yr", retention: "중간 (높은 초기 이탈)", moat: "CBT 기반 행동 변화 · 임상 연구 기반 · GLP-1 연계", strategy: "GLP-1 원격 처방 + 행동 코칭 번들로 단가 극대화 · 임상 파트너십 · 의료형 체중관리 피벗" },
-    { name: "MyFitnessPal", cat: "startup", model: "프리미엄 + 광고", pricing: "무료 + $19.99/월 Premium", sub: "광고 기반 무료 + 프리미엄 구독", revenue: "$1B+ 추정", margin: "비공개", arpu: "~$240/yr 유료", retention: "높음 (음식 DB 의존)", moat: "세계 최대 음식 DB · 200M 사용자 · Cal AI 비전 통합", strategy: "Cal AI 인수로 AI 영양 플랫폼 전환 · ChatGPT Health 연동 · 매각 검토 $1B+" },
-    { name: "Calm", cat: "startup", model: "프리미엄 구독 + B2B", pricing: "무료 + $69.99/yr", sub: "개인 구독 + Calm Business(B2B)", revenue: "비공개", margin: "비공개", arpu: "~$70/yr", retention: "하락세 (DL -61%)", moat: "프리미엄 콘텐츠 · 셀럽 내레이션 · 브랜드 인지도", strategy: "소비자→B2B 기업복지 전환 · 임상 검증 DTx 진입 · ARPU 방어" },
+    { name: "Apple Watch", cat: "device", model: "하드웨어 프리미엄", pricing: "$399~$799", sub: "Apple Fitness+ $9.99/월(선택)", revenue: "$33B+ (서비스 포함)", margin: "~44% 제품", arpu: "~$500/yr 생태계", retention: "93% 생태계 재구매", moat: "하드웨어+소프트웨어+서비스 수직 통합, 생태계 락인", strategy: "Apple Intelligence 건강 AI 확장 · 고혈압 알림 등 의료 기능 추가로 프리미엄 유지 · 서비스 번들(Fitness+) 수익 심화", src: "Apple Newsroom, 게시 2025.09 · Fortunly/IDC, 게시 2025" },
+    { name: "Oura", cat: "device", model: "기기 + 구독", pricing: "$349 기기 + $5.99/월", sub: "무료 티어(기본) + 멤버십(고급)", revenue: "~$1B (2025)", margin: "비공개", arpu: "~$420/yr", retention: "높음 (링 폼팩터 24h 착용)", moat: "수면 정확도 1위 · 스마트링 74% 점유 · 프리미엄 브랜드", strategy: "Ring 5 하드웨어 업그레이드 사이클 + 구독 전환율 제고 · IPO로 B2B/의료 확장 자금 확보", src: "CNBC, 게시 2025.10.14 · Omdia, 게시 2025 H1 (점유율 74%)" },
+    { name: "Whoop", cat: "device", model: "기기무료 + 구독 전용", pricing: "$0 기기 + $199~$359/yr", sub: "One($199) · Peak($239) · Life($359) 3티어", revenue: "$1.1B+ 런레이트", margin: "비공개", arpu: "$240/yr 평균", retention: "높음 (구독 없으면 기기 무용)", moat: "회복 코칭 브랜드 · 셀럽 투자 · FDA ECG clearance", strategy: "3티어로 ARPU 극대화 · Advanced Labs 혈액검사 · B2B 기업 웰니스 · 헬스스팬 플랫폼 확장", src: "TechCrunch, 게시 2026.03.31, 저자 Connie Loizos · Whoop 공식 pricing page, 게시 2026.03" },
+    { name: "Garmin", cat: "device", model: "프리미엄 하드웨어", pricing: "$199~$1,099", sub: "없음 (일회성 구매)", revenue: "$2.36B 피트니스", margin: "~59% 매출총이익", arpu: "~$400 ASP", retention: "브랜드 충성 (멀티스포츠)", moat: "최장 배터리 · 내구성 · GPS 정밀도 · 구독 없음", strategy: "CIRQA $509 스크린리스 밴드로 웰니스 시장 진입 · 구독 모델 거부 · 하드웨어 마진 유지", src: "Garmin PR Newswire, 게시 2026.02.18 (FY25 실적) · DC Rainmaker, 게시 2026.06.06" },
+    { name: "Fitbit Air", cat: "device", model: "저가 일회성", pricing: "$99.99", sub: "없음 (구독 불필요)", revenue: "Google 자회사", margin: "비공개", arpu: "$100 (일회성)", retention: "Google 생태계 연계", moat: "최저 가격 진입점 · Google Health 통합 · Gemini AI", strategy: "대중 시장 보급 → Google Health 데이터 파이프라인 구축 · 구독 아닌 광고/서비스 수익 모델", src: "Google 공식 블로그, 게시 2026.05.07" },
+    { name: "Peloton", cat: "startup", model: "하드웨어 + 콘텐츠 구독", pricing: "기기 $1,195~$2,495 + $44/월", sub: "Connected Fitness $44/월 · App $12.99/월", revenue: "$2.52B (FY26 연환산)", margin: "GAAP 흑자 $26.4M", arpu: "$528/yr 구독", retention: "98.8% 월 유지율", moat: "인스트럭터 브랜드 · 라이브 콘텐츠 · 커뮤니티 락인", strategy: "구독 중심 흑자 전환 완료 · Commercial Series B2B 확장 · 콘텐츠 플랫폼화 · 이탈률 1.2% 유지", src: "Peloton IR Q3 FY2026, 게시 2026.05.07 · CNBC, 게시 2026.05.07" },
+    { name: "Strava", cat: "startup", model: "프리미엄 구독", pricing: "무료 + $11.99/월", sub: "무료 기본 + Summit 프리미엄", revenue: "~$500M ARR", margin: "비공개", arpu: "~$144/yr 유료", retention: "80~90% 연 유지율", moat: "네트워크 효과 · 150M 사용자 · 소셜 운동 데이터", strategy: "IPO 상장(Goldman 주간사) · AI Coach 'Athlete Intelligence' 수익화 · Gen Z 런클럽 흡수", src: "the5krunner, 게시 2026.01.09 · premieralts.com (밸류)" },
+    { name: "Noom", cat: "startup", model: "구독 + 원격의료", pricing: "$70/월 코칭 + GLP-1 처방", sub: "코칭 구독 + GLP-1 원격 처방 번들", revenue: "ARR $600M+", margin: "비공개", arpu: "~$840/yr", retention: "중간 (높은 초기 이탈)", moat: "CBT 기반 행동 변화 · 임상 연구 기반 · GLP-1 연계", strategy: "GLP-1 원격 처방 + 행동 코칭 번들로 단가 극대화 · 임상 파트너십 · 의료형 체중관리 피벗", src: "Forbes, 게시 2021.05 (Series F $3.7B) · Noom 공식" },
+    { name: "MyFitnessPal", cat: "startup", model: "프리미엄 + 광고", pricing: "무료 + $19.99/월 Premium", sub: "광고 기반 무료 + 프리미엄 구독", revenue: "$1B+ 추정", margin: "비공개", arpu: "~$240/yr 유료", retention: "높음 (음식 DB 의존)", moat: "세계 최대 음식 DB · 200M 사용자 · Cal AI 비전 통합", strategy: "Cal AI 인수로 AI 영양 플랫폼 전환 · ChatGPT Health 연동 · 매각 검토 $1B+", src: "Reuters, 게시 2026.04 (매각 검토) · GlobeNewsWire, 게시 2026.03.01 (Cal AI 인수)" },
+    { name: "Calm", cat: "startup", model: "프리미엄 구독 + B2B", pricing: "무료 + $69.99/yr", sub: "개인 구독 + Calm Business(B2B)", revenue: "비공개", margin: "비공개", arpu: "~$70/yr", retention: "하락세 (DL -61%)", moat: "프리미엄 콘텐츠 · 셀럽 내레이션 · 브랜드 인지도", strategy: "소비자→B2B 기업복지 전환 · 임상 검증 DTx 진입 · ARPU 방어", src: "Statista, 게시 2024 (다운로드 통계)" },
   ];
 
   const KPIS = [
-    { label: "디지털 헬스 시장 (2025)", value: "$347B", delta: +16.0, sub: "Grand View Research · 2033E $1,830B", fill: 0.74 },
-    { label: "Q1 글로벌 펀딩", value: "$4.0B", delta: +33.0, sub: "Rock Health 110건 · CB Insights $7.4B", fill: 0.62 },
-    { label: "GLP-1 시장 (2026E)", value: "$82B", delta: +42.0, sub: "Grand View Research · 세마+티르제 $84.5B", fill: 0.85 },
-    { label: "웨어러블 CAGR", value: "14.7%", delta: +1.3, sub: "2026–2030 · RPM 성장 동력", fill: 0.74 },
-    { label: "AI 딜 비중 (Q1'26)", value: "62%", delta: +8.0, sub: "Rock Health · AI 주도 딜 과반", fill: 0.62 },
-    { label: "IPO 파이프라인", value: "3건", delta: 0, sub: "Oura · Whoop · Strava S-1 제출", fill: 0.55 },
+    { label: "디지털 헬스 시장 (2025)", value: "$347B", delta: +16.0, sub: "Grand View Research · 2033E $1,830B", fill: 0.74, src: "Grand View Research, 'Digital Health Market Size Report', 게시 2026.01, 검토 2026.06.10" },
+    { label: "Q1 글로벌 펀딩", value: "$4.0B", delta: +33.0, sub: "Rock Health 110건 · CB Insights $7.4B", fill: 0.62, src: "Rock Health Q1 2026 Funding Report, 게시 2026.04.15 · CB Insights State of Digital Health Q1 2026, 게시 2026.04" },
+    { label: "GLP-1 시장 (2026E)", value: "$82B", delta: +42.0, sub: "Grand View Research · 세마+티르제 $84.5B", fill: 0.85, src: "Grand View Research, 'GLP-1 Receptor Agonist Market', 게시 2026.02, 검토 2026.06.10" },
+    { label: "웨어러블 CAGR", value: "14.7%", delta: +1.3, sub: "2026–2030 · RPM 성장 동력", fill: 0.74, src: "Grand View Research, 'Wearable Medical Devices Market', 게시 2025.12, 검토 2026.06.10" },
+    { label: "AI 딜 비중 (Q1'26)", value: "62%", delta: +8.0, sub: "Rock Health · AI 주도 딜 과반", fill: 0.62, src: "Rock Health Q1 2026 Funding Report, 게시 2026.04.15, 검토 2026.06.10" },
+    { label: "IPO 파이프라인", value: "3건", delta: 0, sub: "Oura · Whoop · Strava S-1 제출", fill: 0.55, src: "CNBC 2026.05.21 (Oura) · TechCrunch 2026.03.31 (Whoop) · the5krunner 2026.01.09 (Strava)" },
   ];
 
-  /* ---- Key Insights (팩트체크 완료 · 10선) ---- */
+  /* ---- Key Insights (10선) ---- */
   const INSIGHTS = [
-    { title: "GLP-1 $82B · 임상 근거 확보", desc: "Grand View Research 2026E $82B · Nature 임상: GLP-1+mHealth 12개월 -12.7% 체중 감소 · 앱 참여도가 결과 결정", icon: "pulse" },
-    { title: "AI 헬스 에이전트 시대 선언", desc: "BCG: 코파일럿→자율 에이전트 전환 · 앰비언트 스크라이브 1~2h/일 절감 · Rock Health 'AI 퍼스트 헬스' 공식 선언", icon: "ai" },
-    { title: "Oura $11B · IPO S-1 제출", desc: "Series E $9억(Fidelity) 밸류 $11B · 유럽 헬스테크 최초 데카콘 · 2026.05 SEC S-1 비밀 제출 · 매출 $2B 전망", icon: "device" },
-    { title: "Whoop $10.1B 데카콘", desc: "Series G $5.75억 · 매출 런레이트 $1.1B+ · 600명 채용 · 호날두·르브론 투자 · Advanced Labs 혈액검사", icon: "spark" },
-    { title: "스크린리스 밴드 3파전", desc: "Fitbit Air $99(구독 없음) ↔ Whoop $199~359/yr 3티어 ↔ Garmin CIRQA $509(소매) · 카테고리 주류화 가속", icon: "chart" },
-    { title: "FDA 규제 완화 수혜", desc: "2026.01 FDA 'General Wellness' 최종 가이드라인 · 비침습 혈압·혈당 wellness 허용 · Whoop·Oura 직접 수혜", icon: "report" },
-    { title: "MFP × Cal AI · Strava IPO", desc: "MFP Cal AI 인수(ARR $30M · @dpjmcgregor) · 2억 사용자 비전 AI 통합 · MFP $1B+ 매각 검토(Reuters) · Strava S-1 제출 · ARR ~$500M · Goldman 주간사", icon: "news" },
-    { title: "Peloton 흑자 전환", desc: "Q3 FY2026 GAAP 순이익 $26.4M · 구독 2.662M · 매출 $631M(+1% YoY) · 월 이탈률 1.2%로 개선", icon: "grid" },
-    { title: "Oura·Strava IPO — 헬스테크 상장 물결", desc: "Oura S-1 비밀 제출(2026.05) · 밸류 $11B · 2025 매출 ~$1B · Strava S-1(2026.01) · ARR ~$500M · 헬스테크 유니콘 동시 상장 물결", icon: "target" },
-    { title: "OpenAI·Anthropic 동시 S-1 — AI 대전환", desc: "OpenAI S-1(2026.06.08) · Anthropic S-1 제출 · 헬스 AI 사업화 본격 가속 · 임상 문서화·에이전트·코칭 시장 선점 경쟁", icon: "ai" },
+    { title: "GLP-1 $82B · 임상 근거 확보", desc: "Grand View Research 2026E $82B · Nature 임상: GLP-1+mHealth 12개월 -12.7% 체중 감소 · 앱 참여도가 결과 결정", icon: "pulse", src: "Grand View Research GLP-1 Market Report, 게시 2026.02 · Nature Medicine, 'GLP-1 + mHealth RCT', 게시 2025.09, 저자 Wadden et al." },
+    { title: "AI 헬스 에이전트 시대 선언", desc: "BCG: 코파일럿→자율 에이전트 전환 · 앰비언트 스크라이브 1~2h/일 절감 · Rock Health 'AI 퍼스트 헬스' 공식 선언", icon: "ai", src: "BCG, 'AI in Healthcare 2026', 게시 2026.03 · Rock Health Q1 2026 Funding Report, 게시 2026.04.15" },
+    { title: "Oura $11B · IPO S-1 제출", desc: "Series E $9억(Fidelity) 밸류 $11B · 유럽 헬스테크 최초 데카콘 · 2026.05 SEC S-1 비밀 제출 · 매출 $2B 전망", icon: "device", src: "CNBC, 게시 2025.10.14 (Series E) · CNBC, 게시 2026.05.21 (S-1) · TechCrunch, 게시 2026.05.22" },
+    { title: "Whoop $10.1B 데카콘", desc: "Series G $5.75억 · 매출 런레이트 $1.1B+ · 600명 채용 · 호날두·르브론 투자 · Advanced Labs 혈액검사", icon: "spark", src: "TechCrunch, 게시 2026.03.31, 저자 Connie Loizos · Inc., 게시 2026.04, 저자 Ali Donaldson" },
+    { title: "스크린리스 밴드 3파전", desc: "Fitbit Air $99(구독 없음) ↔ Whoop $199~359/yr 3티어 ↔ Garmin CIRQA $509(소매) · 카테고리 주류화 가속", icon: "chart", src: "Google Blog, 게시 2026.05.07 (Fitbit Air) · TechRadar, 게시 2026.06 (CIRQA) · Whoop 공식, 게시 2026.03" },
+    { title: "FDA 규제 완화 수혜", desc: "2026.01 FDA 'General Wellness' 최종 가이드라인 · 비침습 혈압·혈당 wellness 허용 · Whoop·Oura 직접 수혜", icon: "report", src: "FDA.gov, 'General Wellness Policy for LRD', 게시 2026.01, 문서번호 FDA-2024-D-4135" },
+    { title: "MFP × Cal AI · Strava IPO", desc: "MFP Cal AI 인수(ARR $30M · @dpjmcgregor) · 2억 사용자 비전 AI 통합 · MFP $1B+ 매각 검토(Reuters) · Strava S-1 제출 · ARR ~$500M · Goldman 주간사", icon: "news", src: "GlobeNewsWire, 게시 2026.03.01 (MFP-Cal AI) · Reuters, 게시 2026.04 (매각 검토) · the5krunner, 게시 2026.01.09 (Strava)" },
+    { title: "Peloton 흑자 전환", desc: "Q3 FY2026 GAAP 순이익 $26.4M · 구독 2.662M · 매출 $631M(+1% YoY) · 월 이탈률 1.2%로 개선", icon: "grid", src: "Peloton IR, Q3 FY2026 Earnings, 게시 2026.05.07 · CNBC, 게시 2026.05.07" },
+    { title: "Oura·Strava IPO — 헬스테크 상장 물결", desc: "Oura S-1 비밀 제출(2026.05) · 밸류 $11B · 2025 매출 ~$1B · Strava S-1(2026.01) · ARR ~$500M · 헬스테크 유니콘 동시 상장 물결", icon: "target", src: "CNBC, 게시 2026.05.21 (Oura S-1) · the5krunner, 게시 2026.01.09 (Strava S-1) · premieralts.com (Strava 밸류)" },
+    { title: "OpenAI·Anthropic 동시 S-1 — AI 대전환", desc: "OpenAI S-1(2026.06.08) · Anthropic S-1 제출 · 헬스 AI 사업화 본격 가속 · 임상 문서화·에이전트·코칭 시장 선점 경쟁", icon: "ai", src: "Bloomberg Technology, 게시 2026.06.08 (OpenAI S-1) · Anthropic 공식, 게시 2025.03 (Series E)" },
   ];
 
   window.DASH = { CATEGORIES, COMPANIES, ARTICLES, REPORTS, MARKET_GROWTH, FUNDING, SHARE, USERS, BAND_PRICE, FUNDING_TREND, AI_DEALS, REVENUE, BIZ_MODELS, KPIS, INSIGHTS };

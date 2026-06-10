@@ -295,7 +295,7 @@ function InsightsBoard({ insights, sectionRef }) {
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
           <h2>핵심 인사이트 <span className="board-en">Key Insights · 2026.06</span></h2>
-          <p>검증 데이터 기반 시장 핵심 동향 10선 · Grand View Research · Rock Health · 공식 발표</p>
+          <p>시장 핵심 동향 10선 · Grand View Research · Rock Health · 공식 발표</p>
         </div>
       </div>
       <div className="insight-grid">
@@ -307,6 +307,7 @@ function InsightsBoard({ insights, sectionRef }) {
               <div className="insight-body">
                 <div className="insight-title">{ins.title}</div>
                 <div className="insight-desc"><BoldSummary text={ins.desc} /></div>
+                {ins.src && <div className="insight-src">{ins.src}</div>}
               </div>
             </div>
           );
@@ -344,7 +345,7 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>기업별 밸류에이션 (검증본)</h3><span>$B</span></div>
+          <div className="cc-head"><h3>기업별 밸류에이션</h3><span>$B</span></div>
           <HBarChart data={data.FUNDING} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
         </div>
 
@@ -354,7 +355,7 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>스크린리스 밴드 가격 비교</h3><span>$ · 2026.06 검증</span></div>
+          <div className="cc-head"><h3>스크린리스 밴드 가격 비교</h3><span>$ · 2026.06</span></div>
           <HBarChart data={data.BAND_PRICE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="" valuePrefix="$" />
         </div>
 
@@ -364,7 +365,7 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>매출 비교 (검증)</h3><span>$B · 연환산</span></div>
+          <div className="cc-head"><h3>매출 비교</h3><span>$B · 연환산</span></div>
           <HBarChart data={data.REVENUE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
         </div>
 
@@ -689,6 +690,7 @@ function BizModelBoard({ companies, cats, sectionRef, theme }) {
                 <em>수익화 전략</em>
                 <span>{m.strategy}</span>
               </div>
+              {m.src && <div className="biz-src">{m.src}</div>}
             </div>
           );
         })}
