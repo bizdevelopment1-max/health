@@ -116,7 +116,7 @@ function App() {
 
       <div className="shell">
         <TopBar dark={dark} onTheme={() => setTweak("dark", !dark)} query={query} onQuery={setQuery} todayLabel={today}
-          onMenuToggle={() => setSidebarOpen(o => !o)} onColorCycle={cycleColor} />
+          onMenuToggle={() => setSidebarOpen(o => !o)} onColorCycle={cycleColor} onNav={navTo} />
 
         <main className="main" ref={scrollRef}>
           <div className="main-inner">

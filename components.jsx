@@ -142,14 +142,14 @@ const BRANDS = [
 ];
 
 // ---- Top bar ----------------------------------------------------
-function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onColorCycle }) {
+function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onColorCycle, onNav }) {
   return (
     <header className="topbar">
       <button className="tb-menu" onClick={onMenuToggle} title="메뉴">
         <Icon name="menu" size={18} sw={2} />
       </button>
       <div className="tb-title">
-        <h1>헬스케어 인텔리전스 <span className="tb-sub">데일리 브리핑 · 경쟁 트렌드 · 정량분석</span></h1>
+        <h1>헬스케어 인텔리전스</h1>
       </div>
       <div className="tb-tools">
         <div className="tb-search">
@@ -160,6 +160,7 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onCol
           <Icon name="dot" size={9} />
           <span>{todayLabel} 업데이트</span>
         </div>
+        <AIChatbot onNav={onNav} />
         <button className="tb-color" onClick={onColorCycle} title="색상 변경">
           <Icon name="palette" size={16} />
         </button>
@@ -195,4 +196,157 @@ function KpiStrip({ kpis }) {
   );
 }
 
-Object.assign(window, { Icon, Trend, Sidebar, TopBar, KpiStrip, NAV, BRANDS, sbBg });
+// ---- AI Chatbot (dropdown questions + natural language search) ----
+function AIChatbot({ onNav }) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [answer, setAnswer] = useState(null);
+  const [displayText, setDisplayText] = useState("");
+  const [typing, setTyping] = useState(false);
+  const [answerNav, setAnswerNav] = useState(null);
+  const dropRef = useRef(null);
+  const typingRef = useRef(null);
+
+  const QA = window.DASH.QA_PAIRS || [];
+
+  useEffect(() => {
+    const close = e => { if (dropRef.current && !dropRef.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
+
+  const typeOut = (text, nav) => {
+    setAnswer(text);
+    setAnswerNav(nav);
+    setDisplayText("");
+    setTyping(true);
+    setOpen(false);
+    if (typingRef.current) clearInterval(typingRef.current);
+    let i = 0;
+    typingRef.current = setInterval(() => {
+      i += 2;
+      if (i >= text.length) {
+        setDisplayText(text);
+        setTyping(false);
+        clearInterval(typingRef.current);
+      } else {
+        setDisplayText(text.slice(0, i));
+      }
+    }, 12);
+  };
+
+  const selectQ = (qa) => {
+    setSearch(qa.q);
+    typeOut(qa.a, qa.nav);
+  };
+
+  const doSearch = () => {
+    if (!search.trim()) return;
+    const q = search.toLowerCase();
+    const match = QA.find(qa => {
+      const kw = qa.keywords || [];
+      return kw.some(k => q.includes(k)) || qa.q.toLowerCase().includes(q.slice(0, 8));
+    });
+    if (match) { typeOut(match.a, match.nav); return; }
+
+    const D = window.DASH;
+    const results = [];
+    (D.COMPANIES || []).forEach(c => {
+      const txt = (c.name + " " + c.note + " " + (c.vp || "")).toLowerCase();
+      if (txt.includes(q) || q.split(/\s+/).some(w => w.length > 1 && txt.includes(w))) {
+        results.push({ text: c.name + ": " + c.note, nav: c.cat });
+      }
+    });
+    (D.INSIGHTS || []).forEach(ins => {
+      const txt = (ins.title + " " + ins.desc).toLowerCase();
+      if (txt.includes(q) || q.split(/\s+/).some(w => w.length > 1 && txt.includes(w))) {
+        results.push({ text: ins.title + " — " + ins.desc, nav: "insights" });
+      }
+    });
+    (D.ARTICLES || []).forEach(a => {
+      const txt = (a.title + " " + (a.summary || "")).toLowerCase();
+      if (q.split(/\s+/).some(w => w.length > 1 && txt.includes(w))) {
+        results.push({ text: a.source + ": " + a.title, nav: "articles" });
+      }
+    });
+
+    if (results.length > 0) {
+      const top = results.slice(0, 3);
+      const answerText = top.map((r, i) => (i + 1) + ". " + r.text).join("\n\n");
+      typeOut(answerText, top[0].nav);
+    } else {
+      typeOut("관련 정보를 찾을 수 없습니다. 다른 키워드로 검색해 보세요.", null);
+    }
+  };
+
+  const closeAnswer = () => {
+    setAnswer(null);
+    setDisplayText("");
+    setTyping(false);
+    if (typingRef.current) clearInterval(typingRef.current);
+  };
+
+  const goToSection = () => {
+    if (answerNav && onNav) { onNav(answerNav); }
+    closeAnswer();
+  };
+
+  const filtered = search.trim()
+    ? QA.filter(qa => {
+        const s = search.toLowerCase();
+        return qa.q.toLowerCase().includes(s) || (qa.keywords || []).some(k => s.includes(k));
+      })
+    : QA;
+
+  return (
+    <div className="chatbot" ref={dropRef}>
+      <div className="chatbot-box">
+        <input
+          className="chatbot-input"
+          value={search}
+          onChange={e => { setSearch(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); doSearch(); } }}
+          placeholder="AI Chatbot"
+        />
+        <button className="chatbot-arrow" onClick={() => setOpen(!open)} title="질문 선택">
+          <Icon name={open ? "up" : "down"} size={14} sw={2.2} />
+        </button>
+      </div>
+      {open && (
+        <div className="chatbot-drop">
+          <div className="chatbot-drop-title">질문을 선택하세요</div>
+          <div className="chatbot-drop-list">
+            {filtered.slice(0, 10).map((qa, i) => (
+              <button key={i} className="chatbot-drop-item" onClick={() => selectQ(qa)}>
+                {qa.q}
+              </button>
+            ))}
+            {filtered.length === 0 && <div className="chatbot-drop-empty">일치하는 질문이 없습니다. Enter로 자연어 검색</div>}
+          </div>
+        </div>
+      )}
+      {answer && (
+        <div className="chatbot-overlay" onClick={closeAnswer}>
+          <div className="chatbot-bubble" onClick={e => e.stopPropagation()}>
+            <div className="chatbot-bubble-head">
+              <span className="chatbot-bubble-icon"><Icon name="ai" size={16} /></span>
+              <b>AI Chatbot</b>
+              {typing && <span className="chatbot-typing">입력 중...</span>}
+              <button className="chatbot-bubble-close" onClick={closeAnswer}><Icon name="x" size={14} sw={2} /></button>
+            </div>
+            <div className="chatbot-bubble-q">{search}</div>
+            <div className="chatbot-bubble-a">{displayText}{typing && <span className="chatbot-cursor">|</span>}</div>
+            {!typing && answerNav && (
+              <button className="chatbot-go" onClick={goToSection}>
+                해당 섹션으로 이동 <Icon name="chevron" size={12} />
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+Object.assign(window, { Icon, Trend, Sidebar, TopBar, KpiStrip, NAV, BRANDS, sbBg, AIChatbot });
