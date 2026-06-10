@@ -160,6 +160,19 @@ function CompanyDetail({ company, cats, articles, onClose }) {
           </div>
         </div>
 
+        {c.sources && c.sources.length > 0 && (
+          <div className="cd-section">
+            <h4>출처 <em>{c.sources.length}건 · 텍스트 복사 가능</em></h4>
+            <div className="cd-sources">
+              {c.sources.map((s, i) => (
+                <div key={i} className="cd-src-item" onClick={e => { const t = e.currentTarget.querySelector('.cd-src-text'); if (t) { navigator.clipboard.writeText(t.textContent); } }}>
+                  <span className="cd-src-text">{s}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <a className="cd-source" href={c.url} target="_blank" rel="noopener">
           공식 출처 보기 <Icon name="ext" size={13} />
         </a>
