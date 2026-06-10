@@ -1,12 +1,12 @@
 /* ============================================================
    styles.css — Health Intelligence Dashboard
-   Fonts: Pretendard (SamsungOne-700/500 fallback) + tabular nums
+   Fonts: Pretendard + tabular nums
    ============================================================ */
 
 :root {
-  --f: "Pretendard", "SamsungOne700", "SamsungOne500", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --f: "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --f-nano: "Pretendard", "Nanosans", var(--f);
-  --samsung: #1428A0;
+  --brand: #1428A0;
 
   /* light theme (default) */
   --bg: #EEF0F4;
@@ -110,7 +110,7 @@ b, strong { font-weight: 700; }
 .sb-ic { display: grid; place-items: center; flex-shrink: 0; opacity: .92; }
 .sb-label { white-space: nowrap; overflow: hidden; }
 .sb-badge {
-  margin-left: auto; background: #fff; color: var(--samsung);
+  margin-left: auto; background: #fff; color: var(--brand);
   font-size: 10px; font-weight: 800; padding: 1px 6px; border-radius: 20px;
 }
 .sb-active-bar { position: absolute; left: -12px; top: 9px; bottom: 9px; width: 3px; background: #fff; border-radius: 0 3px 3px 0; }
@@ -453,7 +453,7 @@ b, strong { font-weight: 700; }
 .report > svg { color: var(--muted); opacity: 0; transition: opacity .12s; }
 .report:hover > svg { opacity: 1; }
 .rep-type { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 5px; text-align: center; letter-spacing: .02em; }
-.rep-type.sec { background: var(--samsung); color: #fff; }
+.rep-type.sec { background: var(--brand); color: #fff; }
 .rep-type.mkt { background: var(--accent); color: #fff; opacity: .82; }
 .rep-house { font-weight: 800; font-size: 12.5px; }
 .rep-title { font-weight: 600; color: var(--ink); line-height: 1.35; text-wrap: pretty; }

@@ -51,7 +51,7 @@ function Trend({ v, small, animate }) {
   );
 }
 
-// ---- Sidebar (Samsung blue board) ------------------------------
+// ---- Sidebar ------------------------------
 const NAV = [
   { id: "overview", ko: "오버뷰", en: "Overview", icon: "grid" },
   { id: "device", ko: "디바이스 헬스", en: "Device Health", icon: "device" },
@@ -135,7 +135,7 @@ function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, 
 }
 
 const BRANDS = [
-  { name: "Samsung Blue", bg: "#1428A0" },
+  { name: "Classic Blue", bg: "#1428A0" },
   { name: "Deep Navy", bg: "#0B1F4D" },
   { name: "Midnight", bg: "#10131C" },
   { name: "Violet", bg: "#4322A8" },
