@@ -7,14 +7,13 @@
 const { useRef: useRefC, useContext: useCtxC, useState: useStateC } = React;
 
 // Re-fire a chart's animation as the pointer moves over it. Throttled so the
-// 0→target ramp is actually visible (a fresh restart at most ~every 500ms),
-// rather than freezing at 0 under a constant stream of mousemove events.
+// 0→target ramp is actually visible (a fresh restart at most ~every 350ms).
 function useHoverReplay() {
   const [nonce, setNonce] = useStateC(0);
   const last = useRefC(0);
   const bump = () => {
     const now = (typeof performance !== "undefined" ? performance.now() : Date.now());
-    if (now - last.current > 500) { last.current = now; setNonce(n => n + 1); }
+    if (now - last.current > 350) { last.current = now; setNonce(n => n + 1); }
   };
   return [nonce, bump];
 }
