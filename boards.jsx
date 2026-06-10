@@ -143,6 +143,20 @@ function CompanyDetail({ company, cats, articles, onClose }) {
           <p>{c.note}</p>
         </div>
 
+        {c.vp && (
+          <div className="cd-section">
+            <h4>밸류 프로포지션 <em>Value Proposition</em></h4>
+            <p className="cd-vp" style={{ borderColor: cat.accent }}>{c.vp}</p>
+          </div>
+        )}
+
+        {c.direction && (
+          <div className="cd-section">
+            <h4>방향성 · 추구 가치 <em>Direction</em></h4>
+            <p>{c.direction}</p>
+          </div>
+        )}
+
         <div className="cd-section">
           <h4>관련 뉴스 <em>{rel.length}건</em></h4>
           <div className="cd-news">
@@ -208,7 +222,7 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
       <div className="board-head">
         <span className="board-tab" style={{ background: "var(--ink)" }} />
         <div className="board-titles">
-          <h2>데일리 기사 피드 <span className="board-en">Daily Articles · 한국어 큐레이션</span></h2>
+          <h2>데일리 기사 피드 <span className="board-en">Daily Articles · 글로벌 외신 큐레이션</span></h2>
           <p>매일 최신 기사가 날짜별로 상단에 쌓입니다 · 클릭 시 원문 이동</p>
         </div>
         <div className="feed-filters">
@@ -327,7 +341,73 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
           <div className="cc-head"><h3>사용자 / 판매량</h3><span>주요 앱·기기 · M(백만)</span></div>
           <HBarChart data={data.USERS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" />
         </div>
+
+        <div className="chart-card">
+          <div className="cc-head"><h3>스크린리스 밴드 가격 비교</h3><span>$ · 2026.06 검증</span></div>
+          <HBarChart data={data.BAND_PRICE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="" valuePrefix="$" />
+        </div>
+
+        <div className="chart-card">
+          <div className="cc-head"><h3>AI 주도 딜 비중 (Q1'26)</h3><span>Rock Health</span></div>
+          <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="62%" centerSub="AI 딜 비중" />
+        </div>
+
+        <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
+          <div className="cc-head"><h3>Q1'26 펀딩 집계 비교</h3><span>$B · Rock Health vs CB Insights</span></div>
+          <HBarChart data={data.FUNDING_TREND} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
+        </div>
       </div>
+     </AnimCtx.Provider>
+    </section>
+  );
+}
+
+// ---- Value Proposition board (3 categories × company VP cards) ---
+function VPBoard({ companies, cats, sectionRef, onSelect, query }) {
+  const inView = useInView(sectionRef);
+  return (
+    <section className="board" ref={sectionRef} data-screen-label="Value Proposition">
+     <AnimCtx.Provider value={inView}>
+      <div className="board-head">
+        <span className="board-tab" style={{ background: "var(--accent)" }} />
+        <div className="board-titles">
+          <h2>밸류 프로포지션 <span className="board-en">Value Proposition · Direction</span></h2>
+          <p>3대 카테고리 기업별 핵심 가치 제안과 방향성 · 카드 클릭 시 상세 정보</p>
+        </div>
+      </div>
+      {cats.map(cat => {
+        const rows = companies.filter(c => c.cat === cat.id && c.vp)
+          .filter(c => !query || (c.name + c.vp + (c.direction || "")).toLowerCase().includes(query.toLowerCase()));
+        if (rows.length === 0) return null;
+        return (
+          <div className="vp-group" key={cat.id} style={{ "--accent": cat.accent }}>
+            <div className="vp-cat">
+              <span className="vp-cat-dot" style={{ background: cat.accent }} />
+              <b style={{ color: cat.accent }}>{cat.ko}</b>
+              <em>{cat.en}</em>
+            </div>
+            <div className="vp-grid">
+              {rows.map((c, i) => {
+                const prog = useProgress(inView, 700, i * 90);
+                return (
+                  <div className="vp-card" key={c.name} role="button" tabIndex={0}
+                    onClick={() => onSelect && onSelect(c)}
+                    onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelect && onSelect(c); } }}
+                    style={{ opacity: prog, transform: `translateY(${(1 - prog) * 14}px)` }}>
+                    <div className="vp-head">
+                      <CoLogo name={c.name} domain={c.domain} accent={cat.accent} />
+                      <b className="vp-name">{c.name}</b>
+                      <Trend v={c.trend} small animate />
+                    </div>
+                    <div className="vp-prop">{c.vp}</div>
+                    {c.direction && <div className="vp-dir"><Icon name="target" size={12} sw={1.8} /><span>{c.direction}</span></div>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
      </AnimCtx.Provider>
     </section>
   );
@@ -366,4 +446,4 @@ function ReportsBoard({ reports, sectionRef, query }) {
   );
 }
 
-Object.assign(window, { CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, ReportsBoard });
+Object.assign(window, { CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard });

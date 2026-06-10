@@ -49,7 +49,7 @@ function App() {
   const scrollRef = uR(null);
   const refs = {
     overview: uR(null), device: uR(null), ai: uR(null), startup: uR(null),
-    articles: uR(null), charts: uR(null), insights: uR(null), reports: uR(null),
+    vp: uR(null), articles: uR(null), charts: uR(null), insights: uR(null), reports: uR(null),
   };
 
   uE(() => { document.documentElement.dataset.theme = dark ? "dark" : "light"; }, [dark]);
@@ -127,6 +127,8 @@ function App() {
             <CompanyBoard cat={cats[1]} companies={D.COMPANIES} density={t.density} sectionRef={refs.ai} query={query} onSelect={setSelected} />
             <CompanyBoard cat={cats[2]} companies={D.COMPANIES} density={t.density} sectionRef={refs.startup} query={query} onSelect={setSelected} />
 
+            <VPBoard companies={D.COMPANIES} cats={cats} sectionRef={refs.vp} onSelect={setSelected} query={query} />
+
             <ArticleFeed articles={D.ARTICLES} cats={cats} sectionRef={refs.articles} filter={feedFilter} onFilter={setFeedFilter} query={query} />
 
             <ChartsBoard data={D} cats={cats} theme={chartTheme} sectionRef={refs.charts} />
@@ -137,7 +139,7 @@ function App() {
 
             <footer className="foot">
               <span>Health Intelligence Dashboard</span>
-              <span>소스: Grand View Research · Rock Health · CB Insights · Statista · 공식 발표 기준 · 최종 업데이트 2026.06.10</span>
+              <span>소스: Grand View Research · Rock Health · CB Insights · CNBC · TechCrunch · 공식 발표 기준 · 최종 업데이트 2026.06.10</span>
             </footer>
           </div>
         </main>
