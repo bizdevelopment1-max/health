@@ -122,7 +122,7 @@ function App() {
 
         <main className="main" ref={scrollRef}>
           <div className="main-inner">
-            {/* Overview */}
+            {/* Overview — market-level only */}
             <section ref={refs.overview} data-screen-label="Overview">
               <div className="ov-head">
                 <h2 className="ov-title">마켓 오버뷰 <span>Market Overview · 검증 데이터 기준</span></h2>
@@ -133,17 +133,7 @@ function App() {
                 </div>
               </div>
               <KpiStrip kpis={D.KPIS} />
-              <div className="ticker">
-                <div className="ticker-track">
-                  {D.COMPANIES.concat(D.COMPANIES).map((c, i) => (
-                    <span className="tk" key={i}>
-                      <b>{c.name}</b>
-                      <span className="tk-v">{c.value}</span>
-                      <Trend v={c.trend} small />
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <OverviewCharts data={D} cats={cats} theme={chartTheme} />
             </section>
 
             <CompanyBoard cat={cats[0]} companies={D.COMPANIES} density={t.density} sectionRef={refs.device} query={query} onSelect={setSelected} />

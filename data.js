@@ -364,9 +364,8 @@
     { label: "Q1 글로벌 펀딩", value: "$4.0B", delta: +33.0, sub: "Rock Health 110건 · CB Insights $7.4B", fill: 0.62 },
     { label: "GLP-1 시장 (2026E)", value: "$82B", delta: +42.0, sub: "Grand View Research · 세마+티르제 $84.5B", fill: 0.85 },
     { label: "웨어러블 CAGR", value: "14.7%", delta: +1.3, sub: "2026–2030 · RPM 성장 동력", fill: 0.74 },
-    { label: "Oura 밸류", value: "$11B", delta: +120.0, sub: "Series E $9억 · IPO S-1 제출", fill: 0.92 },
-    { label: "Whoop 데카콘", value: "$10.1B", delta: +180.0, sub: "Series G $5.75억 · 매출 $1.1B+", fill: 0.90 },
-    { label: "Oura 매출 (2025)", value: "~$1B", delta: +100.0, sub: "2026E $2B 전망 · IPO S-1 제출", fill: 0.80 },
+    { label: "AI 딜 비중 (Q1'26)", value: "62%", delta: +8.0, sub: "Rock Health · AI 주도 딜 과반", fill: 0.62 },
+    { label: "IPO 파이프라인", value: "3건", delta: 0, sub: "Oura · Whoop · Strava S-1 제출", fill: 0.55 },
   ];
 
   /* ---- Key Insights (팩트체크 완료 · 10선) ---- */

@@ -176,6 +176,18 @@ b, strong { font-weight: 700; }
 .ov-leg { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-2); font-weight: 600; white-space: nowrap; }
 .ov-leg i { width: 10px; height: 10px; border-radius: 3px; }
 
+/* ---------- overview charts ---------- */
+.ov-charts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;
+}
+.ov-chart-card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 16px 18px; box-shadow: var(--shadow);
+  transition: transform .25s ease, box-shadow .25s ease, background .2s;
+}
+.ov-chart-card:hover { transform: translateY(-2px) scale(1.005); box-shadow: var(--shadow-lg); background: var(--panel-2); }
+.ov-chart-card:hover .cc-head h3 { color: var(--accent); }
+
 .kpi-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 12px; }
 .kpi {
   background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
@@ -552,6 +564,7 @@ b, strong { font-weight: 700; }
   .vp-grid { grid-template-columns: repeat(2, 1fr); }
   .report { grid-template-columns: 64px 110px 1fr 130px 92px 44px 16px; }
   .dyn-grid { grid-template-columns: 1fr; }
+  .ov-charts { grid-template-columns: 1fr; }
 }
 @media (max-width: 820px) {
   .tb-menu { display: grid; }

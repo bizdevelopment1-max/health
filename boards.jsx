@@ -462,6 +462,35 @@ function ReportsBoard({ reports, sectionRef, query }) {
   );
 }
 
+// ---- Overview Charts (market-level donut + bar + area, no company names) ----
+function OverviewCharts({ data, cats, theme }) {
+  const ref = React.useRef(null);
+  const inView = useInView(ref);
+  const catColor = id => (cats.find(c => c.id === id) || {}).accent || theme.ink;
+  return (
+    <AnimCtx.Provider value={inView}>
+      <div className="ov-charts" ref={ref}>
+        <div className="ov-chart-card">
+          <div className="cc-head"><h3>디지털 헬스 시장 규모</h3><span>$B · YoY%</span></div>
+          <MarketGrowthChart data={data.MARKET_GROWTH} accent={theme.accent} ink={theme.ink} grid={theme.grid} muted={theme.muted} />
+        </div>
+        <div className="ov-chart-card">
+          <div className="cc-head"><h3>Q1'26 펀딩 카테고리 점유</h3><span>카테고리별</span></div>
+          <DonutChart data={data.SHARE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="$7.4B" centerSub="Q1 글로벌 펀딩" />
+        </div>
+        <div className="ov-chart-card">
+          <div className="cc-head"><h3>AI 딜 비중 (Q1'26)</h3><span>Rock Health</span></div>
+          <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="62%" centerSub="AI 딜 비중" />
+        </div>
+        <div className="ov-chart-card">
+          <div className="cc-head"><h3>Q1'26 펀딩 집계 비교</h3><span>$B</span></div>
+          <HBarChart data={data.FUNDING_TREND} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
+        </div>
+      </div>
+    </AnimCtx.Provider>
+  );
+}
+
 // ---- Dynamics Board (competitive landscape visualization) ------
 function DynamicsBoard({ companies, cats, sectionRef }) {
   const inView = useInView(sectionRef);
@@ -567,4 +596,4 @@ function DynamicsBoard({ companies, cats, sectionRef }) {
   );
 }
 
-Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard, DynamicsBoard });
+Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard, DynamicsBoard, OverviewCharts });
