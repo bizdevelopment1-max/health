@@ -121,9 +121,7 @@ function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, 
         })}
       </nav>
 
-      <div className="sb-foot">
-        <div className="sb-brand-name">{brand.name}</div>
-      </div>
+      <div className="sb-foot" />
     </aside>
   );
 }
