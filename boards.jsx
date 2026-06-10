@@ -65,7 +65,7 @@ function CompanyBoard({ cat, companies, density, sectionRef, query, onSelect }) 
               <Trend v={c.trend} small animate />
               <TrendBar v={c.trend} />
             </span>
-            <span className="ct-note">{c.note}</span>
+            <span className="ct-note"><BoldSummary text={c.note} /></span>
           </div>
         ))}
       </div>
@@ -167,7 +167,7 @@ function CompanyDetail({ company, cats, articles, onClose }) {
                 <span className="cd-art-body">
                   <span className="cd-art-meta"><em>{a.source}</em><span className="cd-art-date">{fmtD(a.date)}</span><span className="cd-art-tag" style={{ color: cat.accent, background: cat.accentSoft }}>{a.tag}</span></span>
                   <span className="cd-art-title">{a.title}</span>
-                  {a.summary && <span className="cd-art-sum">{a.summary}</span>}
+                  {a.summary && <span className="cd-art-sum"><BoldSummary text={a.summary} /></span>}
                 </span>
               </a>
             ))}
@@ -193,6 +193,17 @@ function CompanyDetail({ company, cats, articles, onClose }) {
       </div>
      </AnimCtx.Provider>
     </div>
+  );
+}
+
+// ---- Bold key numbers helper -----------------------------------
+function BoldSummary({ text }) {
+  if (!text) return null;
+  const parts = text.split(/(\$[\d,.]+[BMK]?(?:\+|~)?|\d+\.?\d*%|\+\d+\.?\d*%|-\d+\.?\d*%)/g);
+  return parts.map((part, i) =>
+    /^\$|^\d+\.?\d*%$|^[+-]\d+\.?\d*%$/.test(part)
+      ? <b key={i} style={{ color: 'var(--accent)' }}>{part}</b>
+      : part
   );
 }
 
@@ -261,7 +272,7 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
                       <span className="art-catname">{c.ko}</span>
                     </span>
                     <span className="art-title">{a.title}</span>
-                    {a.summary && <span className="art-summary">{a.summary}</span>}
+                    {a.summary && <span className="art-summary"><BoldSummary text={a.summary} /></span>}
                   </span>
                   <Icon name="ext" size={13} />
                 </a>
@@ -274,7 +285,7 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
   );
 }
 
-// ---- Insights board -------------------------------------------
+// ---- Insights board (10선) ------------------------------------
 function InsightsBoard({ insights, sectionRef }) {
   const inView = useInView(sectionRef);
   return (
@@ -284,7 +295,7 @@ function InsightsBoard({ insights, sectionRef }) {
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
           <h2>핵심 인사이트 <span className="board-en">Key Insights · 2026.06</span></h2>
-          <p>검증 데이터 기반 시장 핵심 동향 9선 · Grand View Research · Rock Health · 공식 발표</p>
+          <p>검증 데이터 기반 시장 핵심 동향 10선 · Grand View Research · Rock Health · 공식 발표</p>
         </div>
       </div>
       <div className="insight-grid">
@@ -295,7 +306,7 @@ function InsightsBoard({ insights, sectionRef }) {
               <div className="insight-icon"><Icon name={ins.icon || "spark"} size={18} /></div>
               <div className="insight-body">
                 <div className="insight-title">{ins.title}</div>
-                <div className="insight-desc">{ins.desc}</div>
+                <div className="insight-desc"><BoldSummary text={ins.desc} /></div>
               </div>
             </div>
           );
@@ -352,6 +363,11 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
           <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="62%" centerSub="AI 딜 비중" />
         </div>
 
+        <div className="chart-card">
+          <div className="cc-head"><h3>매출 비교 (검증)</h3><span>$B · 연환산</span></div>
+          <HBarChart data={data.REVENUE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
+        </div>
+
         <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
           <div className="cc-head"><h3>Q1'26 펀딩 집계 비교</h3><span>$B · Rock Health vs CB Insights</span></div>
           <HBarChart data={data.FUNDING_TREND} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
@@ -371,7 +387,7 @@ function VPBoard({ companies, cats, sectionRef, onSelect, query }) {
       <div className="board-head">
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
-          <h2>밸류 프로포지션 <span className="board-en">Value Proposition · Direction</span></h2>
+          <h2>Value Proposition <span className="board-en">Value Proposition · Direction</span></h2>
           <p>3대 카테고리 기업별 핵심 가치 제안과 방향성 · 카드 클릭 시 상세 정보</p>
         </div>
       </div>
@@ -446,4 +462,4 @@ function ReportsBoard({ reports, sectionRef, query }) {
   );
 }
 
-Object.assign(window, { CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard });
+Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard });
