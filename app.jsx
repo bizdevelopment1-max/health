@@ -36,7 +36,9 @@ function App() {
   })), [t.colDevice, t.colAi, t.colStartup, dark]);
 
   // sidebar brand: explicit cycle overrides tweak default
-  const brand = brandIdx === 0 ? { name: "tweak", bg: t.sidebar } : BRANDS[brandIdx];
+  const brand = brandIdx === 0
+    ? { name: (BRANDS.find(b => b.bg === t.sidebar) || BRANDS[0]).name, bg: t.sidebar }
+    : BRANDS[brandIdx];
 
   // theme for charts
   const pal = dark ? PALETTE.dark : PALETTE.light;
