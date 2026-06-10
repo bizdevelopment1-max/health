@@ -1,17 +1,9 @@
 /* ============================================================
    anim.jsx — scroll-triggered animation primitives
-   - useInView: re-fires every time an element enters/leaves the
-     NEAREST scrollable ancestor (not just the viewport)
-   - useProgress: eased 0→1 ramp, resets to 0 when inactive
-   - CountUp: number string that counts 0→target (replays)
-   - TrendBar: diverging mini bar for ± percentages
-   - AnimCtx: lets rows inherit their board's in-view state
-   Background-tab safety: visibilitychange snaps all running
-   animations to final values when the tab goes hidden.
    ============================================================ */
-const { useState: useStateA, useRef: useRefA, useEffect: useEffectA, useContext: useCtxA, createContext: createCtxA } = React;
+const { useState: useStateA, useRef: useRefA, useEffect: useEffectA, useCallback: useCbA, useContext: useCtxA, createContext: createCtxA } = React;
 
-const AnimCtx = createCtxA(true);
+const AnimCtx = createCtxA(false);
 
 const REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -25,81 +17,89 @@ const _snapCallbacks = new Set();
 function findScrollParent(el) {
   let p = el && el.parentElement;
   while (p) {
-    const ov = getComputedStyle(p).overflowY;
-    if (ov === "auto" || ov === "scroll" || ov === "overlay") return p;
+    const s = getComputedStyle(p).overflowY;
+    if (s === "auto" || s === "scroll" || s === "overlay") return p;
     p = p.parentElement;
   }
-  return window;
+  return null;
 }
 
-function useInView(ref, opts) {
-  const o = opts || {};
+function useInView(ref) {
   const [inView, setInView] = useStateA(false);
-  const [mounted, setMounted] = useStateA(0);
-  useEffectA(() => { setMounted(m => m + 1); }, []);
+  const stateRef = useRefA({ el: null, io: null, unsub: null });
+
   useEffectA(() => {
     const el = ref && ref.current;
+    const s = stateRef.current;
+
+    if (el === s.el) return;
+
+    if (s.unsub) s.unsub();
+    s.el = el;
+    s.io = null;
+    s.unsub = null;
+
     if (!el) return;
+
     const scrollEl = findScrollParent(el);
-    const isWin = scrollEl === window;
 
     const check = () => {
-      const r = el.getBoundingClientRect();
-      let top, bottom;
-      if (isWin) {
-        top = 0;
-        bottom = window.innerHeight || document.documentElement.clientHeight;
-      } else {
+      const rect = el.getBoundingClientRect();
+      let vpTop, vpBot;
+      if (scrollEl) {
         const sr = scrollEl.getBoundingClientRect();
-        top = sr.top;
-        bottom = sr.bottom;
+        vpTop = sr.top;
+        vpBot = sr.bottom;
+      } else {
+        vpTop = 0;
+        vpBot = window.innerHeight;
       }
-      const viewH = bottom - top;
-      const vis = r.top < top + viewH * 0.92 && r.bottom > top + viewH * 0.04;
-      setInView(prev => (prev === vis ? prev : vis));
+      const h = vpBot - vpTop;
+      const vis = rect.top < vpTop + h * 0.9 && rect.bottom > vpTop + h * 0.05;
+      setInView(vis);
     };
+
     check();
 
-    let io;
-    if (typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver(
-        ([e]) => { if (e.isIntersecting) setInView(true); else if (!o.once) setInView(false); },
-        {
-          root: isWin ? null : scrollEl,
-          threshold: o.threshold != null ? o.threshold : 0.08,
-          rootMargin: o.margin || "0px 0px -4% 0px",
-        }
-      );
-      io.observe(el);
-    }
+    const io = new IntersectionObserver(
+      ([e]) => setInView(e.isIntersecting),
+      { root: scrollEl || null, threshold: [0, 0.1, 0.2], rootMargin: "0px 0px -5% 0px" }
+    );
+    io.observe(el);
+    s.io = io;
 
-    const target = isWin ? window : scrollEl;
-    const onScroll = () => check();
-    target.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      if (io) io.disconnect();
-      target.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+    const target = scrollEl || window;
+    target.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+
+    s.unsub = () => {
+      io.disconnect();
+      target.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
     };
-  }, [ref, mounted]);
+  });
+
+  useEffectA(() => {
+    return () => {
+      const s = stateRef.current;
+      if (s.unsub) { s.unsub(); s.unsub = null; s.el = null; }
+    };
+  }, []);
+
   return inView;
 }
 
-// `replayKey` (optional): bump it to restart the 0→1 ramp from scratch even
-// while `active` stays true — used by charts to re-fire on mouse movement.
 function useProgress(active, dur, delay, replayKey) {
-  dur = dur || 1150;
+  dur = dur || 1200;
   const [p, setP] = useStateA(0);
   useEffectA(() => {
     if (!active) { setP(0); return; }
     if (REDUCED) { setP(1); return; }
-    setP(0); // (re)start from zero — also handles replayKey changes
+    setP(0);
     let raf, start, to, done = false;
     const snapFn = () => { if (!done) { done = true; setP(1); } };
     _snapCallbacks.add(snapFn);
-    const safetyMs = (delay || 0) + dur + 200;
-    const finish = setTimeout(snapFn, safetyMs);
+    const safety = setTimeout(snapFn, (delay || 0) + dur + 300);
     const run = () => {
       const step = (t) => {
         if (done) return;
@@ -111,7 +111,7 @@ function useProgress(active, dur, delay, replayKey) {
       raf = requestAnimationFrame(step);
     };
     if (delay) to = setTimeout(run, delay); else run();
-    return () => { cancelAnimationFrame(raf); clearTimeout(to); clearTimeout(finish); _snapCallbacks.delete(snapFn); };
+    return () => { cancelAnimationFrame(raf); clearTimeout(to); clearTimeout(safety); _snapCallbacks.delete(snapFn); };
   }, [active, replayKey]);
   return p;
 }
@@ -141,10 +141,10 @@ function CountUp({ value, active, dur }) {
     if (!on) { setDisp(fmtNum(0, p)); return; }
     if (REDUCED) { setDisp(fmtNum(p.num, p)); return; }
     let raf, start, done = false;
-    const d = dur || 1100;
+    const d = dur || 1200;
     const snapFn = () => { if (!done) { done = true; setDisp(fmtNum(p.num, p)); } };
     _snapCallbacks.add(snapFn);
-    const finish = setTimeout(snapFn, d + 200);
+    const finish = setTimeout(snapFn, d + 300);
     const step = (t) => {
       if (done) return;
       if (!start) start = t;
