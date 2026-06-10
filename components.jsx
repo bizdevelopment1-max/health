@@ -50,15 +50,17 @@ function Trend({ v, small, animate }) {
 // ---- Sidebar (Samsung blue board) ------------------------------
 const NAV = [
   { id: "overview", ko: "오버뷰", en: "Overview", icon: "grid" },
+  { id: "factcheck", ko: "팩트체크", en: "Fact Check", icon: "spark" },
   { id: "device", ko: "디바이스 헬스", en: "Device Health", icon: "device" },
   { id: "ai", ko: "AI 네이티브", en: "AI Native", icon: "ai" },
   { id: "startup", ko: "체중·피트니스", en: "Weight & Fitness", icon: "spark" },
   { id: "articles", ko: "데일리 기사", en: "Daily Articles", icon: "news" },
   { id: "charts", ko: "정량 분석", en: "Quant Charts", icon: "chart" },
+  { id: "insights", ko: "핵심 인사이트", en: "Insights", icon: "pulse" },
   { id: "reports", ko: "리서치 리포트", en: "Research", icon: "report" },
 ];
 
-function Sidebar({ collapsed, onToggle, active, onNav, brand, onCycleBrand, articleCount }) {
+function Sidebar({ collapsed, onToggle, active, onNav, brand, onCycleBrand, articleCount, hallCount }) {
   const stop = (fn) => (e) => { e.stopPropagation(); fn && fn(); };
   return (
     <aside className={"sidebar" + (collapsed ? " collapsed" : "")} style={{ background: brand.bg }}
@@ -68,7 +70,7 @@ function Sidebar({ collapsed, onToggle, active, onNav, brand, onCycleBrand, arti
           <span className="sb-logo-mark" style={{ color: brand.bg }}><Icon name="pulse" size={18} sw={2.4} /></span>
           {!collapsed && (
             <span className="sb-logo-txt">
-              <b>HEALTH</b><span>INTELLIGENCE</span>
+              <b>HEALTH</b><span>INTELLIGENCE v2</span>
             </span>
           )}
         </button>
@@ -81,6 +83,9 @@ function Sidebar({ collapsed, onToggle, active, onNav, brand, onCycleBrand, arti
             {!collapsed && <span className="sb-label">{n.ko}</span>}
             {!collapsed && n.id === "articles" && articleCount > 0 && (
               <span className="sb-badge">{articleCount}</span>
+            )}
+            {!collapsed && n.id === "factcheck" && hallCount > 0 && (
+              <span className="sb-badge" style={{ background: "#D23B3B", color: "#fff" }}>{hallCount}</span>
             )}
             {active === n.id && <span className="sb-active-bar" />}
           </button>
@@ -117,7 +122,7 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel }) {
   return (
     <header className="topbar">
       <div className="tb-title">
-        <h1>헬스케어 인텔리전스 <span className="tb-sub">데일리 브리핑 · 경쟁 트렌드 · 시장 정량분석</span></h1>
+        <h1>헬스케어 인텔리전스 v2 <span className="tb-sub">팩트체크판 · 데일리 브리핑 · 정량분석</span></h1>
       </div>
       <div className="tb-tools">
         <div className="tb-search">

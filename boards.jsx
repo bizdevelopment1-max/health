@@ -38,12 +38,12 @@ function CompanyBoard({ cat, companies, density, sectionRef, query }) {
             <span className="ct-seg">{c.unit}</span>
             <span className="num ct-valcell">
               <AnimatedNumber className="ct-val" value={c.valuation} />
-              {c.valAsof && c.valAsof !== "\u2014" && <em className="ct-asof">'{c.valAsof}월 기준</em>}
+              {c.valAsof && c.valAsof !== "—" && <em className="ct-asof">'{c.valAsof}월 기준</em>}
             </span>
             <span className="num">
               <em className="ct-metric">{c.metric}</em>
               <AnimatedNumber className="ct-mval" value={c.value} />
-              {c.metricAsof && c.metricAsof !== "\u2014" && <em className="ct-asof">'{c.metricAsof}월 기준</em>}
+              {c.metricAsof && c.metricAsof !== "—" && <em className="ct-asof">'{c.metricAsof}월 기준</em>}
             </span>
             <span className="num ct-trend">
               <Trend v={c.trend} small animate />
@@ -65,7 +65,6 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
     .filter(a => filter === "all" || a.cat === filter)
     .filter(a => !query || a.title.toLowerCase().includes(query.toLowerCase()) || a.source.toLowerCase().includes(query.toLowerCase()));
 
-  // group by date, newest first
   const groups = [];
   const seen = {};
   filtered.forEach(a => {
@@ -137,6 +136,87 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
   );
 }
 
+// ---- Hallucination / Fact-check board --------------------------
+function HallucinationBoard({ hallucinations, sectionRef }) {
+  const inView = useInView(sectionRef);
+  const severityColor = { high: "var(--down)", medium: "#E9A100", low: "var(--muted)" };
+  const severityLabel = { high: "오류", medium: "미검증", low: "경미" };
+  return (
+    <section className="board" ref={sectionRef} data-screen-label="Fact Check">
+     <AnimCtx.Provider value={inView}>
+      <div className="board-head">
+        <span className="board-tab" style={{ background: "var(--down)" }} />
+        <div className="board-titles">
+          <h2>팩트체크 <span className="board-en">Hallucination Findings · {hallucinations.length}건</span></h2>
+          <p>이전 버전에서 발견된 할루시네이션·미검증 데이터를 수정 반영했습니다</p>
+        </div>
+        <div className="board-count" style={{ color: "var(--down)", background: "color-mix(in srgb, var(--down) 10%, var(--panel))" }}>{hallucinations.length}건 발견</div>
+      </div>
+      <div className="hall-list">
+        {hallucinations.map((h, i) => {
+          const sColor = severityColor[h.severity];
+          return (
+            <div className="hall-item" key={h.id}>
+              <div className="hall-num" style={{ background: sColor }}>
+                <CountUp value={String(h.id)} active={inView} dur={600} />
+              </div>
+              <div className="hall-body">
+                <div className="hall-top">
+                  <span className="hall-company">{h.company}</span>
+                  <span className="hall-severity" style={{ color: sColor, borderColor: sColor }}>{severityLabel[h.severity]}</span>
+                  {h.source && <span className="hall-source">{h.source}</span>}
+                </div>
+                <div className="hall-claim">"{h.claim}"</div>
+                <div className="hall-row err">
+                  <span className="hall-icon">&#10060;</span>
+                  <span>{h.error}</span>
+                </div>
+                <div className="hall-row fix">
+                  <span className="hall-icon">&#9989;</span>
+                  <span>{h.fact}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+     </AnimCtx.Provider>
+    </section>
+  );
+}
+
+// ---- Insights board -------------------------------------------
+function InsightsBoard({ insights, sectionRef }) {
+  const inView = useInView(sectionRef);
+  return (
+    <section className="board" ref={sectionRef} data-screen-label="Key Insights">
+     <AnimCtx.Provider value={inView}>
+      <div className="board-head">
+        <span className="board-tab" style={{ background: "var(--accent)" }} />
+        <div className="board-titles">
+          <h2>핵심 인사이트 <span className="board-en">Key Insights · 2026.06</span></h2>
+          <p>팩트체크 데이터 기반 시장 핵심 동향 6선</p>
+        </div>
+      </div>
+      <div className="insight-grid">
+        {insights.map((ins, i) => {
+          const prog = useProgress(inView, 700, i * 100);
+          return (
+            <div className="insight-card" key={i} style={{ opacity: prog, transform: `translateY(${(1 - prog) * 16}px)` }}>
+              <div className="insight-icon"><Icon name={ins.icon || "spark"} size={18} /></div>
+              <div className="insight-body">
+                <div className="insight-title">{ins.title}</div>
+                <div className="insight-desc">{ins.desc}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+     </AnimCtx.Provider>
+    </section>
+  );
+}
+
 // ---- Charts section --------------------------------------------
 function ChartsBoard({ data, cats, theme, sectionRef }) {
   const inView = useInView(sectionRef);
@@ -164,12 +244,12 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>기업별 밸류에이션</h3><span>$B</span></div>
+          <div className="cc-head"><h3>기업별 밸류에이션 (검증본)</h3><span>$B</span></div>
           <HBarChart data={data.FUNDING} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>사용자 / 다운로드</h3><span>주요 앱 · M(백만)</span></div>
+          <div className="cc-head"><h3>사용자 / 판매량</h3><span>주요 앱·기기 · M(백만)</span></div>
           <HBarChart data={data.USERS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" />
         </div>
       </div>
@@ -211,4 +291,4 @@ function ReportsBoard({ reports, sectionRef, query }) {
   );
 }
 
-Object.assign(window, { CompanyBoard, ArticleFeed, ChartsBoard, ReportsBoard });
+Object.assign(window, { CompanyBoard, ArticleFeed, HallucinationBoard, InsightsBoard, ChartsBoard, ReportsBoard });

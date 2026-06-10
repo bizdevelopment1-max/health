@@ -46,8 +46,8 @@ function App() {
   // section refs
   const scrollRef = uR(null);
   const refs = {
-    overview: uR(null), device: uR(null), ai: uR(null), startup: uR(null),
-    articles: uR(null), charts: uR(null), reports: uR(null),
+    overview: uR(null), factcheck: uR(null), device: uR(null), ai: uR(null), startup: uR(null),
+    articles: uR(null), charts: uR(null), insights: uR(null), reports: uR(null),
   };
 
   uE(() => { document.documentElement.dataset.theme = dark ? "dark" : "light"; }, [dark]);
@@ -89,7 +89,7 @@ function App() {
       <Sidebar
         collapsed={collapsed} onToggle={() => setCollapsed(v => !v)}
         active={active} onNav={navTo} brand={brand} onCycleBrand={cycleBrand}
-        articleCount={articleCount}
+        articleCount={articleCount} hallCount={D.HALLUCINATIONS ? D.HALLUCINATIONS.length : 0}
       />
 
       <div className="shell">
@@ -100,7 +100,7 @@ function App() {
             {/* Overview */}
             <section ref={refs.overview} data-screen-label="Overview">
               <div className="ov-head">
-                <h2 className="ov-title">마켓 오버뷰 <span>Market Overview</span></h2>
+                <h2 className="ov-title">마켓 오버뷰 <span>Market Overview · v2 팩트체크판</span></h2>
                 <div className="ov-legend">
                   {cats.map(c => (
                     <span key={c.id} className="ov-leg"><i style={{ background: c.accent }} />{c.ko}</span>
@@ -121,6 +121,8 @@ function App() {
               </div>
             </section>
 
+            <HallucinationBoard hallucinations={D.HALLUCINATIONS} sectionRef={refs.factcheck} />
+
             <CompanyBoard cat={cats[0]} companies={D.COMPANIES} density={t.density} sectionRef={refs.device} query={query} />
             <CompanyBoard cat={cats[1]} companies={D.COMPANIES} density={t.density} sectionRef={refs.ai} query={query} />
             <CompanyBoard cat={cats[2]} companies={D.COMPANIES} density={t.density} sectionRef={refs.startup} query={query} />
@@ -129,11 +131,13 @@ function App() {
 
             <ChartsBoard data={D} cats={cats} theme={chartTheme} sectionRef={refs.charts} />
 
+            <InsightsBoard insights={D.INSIGHTS} sectionRef={refs.insights} />
+
             <ReportsBoard reports={D.REPORTS} sectionRef={refs.reports} query={query} />
 
             <footer className="foot">
-              <span>Health Intelligence Dashboard</span>
-              <span>샘플 데이터 · 실제 투자/의사결정 전 원문 확인 필요</span>
+              <span>Health Intelligence Dashboard v2 · 팩트체크판</span>
+              <span>소스: Statista, CB Insights, 공식 발표 기준 · 최종 업데이트 2026.06.10</span>
             </footer>
           </div>
         </main>
