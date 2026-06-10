@@ -14,7 +14,7 @@
   /* ---- Companies (VP/방향성 · 출처 플레인텍스트) ---- */
   const COMPANIES = [
     // ── Device ──
-    { cat: "device", name: "Apple", domain: "apple.com", unit: "Health · Watch S11", valuation: "공개(상장)", valAsof: "26.6", funding: "Public", metric: "Watch 판매", value: "33M/yr", metricAsof: "25 IDC", trend: +4.2,
+    { cat: "device", name: "Apple", domain: "apple.com", unit: "Health · Watch S11", valuation: "~$3.5T 시총", valAsof: "26.6", funding: "Public", metric: "Watch 판매", value: "33M/yr", metricAsof: "25 IDC", trend: +4.2,
       note: "Watch Series 11 · 고혈압 알림+수면 점수 신규 · ECG/AFib FDA clearance · 연 3,300만대(IDC 2025) · Apple Intelligence 헬스 확장",
       vp: "하드웨어·소프트웨어·서비스 수직 통합으로 의료 등급 건강 데이터를 일상 속에 — 소비자 웨어러블 중 유일한 FDA clearance(ECG/AFib) 보유",
       direction: "예방 의학 플랫폼으로 진화 · 고혈압 알림 등 조기 경고 기능 확대 · Apple Intelligence 기반 건강 데이터 AI 요약 · 생태계 락인 심화",
