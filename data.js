@@ -194,17 +194,6 @@
         "Crunchbase — 2022 — https://www.crunchbase.com/",
       ] },
 
-    { cat: "device", name: "Samsung Galaxy Ring", domain: "samsung.com", unit: "Smart Ring", valuation: "Samsung 자회사", valAsof: "26.6", funding: "Public", metric: "출시 세대", value: "1세대", metricAsof: "24 H2 출시", trend: +0, trendBasis: "신규 진입 (YoY 비교 불가)",
-      note: "2024 H2 Galaxy Ring 출시 · $399 · Galaxy AI Health 코칭 · Galaxy Watch Ultra 연동 · Samsung Health 생태계 통합 · Oura 74% 점유율(Omdia 2025 H1, Galaxy Ring 출시 직후 측정)에 도전 · 2세대 2027 예상",
-      vp: "삼성 갤럭시 생태계 통합 스마트링 — Galaxy Watch·Galaxy AI와의 원활한 연동이 차별점",
-      direction: "Galaxy AI Health 코칭 기능 강화 · Galaxy Ring 2세대 2027 출시 전망 · Samsung Health 데이터 허브화",
-      url: "https://www.samsung.com/global/galaxy/galaxy-ring/",
-      sources: [
-        "Samsung 공식 — 2024 — https://www.samsung.com/global/galaxy/galaxy-ring/",
-        "IDC Wearables Market Report — 2025 — https://www.idc.com/",
-        "Counterpoint Research Smart Ring Tracker — Q4 2025 — https://www.counterpointresearch.com/",
-      ] },
-
     { cat: "device", name: "Ultrahuman Ring", domain: "ultrahuman.com", unit: "Smart Ring · CGM", valuation: "$1B+ 추정", valAsof: "26.6", funding: "Series D", metric: "누적 판매", value: "비공개", metricAsof: "26.6", trend: +18.0,
       note: "Oura 직접 경쟁 · Ring AIR 출시 · CGM 패치 M1 Live 연동 · 인도 기반 · 대사 데이터+링 결합 차별화",
       vp: "스마트링 + CGM(연속혈당측정) 통합으로 생체 데이터의 범위를 확장 — Oura에 없는 대사 데이터가 차별점",
@@ -287,7 +276,7 @@
     // ── 2026-06-04 ──
     { date: "2026-06-04", cat: "startup", source: "TechCrunch", title: "AllTrails 6,500만 가입자 대상 AI 트레일 추천 출시", summary: "· 위치·난이도·날씨 반영 맞춤 트레일 추천\n· 아웃도어 앱 최고 성장률 · AI 안전 경고 추가\n· 실시간 혼잡도 표시 기능 업데이트", tag: "Launch", url: "https://techcrunch.com/" },
     { date: "2026-06-04", cat: "ai", source: "CNBC", title: "Google·Amazon·MS, 헬스 AI 인프라 투자 가속", summary: "· Azure Health Bot + AWS HealthScribe + Google MedPaLM\n· 클라우드·모델 사업자 헬스 데이터 워크로드 선점 경쟁\n· 의료 특화 LLM 인프라 구축 가속", tag: "Analysis", url: "https://www.cnbc.com/health-and-science/" },
-    { date: "2026-06-04", cat: "device", source: "Android Central", title: "스마트링 경쟁 격화 — Oura $11B vs Samsung Galaxy Ring (2027 예상)", summary: "· Oura IPO S-1 제출 · Samsung Galaxy Ring 2세대 2026 출시 지연 → 2027 예상\n· 2026 스마트링 출하량 전년비 2배 전망\n· Ultrahuman·Amazfit 등 신규 진입 가속\n· Oura 점유율 74%(Omdia) 방어 vs 가격 경쟁 압박", tag: "Market", url: "https://www.androidcentral.com/wearables" },
+    { date: "2026-06-04", cat: "device", source: "Android Central", title: "스마트링 경쟁 격화 — Oura $11B · Ultrahuman·Amazfit 신규 진입 가속", summary: "· Oura IPO S-1 제출 · 2026 스마트링 출하량 전년비 2배 전망\n· Ultrahuman·Amazfit 등 신규 진입 가속\n· Oura 점유율 74%(Omdia) 방어 vs 가격 경쟁 압박", tag: "Market", url: "https://www.androidcentral.com/wearables" },
 
     // ── 2026-06-03 ──
     { date: "2026-06-03", cat: "device", source: "Bloomberg", title: "Oura Series E $9억 후 사업 확장 — $11B 밸류 · IPO 로드맵", summary: "· Series E $9억(Fidelity 주도) 밸류 $11B(CNBC 2025.10)\n· 대사·여성건강 신규 지표 확장 · Ring 4 글로벌 출시 완료\n· 기업 B2B 웰니스·방위 분야 진출 · 자체 AI 모델 개발", tag: "Funding", url: "https://www.bloomberg.com/technology" },
@@ -300,7 +289,6 @@
     // ── 2026-05-31 ──
     { date: "2026-05-31", cat: "device", source: "the5krunner", title: "스크린리스 밴드 심박 정확도 비교 — Whoop vs Fitbit Air vs Garmin CIRQA", summary: "· the5krunner 실측 HR 비교 테스트\n· Whoop: 안정 시 정확도 높음 · 운동 중 편차 존재\n· Fitbit Air: $99 가격 대비 합리적 정확도 · 고강도 운동 시 한계\n· Garmin CIRQA: Body Battery 알고리즘 차별화 · 가격 $509 프리미엄", tag: "Review", url: "https://the5krunner.com/" },
 
-    { date: "2026-06-02", cat: "ai", source: "The Verge", title: "Samsung Health, Galaxy Watch 7 앞두고 AI 코칭 확장 예고", summary: "· 온디바이스 AI 실시간 코칭 강화\n· Galaxy Watch 7 + One UI Health 대규모 업데이트\n· Samsung Health 에이전트 기능 2026 하반기 출시 예정", tag: "Product", url: "https://www.theverge.com/health" },
     { date: "2026-06-02", cat: "device", source: "CNBC", title: "웨어러블 RPM 시장 연 14.7% 성장 — TAM $660B(2030E)", summary: "· 만성질환 관리 수요 · 웨어러블 원격환자모니터링 확대\n· 2026~2030 CAGR 14.7% · TAM $660B(2030E)\n· 보험 적용 범위 확대가 성장 핵심 동력", tag: "Market", url: "https://www.cnbc.com/health-and-science/" },
 
     // ── 2026-05-22 ──

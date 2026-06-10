@@ -548,12 +548,12 @@ function DynamicsBoard({ companies, cats, sectionRef }) {
     {
       title: "스마트링 시장 경쟁",
       en: "Smart Ring Battle",
-      desc: "Oura 74% 점유율 방어 vs Ultrahuman·Samsung 도전",
-      players: ["Oura", "Ultrahuman Ring", "Samsung"],
+      desc: "Oura 74% 점유율 방어 vs Ultrahuman·Amazfit 도전",
+      players: ["Oura", "Ultrahuman Ring", "Amazfit"],
       dims: [
-        { label: "점유율", values: ["74% (Omdia '25)", "성장 중", "Galaxy Ring 지연"] },
-        { label: "차별화", values: ["수면 정확도 1위", "CGM 연동 대사", "Samsung 생태계"] },
-        { label: "가격", values: ["$349+구독 $6/월", "$349 구독 없음", "$399 (1세대)"] },
+        { label: "점유율", values: ["74% (Omdia '25)", "성장 중", "신규 진입"] },
+        { label: "차별화", values: ["수면 정확도 1위", "CGM 연동 대사", "가성비 포지셔닝"] },
+        { label: "가격", values: ["$349+구독 $6/월", "$349 구독 없음", "$199 (추정)"] },
       ],
     },
     {
