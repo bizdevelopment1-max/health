@@ -20,7 +20,6 @@ const PALETTE = {
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [collapsed, setCollapsed] = uS(false);
   const [brandIdx, setBrandIdx] = uS(0);
   const [active, setActive] = uS("overview");
   const [query, setQuery] = uS("");
@@ -76,9 +75,8 @@ function App() {
     return () => sc.removeEventListener("scroll", onScroll);
   }, []);
 
-  const cycleBrand = (i) => {
-    if (typeof i === "number") setBrandIdx(i);
-    else setBrandIdx(p => (p + 1) % BRANDS.length);
+  const cycleBrand = () => {
+    setBrandIdx(p => (p + 1) % BRANDS.length);
   };
 
   const articleCount = D.ARTICLES.filter(a => a.date === "2026-06-10").length;
@@ -87,7 +85,6 @@ function App() {
   return (
     <div className={"app d-" + t.density}>
       <Sidebar
-        collapsed={collapsed} onToggle={() => setCollapsed(v => !v)}
         active={active} onNav={navTo} brand={brand} onCycleBrand={cycleBrand}
         articleCount={articleCount} hallCount={D.HALLUCINATIONS ? D.HALLUCINATIONS.length : 0}
       />

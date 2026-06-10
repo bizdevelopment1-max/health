@@ -60,31 +60,27 @@ const NAV = [
   { id: "reports", ko: "리서치 리포트", en: "Research", icon: "report" },
 ];
 
-function Sidebar({ collapsed, onToggle, active, onNav, brand, onCycleBrand, articleCount, hallCount }) {
-  const stop = (fn) => (e) => { e.stopPropagation(); fn && fn(); };
+function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, hallCount }) {
   return (
-    <aside className={"sidebar" + (collapsed ? " collapsed" : "")} style={{ background: brand.bg }}
-      onClick={onToggle} title={collapsed ? "펼치려면 클릭" : "접으려면 빈 영역 클릭"}>
+    <aside className="sidebar" style={{ background: brand.bg }}>
       <div className="sb-head">
-        <button className="sb-logo" onClick={stop(onCycleBrand)} title="클릭하여 보드 색상 변경">
+        <button className="sb-logo" onClick={onCycleBrand} title="클릭하여 색상 변경">
           <span className="sb-logo-mark" style={{ color: brand.bg }}><Icon name="pulse" size={18} sw={2.4} /></span>
-          {!collapsed && (
-            <span className="sb-logo-txt">
-              <b>HEALTH</b><span>INTELLIGENCE v2</span>
-            </span>
-          )}
+          <span className="sb-logo-txt">
+            <b>HEALTH</b><span>INTELLIGENCE v2</span>
+          </span>
         </button>
       </div>
 
       <nav className="sb-nav">
         {NAV.map(n => (
-          <button key={n.id} className={"sb-item" + (active === n.id ? " on" : "")} onClick={stop(() => onNav(n.id))} title={n.ko}>
+          <button key={n.id} className={"sb-item" + (active === n.id ? " on" : "")} onClick={() => onNav(n.id)} title={n.ko}>
             <span className="sb-ic"><Icon name={n.icon} size={17} /></span>
-            {!collapsed && <span className="sb-label">{n.ko}</span>}
-            {!collapsed && n.id === "articles" && articleCount > 0 && (
+            <span className="sb-label">{n.ko}</span>
+            {n.id === "articles" && articleCount > 0 && (
               <span className="sb-badge">{articleCount}</span>
             )}
-            {!collapsed && n.id === "factcheck" && hallCount > 0 && (
+            {n.id === "factcheck" && hallCount > 0 && (
               <span className="sb-badge" style={{ background: "#D23B3B", color: "#fff" }}>{hallCount}</span>
             )}
             {active === n.id && <span className="sb-active-bar" />}
@@ -93,17 +89,7 @@ function Sidebar({ collapsed, onToggle, active, onNav, brand, onCycleBrand, arti
       </nav>
 
       <div className="sb-foot">
-        {!collapsed && (
-          <div className="sb-swatches" onClick={stop(null)}>
-            {BRANDS.map((b, i) => (
-              <button key={i} className={"sb-sw" + (b.bg === brand.bg ? " on" : "")} style={{ background: b.bg }} onClick={stop(() => onCycleBrand(i))} title={b.name} />
-            ))}
-          </div>
-        )}
-        <div className="sb-hint">
-          <Icon name={collapsed ? "chevron" : "collapse"} size={16} />
-          {!collapsed && <span>빈 영역 클릭 시 접기 · 펼치기</span>}
-        </div>
+        <div className="sb-brand-name">{brand.name}</div>
       </div>
     </aside>
   );
