@@ -157,10 +157,6 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onCol
           <Icon name="search" size={15} />
           <input value={query} onChange={e => onQuery(e.target.value)} placeholder="기업·기사 검색…" />
         </div>
-        <div className="tb-date">
-          <Icon name="dot" size={9} />
-          <span>{todayLabel} 업데이트</span>
-        </div>
         <AIChatbot onNav={onNav} />
         <button className="tb-color" onClick={onColorCycle} title="색상 변경">
           <Icon name="palette" size={16} />
@@ -168,6 +164,10 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onCol
         <button className="tb-theme" onClick={onTheme} title="다크모드 토글">
           <Icon name={dark ? "sun" : "moon"} size={16} />
         </button>
+        <div className="tb-date">
+          <Icon name="dot" size={9} />
+          <span>{todayLabel} 업데이트</span>
+        </div>
       </div>
     </header>
   );
@@ -243,34 +243,45 @@ function AIChatbot({ onNav }) {
 
   const doSearch = () => {
     if (!search.trim()) return;
-    const q = search.toLowerCase();
-    const match = QA.find(qa => {
+    const q = search.toLowerCase().trim();
+    const words = q.split(/\s+/).filter(w => w.length > 1);
+
+    const scored = QA.map(qa => {
+      let score = 0;
       const kw = qa.keywords || [];
-      return kw.some(k => q.includes(k)) || qa.q.toLowerCase().includes(q.slice(0, 8));
+      kw.forEach(k => { if (q.includes(k)) score += 10; });
+      if (qa.q.toLowerCase().includes(q)) score += 8;
+      words.forEach(w => { if (qa.q.toLowerCase().includes(w)) score += 3; });
+      words.forEach(w => { if (qa.a.toLowerCase().includes(w)) score += 1; });
+      return { qa, score };
     });
-    if (match) { typeOut(match.a, match.nav); return; }
+    scored.sort((a, b) => b.score - a.score);
+    if (scored[0] && scored[0].score >= 3) { typeOut(scored[0].qa.a, scored[0].qa.nav); return; }
 
     const D = window.DASH;
     const results = [];
     (D.COMPANIES || []).forEach(c => {
       const txt = (c.name + " " + c.note + " " + (c.vp || "")).toLowerCase();
-      if (txt.includes(q) || q.split(/\s+/).some(w => w.length > 1 && txt.includes(w))) {
-        results.push({ text: c.name + ": " + c.note, nav: c.cat });
-      }
+      let s = 0;
+      if (txt.includes(q)) s += 10;
+      words.forEach(w => { if (c.name.toLowerCase().includes(w)) s += 5; if (txt.includes(w)) s += 1; });
+      if (s > 0) results.push({ text: c.name + ": " + c.note, nav: c.cat, score: s });
     });
     (D.INSIGHTS || []).forEach(ins => {
       const txt = (ins.title + " " + ins.desc).toLowerCase();
-      if (txt.includes(q) || q.split(/\s+/).some(w => w.length > 1 && txt.includes(w))) {
-        results.push({ text: ins.title + " — " + ins.desc, nav: "insights" });
-      }
+      let s = 0;
+      if (txt.includes(q)) s += 8;
+      words.forEach(w => { if (txt.includes(w)) s += 1; });
+      if (s > 0) results.push({ text: ins.title + " — " + ins.desc, nav: "insights", score: s });
     });
     (D.ARTICLES || []).forEach(a => {
       const txt = (a.title + " " + (a.summary || "")).toLowerCase();
-      if (q.split(/\s+/).some(w => w.length > 1 && txt.includes(w))) {
-        results.push({ text: a.source + ": " + a.title, nav: "articles" });
-      }
+      let s = 0;
+      words.forEach(w => { if (txt.includes(w)) s += 1; });
+      if (s > 0) results.push({ text: a.source + ": " + a.title, nav: "articles", score: s });
     });
 
+    results.sort((a, b) => b.score - a.score);
     if (results.length > 0) {
       const top = results.slice(0, 3);
       const answerText = top.map((r, i) => (i + 1) + ". " + r.text).join("\n\n");

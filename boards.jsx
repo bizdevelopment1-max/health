@@ -430,7 +430,10 @@ function VPBoard({ companies, cats, sectionRef, onSelect, query }) {
 function ReportsBoard({ reports, sectionRef, query }) {
   const inView = useInView(sectionRef);
   const rows = reports.filter(r => !query || (r.title + r.house).toLowerCase().includes(query.toLowerCase()));
-  const fmtDate = ds => { const d = new Date(ds + "T00:00:00"); return `${d.getMonth() + 1}.${String(d.getDate()).padStart(2, "0")}`; };
+  const fmtDate = ds => {
+    const y = ds.slice(2, 4), m = +ds.slice(5, 7), d = +ds.slice(8, 10);
+    return `'${y}.${m}.${String(d).padStart(2, "0")}`;
+  };
   return (
     <section className="board" ref={sectionRef} data-screen-label="Research Reports">
      <AnimCtx.Provider value={inView}>
@@ -442,17 +445,29 @@ function ReportsBoard({ reports, sectionRef, query }) {
         </div>
       </div>
       <div className="report-list">
-        {rows.map((r, i) => (
-          <a className="report" key={i} href={r.url} target="_blank" rel="noopener">
-            <span className={"rep-type " + (r.type === "Securities" ? "sec" : "mkt")}>{r.type === "Securities" ? "증권사" : "시장조사"}</span>
-            <span className="rep-house">{r.house}</span>
-            <span className="rep-title">{r.title}</span>
-            <span className="rep-figure"><AnimatedNumber value={r.figure} /></span>
-            <span className={"rep-rating r-" + r.rating.replace(/\s/g, "").toLowerCase()}>{r.rating}</span>
-            <span className="rep-date">{fmtDate(r.date)}</span>
-            <Icon name="ext" size={12} />
-          </a>
-        ))}
+        {rows.map((r, i) => {
+          const prog = useProgress(inView, 600, i * 60);
+          return (
+            <div className="report-card" key={i} style={{ opacity: prog, transform: `translateY(${(1 - prog) * 12}px)` }}>
+              <a className="report" href={r.url} target="_blank" rel="noopener">
+                <span className={"rep-type " + (r.type === "Securities" ? "sec" : r.type === "Regulatory" ? "reg" : "mkt")}>{r.type === "Securities" ? "증권사" : r.type === "Regulatory" ? "규제" : "시장조사"}</span>
+                <span className="rep-house">{r.house}</span>
+                <span className="rep-title">{r.title}</span>
+                <span className="rep-figure"><AnimatedNumber value={r.figure} /></span>
+                <span className={"rep-rating r-" + r.rating.replace(/\s/g, "").toLowerCase()}>{r.rating}</span>
+                <span className="rep-date">{fmtDate(r.date)}</span>
+                <Icon name="ext" size={12} />
+              </a>
+              {r.bullets && r.bullets.length > 0 && (
+                <div className="rep-bullets">
+                  {r.bullets.map((b, bi) => (
+                    <div key={bi} className="rep-bullet">· {b}</div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
      </AnimCtx.Provider>
     </section>

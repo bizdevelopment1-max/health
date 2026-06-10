@@ -314,16 +314,26 @@
   ];
 
   const REPORTS = [
-    { house: "Morgan Stanley", type: "Securities", date: "2026-06-09", title: "Digital Health 2026: AI 에이전트가 웨어러블 해자를 재편한다", figure: "TAM $660B (2030E)", rating: "Overweight", url: "https://www.morganstanley.com/ideas" },
-    { house: "Goldman Sachs", type: "Securities", date: "2026-06-06", title: "웨어러블 & RPM — 프리미엄 하드웨어 vs. AI 소프트웨어 마진", figure: "웨어러블 CAGR 14.7%", rating: "Neutral", url: "https://www.goldmansachs.com/insights" },
-    { house: "Rock Health", type: "Market", date: "2026-06-05", title: "Q1 2026 펀딩: $4.0B/110건 · 자본 집중 가속 · AI 시대 선언", figure: "Q1 $4.0B", rating: "Report", url: "https://rockhealth.com/insights/q1-2026-funding-overview-capital-continues-concentrating-and-four-other-market-signals/" },
-    { house: "CB Insights", type: "Market", date: "2026-06-05", title: "State of Digital Health Q1'26 — $7.4B 펀딩 · 메가라운드 60%", figure: "Q1 $7.4B", rating: "Report", url: "https://www.cbinsights.com/research/report/digital-health-trends-q1-2026/" },
-    { house: "Grand View Research", type: "Market", date: "2026-06-02", title: "글로벌 디지털 헬스 $347B(2025) → $1,830B(2033E) CAGR 23.4%", figure: "$347B → $1,830B", rating: "Report", url: "https://www.grandviewresearch.com/industry-analysis/digital-health-market" },
-    { house: "Grand View Research", type: "Market", date: "2026-05-30", title: "글로벌 GLP-1 수용체 작용제 시장 $82B(2026E) → $185B(2033E)", figure: "$82B GLP-1", rating: "Report", url: "https://www.grandviewresearch.com/industry-analysis/glp-1-receptor-agonist-market" },
-    { house: "J.P. Morgan", type: "Securities", date: "2026-05-30", title: "GLP-1 + 디지털 코칭: 새로운 체중관리 스택", figure: "참여도 +38% YoY", rating: "Overweight", url: "https://www.jpmorgan.com/insights" },
-    { house: "BCG", type: "Market", date: "2025-12-15", title: "AI 에이전트가 헬스케어를 변혁한다 — 2026 전망", figure: "문서화 1~2h/일 절감", rating: "Report", url: "https://www.bcg.com/publications/2026/how-ai-agents-will-transform-health-care" },
-    { house: "IDC", type: "Market", date: "2026-05-26", title: "글로벌 웨어러블 출하 트래커 — 스마트링이 최고 성장 폼팩터", figure: "Oura 링 점유율 74%", rating: "Report", url: "https://www.idc.com/" },
-    { house: "FDA", type: "Regulatory", date: "2026-01-06", title: "General Wellness 최종 가이드라인 — 혈압·혈당 웨어러블 규제 완화", figure: "Whoop·Oura 수혜", rating: "Final", url: "https://natlawreview.com/article/fdas-2026-general-wellness-policy-and-what-it-means-manufacturers-wearable-devices" },
+    { house: "Morgan Stanley", type: "Securities", date: "2026-06-09", title: "Digital Health 2026: AI 에이전트가 웨어러블 해자를 재편한다", figure: "TAM $660B (2030E)", rating: "Overweight", url: "https://www.morganstanley.com/ideas",
+      bullets: ["웨어러블·RPM TAM $660B(2030E) 전망", "AI 에이전트가 하드웨어 해자를 소프트웨어 해자로 전환", "Oura·Whoop 등 데카콘의 IPO 후 시장 재편 시나리오"] },
+    { house: "Goldman Sachs", type: "Securities", date: "2026-06-06", title: "웨어러블 & RPM — 프리미엄 하드웨어 vs. AI 소프트웨어 마진", figure: "웨어러블 CAGR 14.7%", rating: "Neutral", url: "https://www.goldmansachs.com/insights",
+      bullets: ["웨어러블 CAGR 14.7%(2026–2030)", "하드웨어 마진 하락 vs AI 소프트웨어 마진 상승 분기점", "구독 모델(Whoop) vs 일회성(Garmin) 수익성 비교"] },
+    { house: "Rock Health", type: "Market", date: "2026-06-05", title: "Q1 2026 펀딩: $4.0B/110건 · 자본 집중 가속 · AI 시대 선언", figure: "Q1 $4.0B", rating: "Report", url: "https://rockhealth.com/insights/q1-2026-funding-overview-capital-continues-concentrating-and-four-other-market-signals/",
+      bullets: ["Q1 $4.0B/110건 · 평균 딜 $36.7M(2021 이후 최고)", "메가딜($100M+) 12건 — 팬데믹 피크 이후 최다", "AI 주도 딜 62% · '있는 자/없는 자' 양극화 가속"] },
+    { house: "CB Insights", type: "Market", date: "2026-06-05", title: "State of Digital Health Q1'26 — $7.4B 펀딩 · 메가라운드 60%", figure: "Q1 $7.4B", rating: "Report", url: "https://www.cbinsights.com/research/report/digital-health-trends-q1-2026/",
+      bullets: ["Q1 $7.4B · 메가라운드 60%(19건)", "헬스 AI 투자 전분기 대비 +25%", "디지털 헬스 유니콘 9개 신규 탄생"] },
+    { house: "Grand View Research", type: "Market", date: "2026-06-02", title: "글로벌 디지털 헬스 $347B(2025) → $1,830B(2033E) CAGR 23.4%", figure: "$347B → $1,830B", rating: "Report", url: "https://www.grandviewresearch.com/industry-analysis/digital-health-market",
+      bullets: ["2025년 $347B → 2033E $1,830B · CAGR 23.4%", "원격의료·웨어러블·AI 진단 3축 성장", "아태 지역 최고 성장률 · 북미 최대 시장"] },
+    { house: "Grand View Research", type: "Market", date: "2026-05-30", title: "글로벌 GLP-1 수용체 작용제 시장 $82B(2026E) → $185B(2033E)", figure: "$82B GLP-1", rating: "Report", url: "https://www.grandviewresearch.com/industry-analysis/glp-1-receptor-agonist-market",
+      bullets: ["GLP-1 시장 2026E $82B → 2033E $185B", "세마글루타이드 점유율 52.8%(2025)", "티르제파타이드 CAGR 13.9% 최고 성장"] },
+    { house: "J.P. Morgan", type: "Securities", date: "2026-05-30", title: "GLP-1 + 디지털 코칭: 새로운 체중관리 스택", figure: "참여도 +38% YoY", rating: "Overweight", url: "https://www.jpmorgan.com/insights",
+      bullets: ["GLP-1+디지털 코칭 결합 시 참여도 +38% YoY", "코칭 앱 번들이 약물 치료 표준화 전망", "Noom·WeightWatchers 처방 연계 모델 주목"] },
+    { house: "BCG", type: "Market", date: "2025-12-15", title: "AI 에이전트가 헬스케어를 변혁한다 — 2026 전망", figure: "문서화 1~2h/일 절감", rating: "Report", url: "https://www.bcg.com/publications/2026/how-ai-agents-will-transform-health-care",
+      bullets: ["코파일럿→자율 에이전트 전환 2026 가속", "앰비언트 AI 스크라이브 1일 1~2시간 문서화 절감", "행정 부담 30% 감소(Salesforce 2025 조사)"] },
+    { house: "IDC", type: "Market", date: "2026-05-26", title: "글로벌 웨어러블 출하 트래커 — 스마트링이 최고 성장 폼팩터", figure: "Oura 링 점유율 74%", rating: "Report", url: "https://www.idc.com/",
+      bullets: ["스마트링 출하량 전년비 2배 성장", "Oura 점유율 74%(2025 H1)", "밴드→링 폼팩터 전환 가속 전망"] },
+    { house: "FDA", type: "Regulatory", date: "2026-01-06", title: "General Wellness 최종 가이드라인 — 혈압·혈당 웨어러블 규제 완화", figure: "Whoop·Oura 수혜", rating: "Final", url: "https://natlawreview.com/article/fdas-2026-general-wellness-policy-and-what-it-means-manufacturers-wearable-devices",
+      bullets: ["비침습 혈압·혈당 wellness 용도 허용 확대", "Whoop·Oura 직접 수혜 전망", "의사결정지원 소프트웨어 규제 완화"] },
   ];
 
   const MARKET_GROWTH = [
@@ -533,6 +543,7 @@
   ];
 
   const QA_PAIRS = [
+    { q: "애플(Apple)의 헬스케어 전략은?", a: "Apple의 헬스케어 전략은 하드웨어·소프트웨어·서비스 수직 통합입니다. Apple Watch S11은 소비자 웨어러블 중 유일한 FDA clearance(ECG·AFib)를 보유하고 있으며, 2025년에 고혈압 알림과 수면 점수 기능을 추가했습니다. 연간 3,300만 대 판매(IDC 2025), 생태계 재구매율 93%로 압도적 락인 효과를 보여줍니다. 방향성은 예방 의학 플랫폼으로의 진화입니다. Apple Intelligence 기반 건강 데이터 AI 요약, 고혈압 알림 등 조기 경고 기능 확대, Fitness+ 구독 번들로 서비스 수익 심화를 추진하고 있습니다. 가격은 $399~$799으로 프리미엄 포지셔닝이며, ARPU는 생태계 포함 연간 ~$500입니다.", nav: "device", keywords: ["애플", "apple", "전략", "apple watch", "워치"] },
     { q: "지금 헬스케어 웨어러블 시장에서 가장 빠르게 성장하는 기업은?", a: "현재 가장 가파른 성장세를 보이는 기업은 Oura와 Whoop입니다. 두 회사 모두 2026년에 데카콘(기업 가치 $10B 이상)으로 등극했습니다. Oura는 2025년 10월 Series E 라운드에서 $9억을 조달해 밸류에이션 $11B을 달성했고, 2026년 5월 21일 SEC에 IPO S-1을 비밀 제출했습니다. 2025년 매출 약 $1B, 2026년 예상 매출은 $2B으로 2년 만에 4배 성장이 예상됩니다. 스마트링 시장 점유율은 74%(Omdia 2025 H1 기준)로 압도적 1위입니다. Whoop은 2026년 3월 Series G에서 $5.75억을 조달해 밸류에이션 $10.1B을 기록했고, 매출 런레이트 $1.1B+, 600명 신규 채용을 계획 중입니다.", nav: "device", keywords: ["성장", "웨어러블", "oura", "whoop", "빠르게"] },
     { q: "Oura Ring과 Apple Watch 중 수면 추적 정확도는?", a: "9to5Mac이 2026년 6월에 진행한 4자 실사용 비교 리뷰 기준으로 수면 추적 정확도 순위는 Oura > Apple > Whoop > Fitbit Air 입니다. Oura가 앞서는 이유는 반지 폼팩터 덕분에 24시간 착용률이 높고, 손가락의 혈관 밀도가 손목보다 높아 PPG 신호 품질이 우수하기 때문입니다. 반면 Apple Watch S11은 소비자 웨어러블 중 유일하게 ECG·AFib FDA clearance를 보유하고 있어 의료 등급 기능에서 차별화됩니다. 수면만 놓고 보면 Oura, 종합 건강 모니터링까지 원한다면 Apple Watch가 더 적합합니다.", nav: "device", keywords: ["수면", "oura", "apple", "정확도", "비교"] },
     { q: "Fitbit Air는 어떤 제품이고, Whoop과 무엇이 다른가요?", a: "Fitbit Air는 Google이 2026년 5월 7일 출시한 스크린리스 웨어러블 밴드로, $99.99 일회성 구독 없는 모델입니다. 무게 12g, 7일 배터리, AFib 감지, SpO2, HRV, 피부온도 측정 및 Gemini 기반 AI 인사이트를 제공합니다. Whoop과의 결정적 차이는 비용 구조입니다. Fitbit Air는 $99.99만 내면 끝이지만, Whoop은 기기를 무료로 받는 대신 연간 $199~$359의 구독료를 내야 합니다. 2년 기준 Fitbit Air $99.99 vs Whoop $398~$718. Whoop은 ECG FDA clearance, 혈액검사 통합, 정교한 회복 코칭을 제공합니다.", nav: "device", keywords: ["fitbit", "air", "whoop", "다른", "차이", "비교"] },

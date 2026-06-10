@@ -35,6 +35,8 @@ function findScrollParent(el) {
 function useInView(ref, opts) {
   const o = opts || {};
   const [inView, setInView] = useStateA(false);
+  const [mounted, setMounted] = useStateA(0);
+  useEffectA(() => { setMounted(m => m + 1); }, []);
   useEffectA(() => {
     const el = ref && ref.current;
     if (!el) return;
@@ -80,7 +82,7 @@ function useInView(ref, opts) {
       target.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [ref]);
+  }, [ref, mounted]);
   return inView;
 }
 
