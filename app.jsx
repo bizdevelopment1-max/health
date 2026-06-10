@@ -59,7 +59,7 @@ function App() {
   const scrollRef = uR(null);
   const refs = {
     overview: uR(null), device: uR(null), ai: uR(null), startup: uR(null),
-    vp: uR(null), articles: uR(null), charts: uR(null), insights: uR(null), dynamics: uR(null), reports: uR(null),
+    vp: uR(null), articles: uR(null), charts: uR(null), insights: uR(null), dynamics: uR(null), bizmodel: uR(null), reports: uR(null),
   };
 
   uE(() => { document.documentElement.dataset.theme = dark ? "dark" : "light"; }, [dark]);
@@ -104,9 +104,7 @@ function App() {
   };
 
   const articleCount = D.ARTICLES.filter(a => a.date === "2026-06-10").length;
-  // 페이지 로드(업데이트) 시각 — "M/D H:MM" 형식
-  const now = new Date();
-  const today = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
+  const today = "6/10 18:58";
 
   return (
     <div className={"app d-" + t.density}>
@@ -149,6 +147,8 @@ function App() {
             <InsightsBoard insights={D.INSIGHTS} sectionRef={refs.insights} />
 
             <DynamicsBoard companies={D.COMPANIES} cats={cats} sectionRef={refs.dynamics} />
+
+            <BizModelBoard companies={D.COMPANIES} cats={cats} sectionRef={refs.bizmodel} theme={chartTheme} />
 
             <ReportsBoard reports={D.REPORTS} sectionRef={refs.reports} query={query} />
 

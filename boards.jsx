@@ -608,4 +608,94 @@ function DynamicsBoard({ companies, cats, sectionRef }) {
   );
 }
 
-Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard, DynamicsBoard, OverviewCharts });
+// ---- Biz Model Board (monetization / revenue model per company) ----
+function BizModelBoard({ companies, cats, sectionRef, theme }) {
+  const inView = useInView(sectionRef);
+  const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
+  const models = window.DASH.BIZ_MODELS || [];
+
+  const modelTypes = [
+    { label: "하드웨어 프리미엄", color: "#1428A0" },
+    { label: "기기 + 구독", color: "#7A38D6" },
+    { label: "기기무료 + 구독 전용", color: "#D23B3B" },
+    { label: "프리미엄 하드웨어", color: "#0E8F6E" },
+    { label: "저가 일회성", color: "#F59E0B" },
+    { label: "하드웨어 + 콘텐츠 구독", color: "#0891B2" },
+    { label: "프리미엄 구독", color: "#2D6BFF" },
+    { label: "구독 + 원격의료", color: "#C026D3" },
+    { label: "프리미엄 + 광고", color: "#16A34A" },
+  ];
+  const modelColor = m => (modelTypes.find(t => t.label === m) || {}).color || theme.ink;
+
+  return (
+    <section className="board" ref={sectionRef} data-screen-label="Biz Model">
+     <AnimCtx.Provider value={inView}>
+      <div className="board-head">
+        <span className="board-tab" style={{ background: "var(--accent)" }} />
+        <div className="board-titles">
+          <h2>수익화 모델 <span className="board-en">Biz Model & Monetization · 2026.06</span></h2>
+          <p>기업별 수익 구조 · 가격 전략 · ARPU · 리텐션 · 성장 전략 비교</p>
+        </div>
+      </div>
+
+      <div className="biz-grid">
+        {models.map((m, i) => {
+          const prog = useProgress(inView, 800, i * 80);
+          const cat = catMap[m.cat];
+          const co = companies.find(c => c.name.startsWith(m.name.split(" (")[0]));
+          return (
+            <div className="biz-card" key={i} style={{
+              opacity: prog, transform: `translateY(${(1 - prog) * 18}px)`,
+              "--biz-accent": cat ? cat.accent : "var(--accent)",
+            }}>
+              <div className="biz-card-head">
+                {co && <CoLogo name={co.name} domain={co.domain} accent={cat ? cat.accent : "var(--accent)"} />}
+                <div className="biz-card-titles">
+                  <b className="biz-name">{m.name}</b>
+                  <span className="biz-model-tag" style={{ background: modelColor(m.model), color: "#fff" }}>{m.model}</span>
+                </div>
+              </div>
+
+              <div className="biz-metrics">
+                <div className="biz-metric">
+                  <em>가격</em>
+                  <b>{m.pricing}</b>
+                </div>
+                <div className="biz-metric">
+                  <em>매출</em>
+                  <b><AnimatedNumber value={m.revenue} /></b>
+                </div>
+                <div className="biz-metric">
+                  <em>ARPU</em>
+                  <b>{m.arpu}</b>
+                </div>
+                <div className="biz-metric">
+                  <em>리텐션</em>
+                  <b>{m.retention}</b>
+                </div>
+              </div>
+
+              <div className="biz-sub-row">
+                <em>구독 구조</em>
+                <span>{m.sub}</span>
+              </div>
+
+              <div className="biz-moat">
+                <em>경쟁 해자 (Moat)</em>
+                <span>{m.moat}</span>
+              </div>
+
+              <div className="biz-strategy">
+                <em>수익화 전략</em>
+                <span>{m.strategy}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+     </AnimCtx.Provider>
+    </section>
+  );
+}
+
+Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard, DynamicsBoard, OverviewCharts, BizModelBoard });

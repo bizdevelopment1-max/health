@@ -1,13 +1,13 @@
 /* ============================================================
    anim.jsx — scroll-triggered animation primitives
-   - useInView: re-fires every time an element enters/leaves view
+   - useInView: re-fires every time an element enters/leaves the
+     NEAREST scrollable ancestor (not just the viewport)
    - useProgress: eased 0→1 ramp, resets to 0 when inactive
    - CountUp: number string that counts 0→target (replays)
    - TrendBar: diverging mini bar for ± percentages
    - AnimCtx: lets rows inherit their board's in-view state
    Background-tab safety: visibilitychange snaps all running
-   animations to final values when the tab goes hidden, so
-   screenshots/captures always show completed numbers.
+   animations to final values when the tab goes hidden.
    ============================================================ */
 const { useState: useStateA, useRef: useRefA, useEffect: useEffectA, useContext: useCtxA, createContext: createCtxA } = React;
 
@@ -15,8 +15,6 @@ const AnimCtx = createCtxA(true);
 
 const REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// Global registry: every running animation registers a "snap to final" callback.
-// When the tab hides (background, screenshot, print) we call them all.
 const _snapCallbacks = new Set();
 (function initVisSnap() {
   const snap = () => { if (document.hidden) _snapCallbacks.forEach(fn => fn()); };
@@ -24,33 +22,62 @@ const _snapCallbacks = new Set();
   window.addEventListener("beforeprint", () => _snapCallbacks.forEach(fn => fn()));
 })();
 
+function findScrollParent(el) {
+  let p = el && el.parentElement;
+  while (p) {
+    const ov = getComputedStyle(p).overflowY;
+    if (ov === "auto" || ov === "scroll" || ov === "overlay") return p;
+    p = p.parentElement;
+  }
+  return window;
+}
+
 function useInView(ref, opts) {
   const o = opts || {};
   const [inView, setInView] = useStateA(false);
   useEffectA(() => {
     const el = ref && ref.current;
     if (!el) return;
+    const scrollEl = findScrollParent(el);
+    const isWin = scrollEl === window;
+
     const check = () => {
       const r = el.getBoundingClientRect();
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      const vis = r.top < vh * 0.92 && r.bottom > vh * 0.04;
+      let top, bottom;
+      if (isWin) {
+        top = 0;
+        bottom = window.innerHeight || document.documentElement.clientHeight;
+      } else {
+        const sr = scrollEl.getBoundingClientRect();
+        top = sr.top;
+        bottom = sr.bottom;
+      }
+      const viewH = bottom - top;
+      const vis = r.top < top + viewH * 0.92 && r.bottom > top + viewH * 0.04;
       setInView(prev => (prev === vis ? prev : vis));
     };
     check();
+
     let io;
     if (typeof IntersectionObserver !== "undefined") {
       io = new IntersectionObserver(
         ([e]) => { if (e.isIntersecting) setInView(true); else if (!o.once) setInView(false); },
-        { threshold: o.threshold != null ? o.threshold : 0.12, rootMargin: o.margin || "0px 0px -6% 0px" }
+        {
+          root: isWin ? null : scrollEl,
+          threshold: o.threshold != null ? o.threshold : 0.08,
+          rootMargin: o.margin || "0px 0px -4% 0px",
+        }
       );
       io.observe(el);
     }
+
+    const target = isWin ? window : scrollEl;
     const onScroll = () => check();
-    window.addEventListener("scroll", onScroll, true);
+    target.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
       if (io) io.disconnect();
-      window.removeEventListener("scroll", onScroll, true);
+      target.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
   }, [ref]);

@@ -398,6 +398,19 @@
     { name: "Strava (ARR)", value: 0.5, cat: "startup" },
   ];
 
+  const BIZ_MODELS = [
+    { name: "Apple Watch", cat: "device", model: "하드웨어 프리미엄", pricing: "$399~$799", sub: "Apple Fitness+ $9.99/월(선택)", revenue: "$33B+ (서비스 포함)", margin: "~44% 제품", arpu: "~$500/yr 생태계", retention: "93% 생태계 재구매", moat: "하드웨어+소프트웨어+서비스 수직 통합, 생태계 락인", strategy: "Apple Intelligence 건강 AI 확장 · 고혈압 알림 등 의료 기능 추가로 프리미엄 유지 · 서비스 번들(Fitness+) 수익 심화" },
+    { name: "Oura", cat: "device", model: "기기 + 구독", pricing: "$349 기기 + $5.99/월", sub: "무료 티어(기본) + 멤버십(고급)", revenue: "~$1B (2025)", margin: "비공개", arpu: "~$420/yr", retention: "높음 (링 폼팩터 24h 착용)", moat: "수면 정확도 1위 · 스마트링 74% 점유 · 프리미엄 브랜드", strategy: "Ring 5 하드웨어 업그레이드 사이클 + 구독 전환율 제고 · IPO로 B2B/의료 확장 자금 확보" },
+    { name: "Whoop", cat: "device", model: "기기무료 + 구독 전용", pricing: "$0 기기 + $199~$359/yr", sub: "One($199) · Peak($239) · Life($359) 3티어", revenue: "$1.1B+ 런레이트", margin: "비공개", arpu: "$240/yr 평균", retention: "높음 (구독 없으면 기기 무용)", moat: "회복 코칭 브랜드 · 셀럽 투자 · FDA ECG clearance", strategy: "3티어로 ARPU 극대화 · Advanced Labs 혈액검사 · B2B 기업 웰니스 · 헬스스팬 플랫폼 확장" },
+    { name: "Garmin", cat: "device", model: "프리미엄 하드웨어", pricing: "$199~$1,099", sub: "없음 (일회성 구매)", revenue: "$2.36B 피트니스", margin: "~59% 매출총이익", arpu: "~$400 ASP", retention: "브랜드 충성 (멀티스포츠)", moat: "최장 배터리 · 내구성 · GPS 정밀도 · 구독 없음", strategy: "CIRQA $509 스크린리스 밴드로 웰니스 시장 진입 · 구독 모델 거부 · 하드웨어 마진 유지" },
+    { name: "Fitbit Air", cat: "device", model: "저가 일회성", pricing: "$99.99", sub: "없음 (구독 불필요)", revenue: "Google 자회사", margin: "비공개", arpu: "$100 (일회성)", retention: "Google 생태계 연계", moat: "최저 가격 진입점 · Google Health 통합 · Gemini AI", strategy: "대중 시장 보급 → Google Health 데이터 파이프라인 구축 · 구독 아닌 광고/서비스 수익 모델" },
+    { name: "Peloton", cat: "startup", model: "하드웨어 + 콘텐츠 구독", pricing: "기기 $1,195~$2,495 + $44/월", sub: "Connected Fitness $44/월 · App $12.99/월", revenue: "$2.52B (FY26 연환산)", margin: "GAAP 흑자 $26.4M", arpu: "$528/yr 구독", retention: "98.8% 월 유지율", moat: "인스트럭터 브랜드 · 라이브 콘텐츠 · 커뮤니티 락인", strategy: "구독 중심 흑자 전환 완료 · Commercial Series B2B 확장 · 콘텐츠 플랫폼화 · 이탈률 1.2% 유지" },
+    { name: "Strava", cat: "startup", model: "프리미엄 구독", pricing: "무료 + $11.99/월", sub: "무료 기본 + Summit 프리미엄", revenue: "~$500M ARR", margin: "비공개", arpu: "~$144/yr 유료", retention: "80~90% 연 유지율", moat: "네트워크 효과 · 150M 사용자 · 소셜 운동 데이터", strategy: "IPO 상장(Goldman 주간사) · AI Coach 'Athlete Intelligence' 수익화 · Gen Z 런클럽 흡수" },
+    { name: "Noom", cat: "startup", model: "구독 + 원격의료", pricing: "$70/월 코칭 + GLP-1 처방", sub: "코칭 구독 + GLP-1 원격 처방 번들", revenue: "ARR $600M+", margin: "비공개", arpu: "~$840/yr", retention: "중간 (높은 초기 이탈)", moat: "CBT 기반 행동 변화 · 임상 연구 기반 · GLP-1 연계", strategy: "GLP-1 원격 처방 + 행동 코칭 번들로 단가 극대화 · 임상 파트너십 · 의료형 체중관리 피벗" },
+    { name: "MyFitnessPal", cat: "startup", model: "프리미엄 + 광고", pricing: "무료 + $19.99/월 Premium", sub: "광고 기반 무료 + 프리미엄 구독", revenue: "$1B+ 추정", margin: "비공개", arpu: "~$240/yr 유료", retention: "높음 (음식 DB 의존)", moat: "세계 최대 음식 DB · 200M 사용자 · Cal AI 비전 통합", strategy: "Cal AI 인수로 AI 영양 플랫폼 전환 · ChatGPT Health 연동 · 매각 검토 $1B+" },
+    { name: "Calm", cat: "startup", model: "프리미엄 구독 + B2B", pricing: "무료 + $69.99/yr", sub: "개인 구독 + Calm Business(B2B)", revenue: "비공개", margin: "비공개", arpu: "~$70/yr", retention: "하락세 (DL -61%)", moat: "프리미엄 콘텐츠 · 셀럽 내레이션 · 브랜드 인지도", strategy: "소비자→B2B 기업복지 전환 · 임상 검증 DTx 진입 · ARPU 방어" },
+  ];
+
   const KPIS = [
     { label: "디지털 헬스 시장 (2025)", value: "$347B", delta: +16.0, sub: "Grand View Research · 2033E $1,830B", fill: 0.74 },
     { label: "Q1 글로벌 펀딩", value: "$4.0B", delta: +33.0, sub: "Rock Health 110건 · CB Insights $7.4B", fill: 0.62 },
@@ -421,5 +434,5 @@
     { title: "OpenAI·Anthropic 동시 S-1 — AI 대전환", desc: "OpenAI S-1(2026.06.08) · Anthropic S-1 제출 · 헬스 AI 사업화 본격 가속 · 임상 문서화·에이전트·코칭 시장 선점 경쟁", icon: "ai" },
   ];
 
-  window.DASH = { CATEGORIES, COMPANIES, ARTICLES, REPORTS, MARKET_GROWTH, FUNDING, SHARE, USERS, BAND_PRICE, FUNDING_TREND, AI_DEALS, REVENUE, KPIS, INSIGHTS };
+  window.DASH = { CATEGORIES, COMPANIES, ARTICLES, REPORTS, MARKET_GROWTH, FUNDING, SHARE, USERS, BAND_PRICE, FUNDING_TREND, AI_DEALS, REVENUE, BIZ_MODELS, KPIS, INSIGHTS };
 })();
