@@ -76,6 +76,7 @@ function MarketGrowthChart({ data, accent, ink, grid, muted }) {
         const shownSize = Math.round(d.size * (reveal ? Math.min(localProg * 3, 1) : 0));
         return (
           <g key={i} style={{ opacity: reveal ? 1 : 0, transition: "opacity .25s" }}>
+            <title>{d.src || `${d.year}: $${d.size}B`}</title>
             <circle cx={x(i)} cy={y(d.size)} r="3.4" fill="#fff" stroke={accent} strokeWidth="2" />
             <text x={x(i)} y={y(d.size) - 11} textAnchor="middle" fontSize="9.5" fontWeight="700" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{shownGrowth}%</text>
             <text x={x(i)} y={padT + ih + 18} textAnchor="middle" fontSize="9.5" fill={muted}>{d.year}</text>
@@ -118,6 +119,7 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
         const shown = dec ? (d.value * Math.min(local * 1.15, 1)).toFixed(dec) : Math.round(d.value * Math.min(local * 1.15, 1));
         return (
           <g key={i} style={{ opacity: local > 0 ? 1 : 0.35, transition: "opacity .2s" }}>
+            <title>{d.src || d.name}</title>
             <text x={padL} y={yy + rowH / 2 + 3.5} fontSize="11.5" fill={ink} fontWeight="600">{d.name}</text>
             <rect x={labelW} y={yy + 5} width={barMaxW} height={rowH - 13} rx="2.5" fill={grid} />
             <rect x={labelW} y={yy + 5} width={Math.max(w, 0.5)} height={rowH - 13} rx="2.5" fill={c} />
@@ -184,9 +186,10 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
           const t0 = 0.15 + i * 0.18;
           const local = Math.max(0, Math.min((prog - t0) / 0.3, 1));
           return (
-            <div key={i} style={{
+            <div key={i} title={s.d.src || s.d.label} style={{
               display: "flex", alignItems: "center", gap: 8, fontSize: 12,
               opacity: 0.25 + 0.75 * local, transform: `translateX(${(1 - local) * 14}px)`,
+              cursor: "default",
             }}>
               <span style={{ width: 10, height: 10, borderRadius: 2, background: s.color, flexShrink: 0 }}></span>
               <span style={{ color: ink, fontWeight: 500, whiteSpace: "nowrap" }}>{s.d.label}</span>
@@ -201,4 +204,59 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
   );
 }
 
-Object.assign(window, { MarketGrowthChart, HBarChart, DonutChart });
+// ---- Monthly line chart (multi-series, iOS+Android or revenue) ----
+function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valuePrefix }) {
+  const inView = useCtxC(AnimCtx);
+  const [nonce, bump] = useHoverReplay();
+  const prog = useProgress(inView, 1400, 0, nonce);
+
+  const W = 520, H = 220, padL = 46, padR = 16, padT = 18, padB = 30;
+  const iw = W - padL - padR, ih = H - padT - padB;
+  const allVals = series.flatMap(s => s.values);
+  const ticks = niceTicks(Math.max(...allVals), 4);
+  const tMax = ticks[ticks.length - 1];
+  const x = i => padL + (iw * i) / (months.length - 1 || 1);
+  const y = v => padT + ih - (ih * v) / tMax;
+  const pre = valuePrefix || "";
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
+      onMouseMove={bump} onMouseEnter={bump}>
+      {ticks.map((t, i) => (
+        <g key={i}>
+          <line x1={padL} x2={padL + iw} y1={y(t)} y2={y(t)} stroke={grid} strokeWidth="1" />
+          <text x={padL - 8} y={y(t) + 3} textAnchor="end" fontSize="10" fill={muted} style={{ fontVariantNumeric: "tabular-nums" }}>{pre}{t}{unit}</text>
+        </g>
+      ))}
+      {months.map((m, i) => (
+        <text key={i} x={x(i)} y={padT + ih + 18} textAnchor="middle" fontSize="9" fill={muted}>{m.replace("2026-", "")}</text>
+      ))}
+      {series.map((s, si) => {
+        const pts = s.values.map((v, i) => `${x(i)},${y(v)}`);
+        const visiblePts = Math.floor(prog * pts.length) + 1;
+        const shownPts = pts.slice(0, visiblePts).join(" ");
+        return (
+          <g key={si}>
+            <polyline points={shownPts} fill="none" stroke={colors[si % colors.length]} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" opacity={0.85} />
+            {s.values.slice(0, visiblePts).map((v, i) => (
+              <g key={i}>
+                <title>{s.name} {months[i]}: {pre}{v}{unit} — {s.srcs && s.srcs[i] || ""}</title>
+                <circle cx={x(i)} cy={y(v)} r="3" fill="#fff" stroke={colors[si % colors.length]} strokeWidth="1.8" />
+              </g>
+            ))}
+          </g>
+        );
+      })}
+      <g style={{ fontSize: 10 }}>
+        {series.map((s, si) => (
+          <g key={si} transform={`translate(${padL + si * 100}, ${H - 4})`}>
+            <rect width="8" height="8" rx="1.5" fill={colors[si % colors.length]} y="-7" />
+            <text x="12" y="0" fill={ink} fontWeight="600">{s.name}</text>
+          </g>
+        ))}
+      </g>
+    </svg>
+  );
+}
+
+Object.assign(window, { MarketGrowthChart, HBarChart, DonutChart, MonthlyLineChart });

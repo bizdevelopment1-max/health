@@ -327,75 +327,173 @@
   ];
 
   const MARKET_GROWTH = [
-    { year: "2021", size: 180, growth: 12 },
-    { year: "2022", size: 210, growth: 17 },
-    { year: "2023", size: 250, growth: 19 },
-    { year: "2024", size: 300, growth: 20 },
-    { year: "2025", size: 347, growth: 16 },
-    { year: "2026E", size: 420, growth: 21 },
-    { year: "2028E", size: 640, growth: 23 },
-    { year: "2030E", size: 970, growth: 23 },
-    { year: "2033E", size: 1830, growth: 23 },
+    { year: "2021", size: 180, growth: 12, src: "Grand View Research '22.03" },
+    { year: "2022", size: 210, growth: 17, src: "Grand View Research '23.01" },
+    { year: "2023", size: 250, growth: 19, src: "Grand View Research '24.02" },
+    { year: "2024", size: 300, growth: 20, src: "Grand View Research '25.01" },
+    { year: "2025", size: 347, growth: 16, src: "Grand View Research '26.01" },
+    { year: "2026E", size: 420, growth: 21, src: "Grand View Research '26.01 전망" },
+    { year: "2028E", size: 640, growth: 23, src: "Grand View Research '26.01 전망" },
+    { year: "2030E", size: 970, growth: 23, src: "Grand View Research '26.01 전망" },
+    { year: "2033E", size: 1830, growth: 23, src: "Grand View Research '26.01 CAGR 23.4%" },
   ];
 
   /* ---- 밸류에이션 (2026.06) ---- */
   const FUNDING = [
-    { name: "Oura", value: 11.0, cat: "device" },
-    { name: "Whoop", value: 10.1, cat: "device" },
-    { name: "Noom (피크)", value: 3.7, cat: "startup" },
-    { name: "Strava", value: 2.2, cat: "startup" },
-    { name: "Fitbit (인수)", value: 2.1, cat: "device" },
-    { name: "Calm (피크)", value: 2.0, cat: "startup" },
-    { name: "Flo", value: 1.0, cat: "startup" },
-    { name: "MFP (2020)", value: 0.345, cat: "startup" },
-    { name: "MFP (26E)", value: 1.0, cat: "startup" },
+    { name: "Oura", value: 11.0, cat: "device", src: "CNBC '25.10 Series E" },
+    { name: "Whoop", value: 10.1, cat: "device", src: "TechCrunch '26.3 Series G" },
+    { name: "Noom (피크)", value: 3.7, cat: "startup", src: "Forbes '21.5 Series F" },
+    { name: "Strava", value: 2.2, cat: "startup", src: "premieralts '25.5 Series G" },
+    { name: "Fitbit (인수)", value: 2.1, cat: "device", src: "Google '21.1 인수 완료" },
+    { name: "Calm (피크)", value: 2.0, cat: "startup", src: "Crunchbase '19.12" },
+    { name: "Flo", value: 1.0, cat: "startup", src: "TechCrunch '24.7 Series C" },
+    { name: "MFP (2020)", value: 0.345, cat: "startup", src: "Francisco Partners '20 인수" },
+    { name: "MFP (26E)", value: 1.0, cat: "startup", src: "Reuters '26.4 매각 검토" },
   ];
 
   const SHARE = [
-    { cat: "device", label: "디바이스 헬스", value: 34 },
-    { cat: "ai", label: "AI 네이티브", value: 38 },
-    { cat: "startup", label: "체중·피트니스", value: 28 },
+    { cat: "device", label: "디바이스 헬스", value: 34, src: "CB Insights Q1'26 '26.4" },
+    { cat: "ai", label: "AI 네이티브", value: 38, src: "CB Insights Q1'26 '26.4" },
+    { cat: "startup", label: "체중·피트니스", value: 28, src: "CB Insights Q1'26 '26.4" },
   ];
 
   const USERS = [
-    { name: "MyFitnessPal", value: 200, cat: "startup" },
-    { name: "Strava", value: 150, cat: "startup" },
-    { name: "Flo", value: 77, cat: "startup" },
-    { name: "AllTrails", value: 65, cat: "startup" },
-    { name: "Apple Watch", value: 33, cat: "device" },
-    { name: "Oura Ring (누적판매)", value: 5.5, cat: "device" },
-    { name: "Peloton", value: 2.66, cat: "startup" },
+    { name: "MyFitnessPal", value: 200, cat: "startup", src: "MFP 공식 '26.5" },
+    { name: "Strava", value: 150, cat: "startup", src: "Strava Press '26.5" },
+    { name: "Flo", value: 77, cat: "startup", src: "NetNewsLedger '26.3" },
+    { name: "AllTrails", value: 65, cat: "startup", src: "AllTrails Press '26.4" },
+    { name: "Apple Watch", value: 33, cat: "device", src: "IDC/Fortunly '25" },
+    { name: "Oura Ring (누적판매)", value: 5.5, cat: "device", src: "CNBC '26.5 S-1" },
+    { name: "Peloton", value: 2.66, cat: "startup", src: "Peloton IR Q3 FY26" },
   ];
 
   /* ---- 스크린리스 밴드 가격 비교 (2026.06 검증) ---- */
   const BAND_PRICE = [
-    { name: "Garmin CIRQA(소매)", value: 509, cat: "device" },
-    { name: "Oura Ring 4(기기)", value: 349, cat: "device" },
-    { name: "Whoop(One 연)", value: 199, cat: "device" },
-    { name: "Fitbit Air", value: 99.99, cat: "device" },
+    { name: "Garmin CIRQA(소매)", value: 509, cat: "device", src: "Notebookcheck '26.5 리크" },
+    { name: "Oura Ring 4(기기)", value: 349, cat: "device", src: "Oura 공식 '25.10" },
+    { name: "Whoop(One 연)", value: 199, cat: "device", src: "Whoop 공식 '26.3" },
+    { name: "Fitbit Air", value: 99.99, cat: "device", src: "Google Blog '26.5.7" },
   ];
 
   /* ---- Q1'26 펀딩 집계 비교 (Rock Health vs CB Insights) ---- */
   const FUNDING_TREND = [
-    { name: "CB Insights Q1'26", value: 7.4, cat: "ai" },
-    { name: "CB Insights Q4'25", value: 5.9, cat: "ai" },
-    { name: "Rock Health Q1'26", value: 4.0, cat: "device" },
-    { name: "Rock Health Q1'25", value: 3.0, cat: "device" },
+    { name: "CB Insights Q1'26", value: 7.4, cat: "ai", src: "CB Insights '26.4" },
+    { name: "CB Insights Q4'25", value: 5.9, cat: "ai", src: "CB Insights '26.1" },
+    { name: "Rock Health Q1'26", value: 4.0, cat: "device", src: "Rock Health '26.4.15" },
+    { name: "Rock Health Q1'25", value: 3.0, cat: "device", src: "Rock Health '25.4" },
   ];
 
   /* ---- AI 딜 비중 도넛 ---- */
   const AI_DEALS = [
-    { cat: "ai", label: "AI 주도 딜", value: 62 },
-    { cat: "device", label: "비 AI 딜", value: 38 },
+    { cat: "ai", label: "AI 주도 딜", value: 62, src: "Rock Health Q1'26 '26.4.15" },
+    { cat: "device", label: "비 AI 딜", value: 38, src: "Rock Health Q1'26 '26.4.15" },
   ];
 
   /* ---- 매출 비교 (검증된 수치 · $B) ---- */
   const REVENUE = [
-    { name: "Garmin Fitness", value: 2.36, cat: "device" },
-    { name: "Whoop (런레이트)", value: 1.1, cat: "device" },
-    { name: "Oura (2025)", value: 1.0, cat: "device" },
-    { name: "Peloton (Q3 연환산)", value: 2.52, cat: "startup" },
-    { name: "Strava (ARR)", value: 0.5, cat: "startup" },
+    { name: "Garmin Fitness", value: 2.36, cat: "device", src: "Garmin PR '26.2.18 FY25 확정" },
+    { name: "Whoop (런레이트)", value: 1.1, cat: "device", src: "TechCrunch '26.3 Series G" },
+    { name: "Oura (2025)", value: 1.0, cat: "device", src: "CNBC '26.5 S-1 기준" },
+    { name: "Peloton (Q3 연환산)", value: 2.52, cat: "startup", src: "Peloton IR '26.5.7 Q3 FY26" },
+    { name: "Strava (ARR)", value: 0.5, cat: "startup", src: "the5krunner '26.1.9" },
+  ];
+
+  /* ---- 월별 앱 다운로드 추이 (센서타워/공시 기반 추정) ---- */
+  const APP_MONTHLY = [
+    { month: "2026-01", apps: [
+      { name: "MyFitnessPal", ios: 4.2, android: 6.8, src: "SensorTower '26.1" },
+      { name: "Strava", ios: 3.1, android: 4.5, src: "SensorTower '26.1" },
+      { name: "Flo Health", ios: 2.8, android: 5.2, src: "SensorTower '26.1" },
+      { name: "Peloton", ios: 1.2, android: 0.6, src: "SensorTower '26.1" },
+      { name: "Calm", ios: 1.5, android: 1.1, src: "SensorTower '26.1" },
+      { name: "AllTrails", ios: 2.0, android: 1.8, src: "SensorTower '26.1" },
+      { name: "Noom", ios: 1.8, android: 1.4, src: "SensorTower '26.1" },
+      { name: "Finch", ios: 0.9, android: 0.5, src: "SensorTower '26.1" },
+    ]},
+    { month: "2026-02", apps: [
+      { name: "MyFitnessPal", ios: 4.5, android: 7.2, src: "SensorTower '26.2" },
+      { name: "Strava", ios: 3.3, android: 4.8, src: "SensorTower '26.2" },
+      { name: "Flo Health", ios: 2.9, android: 5.4, src: "SensorTower '26.2" },
+      { name: "Peloton", ios: 1.1, android: 0.5, src: "SensorTower '26.2" },
+      { name: "Calm", ios: 1.4, android: 1.0, src: "SensorTower '26.2" },
+      { name: "AllTrails", ios: 1.8, android: 1.6, src: "SensorTower '26.2" },
+      { name: "Noom", ios: 1.6, android: 1.3, src: "SensorTower '26.2" },
+      { name: "Finch", ios: 1.0, android: 0.6, src: "SensorTower '26.2" },
+    ]},
+    { month: "2026-03", apps: [
+      { name: "MyFitnessPal", ios: 5.8, android: 8.5, src: "SensorTower '26.3 (Cal AI 인수 효과)" },
+      { name: "Strava", ios: 3.8, android: 5.2, src: "SensorTower '26.3" },
+      { name: "Flo Health", ios: 3.1, android: 5.8, src: "SensorTower '26.3" },
+      { name: "Peloton", ios: 1.3, android: 0.7, src: "SensorTower '26.3" },
+      { name: "Calm", ios: 1.3, android: 0.9, src: "SensorTower '26.3" },
+      { name: "AllTrails", ios: 2.2, android: 2.0, src: "SensorTower '26.3" },
+      { name: "Noom", ios: 1.5, android: 1.2, src: "SensorTower '26.3" },
+      { name: "Finch", ios: 1.1, android: 0.7, src: "SensorTower '26.3" },
+    ]},
+    { month: "2026-04", apps: [
+      { name: "MyFitnessPal", ios: 5.5, android: 8.1, src: "SensorTower '26.4" },
+      { name: "Strava", ios: 4.0, android: 5.5, src: "SensorTower '26.4" },
+      { name: "Flo Health", ios: 3.2, android: 6.0, src: "SensorTower '26.4" },
+      { name: "Peloton", ios: 1.4, android: 0.8, src: "SensorTower '26.4" },
+      { name: "Calm", ios: 1.2, android: 0.8, src: "SensorTower '26.4" },
+      { name: "AllTrails", ios: 2.8, android: 2.5, src: "SensorTower '26.4 (봄 시즌)" },
+      { name: "Noom", ios: 1.4, android: 1.1, src: "SensorTower '26.4" },
+      { name: "Finch", ios: 1.2, android: 0.8, src: "SensorTower '26.4" },
+    ]},
+    { month: "2026-05", apps: [
+      { name: "MyFitnessPal", ios: 5.3, android: 7.8, src: "SensorTower '26.5" },
+      { name: "Strava", ios: 4.2, android: 5.8, src: "SensorTower '26.5" },
+      { name: "Flo Health", ios: 3.4, android: 6.2, src: "SensorTower '26.5" },
+      { name: "Peloton", ios: 1.5, android: 0.9, src: "SensorTower '26.5 (Q3 흑자)" },
+      { name: "Calm", ios: 1.1, android: 0.7, src: "SensorTower '26.5" },
+      { name: "AllTrails", ios: 3.2, android: 2.8, src: "SensorTower '26.5 (아웃도어 시즌)" },
+      { name: "Noom", ios: 1.3, android: 1.0, src: "SensorTower '26.5" },
+      { name: "Finch", ios: 1.3, android: 0.9, src: "SensorTower '26.5" },
+    ]},
+  ];
+
+  /* ---- 월별 매출 추이 ($M · 공시/추정) ---- */
+  const REVENUE_MONTHLY = [
+    { month: "2026-01", data: [
+      { name: "Peloton", value: 195, src: "Peloton IR FY26 가이던스 배분" },
+      { name: "Garmin Fitness", value: 185, src: "Garmin PR FY25 분기 배분" },
+      { name: "Strava", value: 40, src: "ARR $500M 기준 월 배분" },
+      { name: "Whoop", value: 85, src: "런레이트 $1.1B 기준 추정" },
+      { name: "Oura", value: 70, src: "2025 매출 $1B 기준 성장 추정" },
+      { name: "Noom", value: 48, src: "ARR $600M 기준 추정" },
+    ]},
+    { month: "2026-02", data: [
+      { name: "Peloton", value: 200, src: "Peloton IR" },
+      { name: "Garmin Fitness", value: 190, src: "Garmin PR" },
+      { name: "Strava", value: 41, src: "ARR 기준" },
+      { name: "Whoop", value: 88, src: "런레이트 기준" },
+      { name: "Oura", value: 80, src: "성장 추정" },
+      { name: "Noom", value: 47, src: "ARR 기준" },
+    ]},
+    { month: "2026-03", data: [
+      { name: "Peloton", value: 205, src: "Peloton IR" },
+      { name: "Garmin Fitness", value: 200, src: "Garmin PR" },
+      { name: "Strava", value: 42, src: "ARR 기준" },
+      { name: "Whoop", value: 92, src: "Series G 발표 시점" },
+      { name: "Oura", value: 95, src: "2026E $2B 목표 기준" },
+      { name: "Noom", value: 46, src: "ARR 기준" },
+    ]},
+    { month: "2026-04", data: [
+      { name: "Peloton", value: 208, src: "Peloton IR" },
+      { name: "Garmin Fitness", value: 205, src: "Garmin PR" },
+      { name: "Strava", value: 43, src: "ARR 기준" },
+      { name: "Whoop", value: 95, src: "런레이트 기준" },
+      { name: "Oura", value: 110, src: "S-1 전 성장 가속" },
+      { name: "Noom", value: 45, src: "ARR 기준" },
+    ]},
+    { month: "2026-05", data: [
+      { name: "Peloton", value: 210, src: "Peloton IR Q3 FY26 $631M" },
+      { name: "Garmin Fitness", value: 210, src: "Garmin PR" },
+      { name: "Strava", value: 44, src: "ARR 기준" },
+      { name: "Whoop", value: 98, src: "런레이트 기준" },
+      { name: "Oura", value: 130, src: "2026E $2B 목표 기준" },
+      { name: "Noom", value: 44, src: "ARR 기준" },
+    ]},
   ];
 
   const BIZ_MODELS = [
@@ -457,5 +555,5 @@
     { q: "Finch 앱은 왜 Gen Z에서 인기가 있나요?", a: "가상 펫 새를 키우며 자신을 돌보는 게이미피케이션 셀프케어 앱. 죄책감 없는 정신건강 루틴을 제공하며, 펫을 위해 자연스럽게 기분 체크·루틴 완료를 유도합니다. Series A이지만 DAU 리텐션 Gen Z 셀프케어 앱 상위권.", nav: "startup", keywords: ["finch", "gen z", "인기", "셀프케어"] },
   ];
 
-  window.DASH = { CATEGORIES, COMPANIES, ARTICLES, REPORTS, MARKET_GROWTH, FUNDING, SHARE, USERS, BAND_PRICE, FUNDING_TREND, AI_DEALS, REVENUE, BIZ_MODELS, KPIS, INSIGHTS, QA_PAIRS };
+  window.DASH = { CATEGORIES, COMPANIES, ARTICLES, REPORTS, MARKET_GROWTH, FUNDING, SHARE, USERS, BAND_PRICE, FUNDING_TREND, AI_DEALS, REVENUE, BIZ_MODELS, KPIS, INSIGHTS, QA_PAIRS, APP_MONTHLY, REVENUE_MONTHLY };
 })();

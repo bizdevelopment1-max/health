@@ -59,7 +59,7 @@ function App() {
   const scrollRef = uR(null);
   const refs = {
     overview: uR(null), device: uR(null), ai: uR(null), startup: uR(null),
-    vp: uR(null), articles: uR(null), charts: uR(null), insights: uR(null), dynamics: uR(null), bizmodel: uR(null), reports: uR(null),
+    vp: uR(null), articles: uR(null), charts: uR(null), monthly: uR(null), insights: uR(null), dynamics: uR(null), bizmodel: uR(null), reports: uR(null),
   };
 
   uE(() => { document.documentElement.dataset.theme = dark ? "dark" : "light"; }, [dark]);
@@ -143,6 +143,8 @@ function App() {
             <ArticleFeed articles={D.ARTICLES} cats={cats} sectionRef={refs.articles} filter={feedFilter} onFilter={setFeedFilter} query={query} />
 
             <ChartsBoard data={D} cats={cats} theme={chartTheme} sectionRef={refs.charts} />
+
+            <MonthlyTrendsBoard data={D} cats={cats} theme={chartTheme} sectionRef={refs.monthly} />
 
             <InsightsBoard insights={D.INSIGHTS} sectionRef={refs.insights} />
 

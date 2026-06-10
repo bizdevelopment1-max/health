@@ -60,6 +60,7 @@ const NAV = [
   { id: "vp", ko: "밸류 프로포지션", en: "Value Proposition", icon: "target" },
   { id: "articles", ko: "데일리 기사", en: "Daily Articles", icon: "news" },
   { id: "charts", ko: "정량 분석", en: "Quant Charts", icon: "chart" },
+  { id: "monthly", ko: "월별 추이", en: "Monthly Trends", icon: "chart" },
   { id: "insights", ko: "핵심 인사이트", en: "Insights", icon: "pulse" },
   { id: "dynamics", ko: "경쟁 다이내믹스", en: "Competitive Map", icon: "target" },
   { id: "bizmodel", ko: "수익화 모델", en: "Biz Model", icon: "chart" },

@@ -52,14 +52,14 @@ function CompanyBoard({ cat, companies, density, sectionRef, query, onSelect }) 
               <Icon name="chevron" size={12} />
             </span>
             <span className="ct-seg">{c.unit}</span>
-            <span className="num ct-valcell">
+            <span className="num ct-valcell" title={c.valAsof ? `출처: '${c.valAsof} 기준` : ""}>
               <AnimatedNumber className="ct-val" value={c.valuation} />
-              {c.valAsof && c.valAsof !== "—" && <em className="ct-asof">'{c.valAsof}월 기준</em>}
+              {c.valAsof && c.valAsof !== "—" && <em className="ct-asof">'{c.valAsof} 기준</em>}
             </span>
-            <span className="num">
+            <span className="num" title={c.metricAsof ? `출처: '${c.metricAsof} 기준` : ""}>
               <em className="ct-metric">{c.metric}</em>
               <AnimatedNumber className="ct-mval" value={c.value} />
-              {c.metricAsof && c.metricAsof !== "—" && <em className="ct-asof">'{c.metricAsof}월 기준</em>}
+              {c.metricAsof && c.metricAsof !== "—" && <em className="ct-asof">'{c.metricAsof} 기준</em>}
             </span>
             <span className="num ct-trend" title={c.trendBasis || "YoY 또는 밸류 변화율"}>
               <Trend v={c.trend} small animate />
@@ -335,22 +335,22 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
 
       <div className="chart-grid">
         <div className="chart-card">
-          <div className="cc-head"><h3>디지털 헬스 시장 규모 & 성장률</h3><span>$B · YoY%</span></div>
+          <div className="cc-head"><h3>디지털 헬스 시장 규모 & 성장률</h3><span title="Grand View Research '26.01 Digital Health Market Report">$B · YoY% · Grand View Research</span></div>
           <MarketGrowthChart data={data.MARKET_GROWTH} accent={theme.accent} ink={theme.ink} grid={theme.grid} muted={theme.muted} />
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>2026 펀딩 점유율</h3><span>카테고리</span></div>
+          <div className="cc-head"><h3>2026 펀딩 점유율</h3><span title="CB Insights Q1'26 State of Digital Health">카테고리 · CB Insights</span></div>
           <DonutChart data={data.SHARE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="$7.4B" centerSub="Q1 글로벌 펀딩" />
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>기업별 밸류에이션</h3><span>$B</span></div>
+          <div className="cc-head"><h3>기업별 밸류에이션</h3><span title="CNBC · TechCrunch · Crunchbase 등 공시 기준">$B · 공시 기준</span></div>
           <HBarChart data={data.FUNDING} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>사용자 / 판매량</h3><span>주요 앱·기기 · M(백만)</span></div>
+          <div className="cc-head"><h3>사용자 / 판매량</h3><span title="각 기업 공시 · IDC · IR 기준">주요 앱·기기 · M(백만) · 공시 기준</span></div>
           <HBarChart data={data.USERS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" />
         </div>
 
@@ -360,19 +360,15 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>AI 주도 딜 비중 (Q1'26)</h3><span>Rock Health</span></div>
+          <div className="cc-head"><h3>AI 주도 딜 비중 (Q1'26)</h3><span title="Rock Health Q1 2026 Funding Report, 게시 '26.4.15">Rock Health '26.4</span></div>
           <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="62%" centerSub="AI 딜 비중" />
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>매출 비교</h3><span>$B · 연환산</span></div>
+          <div className="cc-head"><h3>매출 비교</h3><span title="Garmin PR · Peloton IR · TechCrunch · CNBC 공시 기준">$B · 연환산 · 공시 기준</span></div>
           <HBarChart data={data.REVENUE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
         </div>
 
-        <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
-          <div className="cc-head"><h3>Q1'26 펀딩 집계 비교</h3><span>$B · Rock Health vs CB Insights</span></div>
-          <HBarChart data={data.FUNDING_TREND} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
-        </div>
       </div>
      </AnimCtx.Provider>
     </section>
@@ -472,19 +468,19 @@ function OverviewCharts({ data, cats, theme }) {
     <AnimCtx.Provider value={inView}>
       <div className="ov-charts" ref={ref}>
         <div className="ov-chart-card">
-          <div className="cc-head"><h3>디지털 헬스 시장 규모</h3><span>$B · YoY%</span></div>
+          <div className="cc-head"><h3>디지털 헬스 시장 규모</h3><span title="Grand View Research '26.01 Digital Health Market Report">$B · YoY% · Grand View Research</span></div>
           <MarketGrowthChart data={data.MARKET_GROWTH} accent={theme.accent} ink={theme.ink} grid={theme.grid} muted={theme.muted} />
         </div>
         <div className="ov-chart-card">
-          <div className="cc-head"><h3>Q1'26 펀딩 카테고리 점유</h3><span>카테고리별</span></div>
+          <div className="cc-head"><h3>Q1'26 펀딩 카테고리 점유</h3><span title="CB Insights Q1'26 State of Digital Health, 게시 '26.4">카테고리별 · CB Insights</span></div>
           <DonutChart data={data.SHARE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="$7.4B" centerSub="Q1 글로벌 펀딩" />
         </div>
         <div className="ov-chart-card">
-          <div className="cc-head"><h3>AI 딜 비중 (Q1'26)</h3><span>Rock Health</span></div>
+          <div className="cc-head"><h3>AI 딜 비중 (Q1'26)</h3><span title="Rock Health Q1 2026 Funding Report, 게시 '26.4.15">Rock Health '26.4</span></div>
           <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="62%" centerSub="AI 딜 비중" />
         </div>
         <div className="ov-chart-card">
-          <div className="cc-head"><h3>Q1'26 펀딩 집계 비교</h3><span>$B</span></div>
+          <div className="cc-head"><h3>Q1'26 펀딩 집계 비교</h3><span title="Rock Health '26.4.15 · CB Insights '26.4">$B · Rock Health vs CB Insights</span></div>
           <HBarChart data={data.FUNDING_TREND} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
         </div>
       </div>
@@ -700,4 +696,128 @@ function BizModelBoard({ companies, cats, sectionRef, theme }) {
   );
 }
 
-Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard, DynamicsBoard, OverviewCharts, BizModelBoard });
+// ---- Monthly Trends Board (downloads + revenue by month) ----
+function MonthlyTrendsBoard({ data, cats, theme, sectionRef }) {
+  const inView = useInView(sectionRef);
+  const [selectedApp, setSelectedApp] = React.useState("all");
+  const [tab, setTab] = React.useState("downloads");
+
+  const appMonthly = data.APP_MONTHLY || [];
+  const revMonthly = data.REVENUE_MONTHLY || [];
+  const months = appMonthly.map(m => m.month);
+  const revMonths = revMonthly.map(m => m.month);
+
+  const allAppNames = appMonthly.length > 0 ? appMonthly[0].apps.map(a => a.name) : [];
+  const allRevNames = revMonthly.length > 0 ? revMonthly[0].data.map(d => d.name) : [];
+
+  const appColors = ["#1428A0", "#7A38D6", "#0E8F6E", "#D23B3B", "#F59E0B", "#0891B2", "#2D6BFF", "#C026D3"];
+
+  const buildDownloadSeries = () => {
+    const names = selectedApp === "all" ? allAppNames.slice(0, 6) : [selectedApp];
+    return names.map(name => ({
+      name,
+      values: months.map((_m, mi) => {
+        const app = appMonthly[mi].apps.find(a => a.name === name);
+        return app ? app.ios + app.android : 0;
+      }),
+      srcs: months.map((_m, mi) => {
+        const app = appMonthly[mi].apps.find(a => a.name === name);
+        return app ? app.src : "";
+      }),
+    }));
+  };
+
+  const buildRevenueSeries = () => {
+    const names = selectedApp === "all" ? allRevNames.slice(0, 6) : allRevNames.filter(n => n === selectedApp || selectedApp === "all");
+    return names.map(name => ({
+      name,
+      values: revMonths.map((_m, mi) => {
+        const d = revMonthly[mi].data.find(r => r.name === name);
+        return d ? d.value : 0;
+      }),
+      srcs: revMonths.map((_m, mi) => {
+        const d = revMonthly[mi].data.find(r => r.name === name);
+        return d ? d.src : "";
+      }),
+    }));
+  };
+
+  const buildPlatformSeries = () => {
+    const names = selectedApp === "all" ? allAppNames.slice(0, 4) : [selectedApp];
+    const result = [];
+    names.forEach(name => {
+      result.push({
+        name: name + " iOS",
+        values: months.map((_m, mi) => {
+          const app = appMonthly[mi].apps.find(a => a.name === name);
+          return app ? app.ios : 0;
+        }),
+        srcs: months.map((_m, mi) => {
+          const app = appMonthly[mi].apps.find(a => a.name === name);
+          return app ? app.src : "";
+        }),
+      });
+      result.push({
+        name: name + " Android",
+        values: months.map((_m, mi) => {
+          const app = appMonthly[mi].apps.find(a => a.name === name);
+          return app ? app.android : 0;
+        }),
+        srcs: months.map((_m, mi) => {
+          const app = appMonthly[mi].apps.find(a => a.name === name);
+          return app ? app.src : "";
+        }),
+      });
+    });
+    return result;
+  };
+
+  return (
+    <section className="board" ref={sectionRef} data-screen-label="Monthly Trends">
+     <AnimCtx.Provider value={inView}>
+      <div className="board-head">
+        <span className="board-tab" style={{ background: "var(--accent)" }} />
+        <div className="board-titles">
+          <h2>월별 추이 <span className="board-en">Monthly Trends · Downloads & Revenue</span></h2>
+          <p>앱 다운로드 · 매출 월별 추이 · 센서타워/공시 기반</p>
+        </div>
+        <div className="feed-filters">
+          <button className={tab === "downloads" ? "on" : ""} onClick={() => setTab("downloads")}>다운로드(합산)</button>
+          <button className={tab === "platform" ? "on" : ""} onClick={() => setTab("platform")}>iOS vs Android</button>
+          <button className={tab === "revenue" ? "on" : ""} onClick={() => setTab("revenue")}>매출 추이</button>
+        </div>
+      </div>
+
+      <div className="monthly-app-filter">
+        <button className={selectedApp === "all" ? "monthly-btn on" : "monthly-btn"} onClick={() => setSelectedApp("all")}>전체</button>
+        {(tab === "revenue" ? allRevNames : allAppNames).map(name => (
+          <button key={name} className={selectedApp === name ? "monthly-btn on" : "monthly-btn"} onClick={() => setSelectedApp(name)}>{name}</button>
+        ))}
+      </div>
+
+      <div className="chart-grid">
+        {tab === "downloads" && (
+          <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
+            <div className="cc-head"><h3>월별 앱 다운로드 추이</h3><span>M(백만) · iOS+Android 합산 · SensorTower 추정</span></div>
+            <MonthlyLineChart series={buildDownloadSeries()} months={months} colors={appColors} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" />
+          </div>
+        )}
+        {tab === "platform" && (
+          <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
+            <div className="cc-head"><h3>iOS vs Android 다운로드</h3><span>M(백만) · 플랫폼별 분리 · SensorTower 추정</span></div>
+            <MonthlyLineChart series={buildPlatformSeries()} months={months} colors={["#1428A0", "#0E8F6E", "#7A38D6", "#D23B3B", "#F59E0B", "#0891B2", "#2D6BFF", "#C026D3"]} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" />
+          </div>
+        )}
+        {tab === "revenue" && (
+          <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
+            <div className="cc-head"><h3>월별 매출 추이</h3><span>$M · 공시/추정 기반</span></div>
+            <MonthlyLineChart series={buildRevenueSeries()} months={revMonths} colors={appColors} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" valuePrefix="$" />
+          </div>
+        )}
+      </div>
+     </AnimCtx.Provider>
+    </section>
+  );
+}
+
+Object.assign(window, { BoldSummary, CoLogo, CompanyBoard, CompanyDetail, ArticleFeed, InsightsBoard, ChartsBoard, VPBoard, ReportsBoard, DynamicsBoard, OverviewCharts, BizModelBoard, MonthlyTrendsBoard });
