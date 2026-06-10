@@ -257,7 +257,7 @@ function InsightsBoard({ insights, sectionRef }) {
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
           <h2>핵심 인사이트 <span className="board-en">Key Insights · 2026.06</span></h2>
-          <p>검증 데이터 기반 시장 핵심 동향 6선 · Statista · CB Insights · 공식 발표</p>
+          <p>검증 데이터 기반 시장 핵심 동향 8선 · Grand View Research · Rock Health · 공식 발표</p>
         </div>
       </div>
       <div className="insight-grid">
@@ -302,7 +302,7 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
 
         <div className="chart-card">
           <div className="cc-head"><h3>2026 펀딩 점유율</h3><span>카테고리</span></div>
-          <DonutChart data={data.SHARE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="$8.2B" centerSub="Q2 글로벌" />
+          <DonutChart data={data.SHARE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="$7.4B" centerSub="Q1 글로벌 펀딩" />
         </div>
 
         <div className="chart-card">

@@ -137,7 +137,7 @@ function App() {
 
             <footer className="foot">
               <span>Health Intelligence Dashboard</span>
-              <span>소스: Statista · CB Insights · 공식 발표 기준 · 최종 업데이트 2026.06.10</span>
+              <span>소스: Grand View Research · Rock Health · CB Insights · Statista · 공식 발표 기준 · 최종 업데이트 2026.06.10</span>
             </footer>
           </div>
         </main>
