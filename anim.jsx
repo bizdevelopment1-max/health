@@ -14,63 +14,24 @@ const _snapCallbacks = new Set();
   window.addEventListener("beforeprint", () => _snapCallbacks.forEach(fn => fn()));
 })();
 
-function findScrollParent(el) {
-  let p = el && el.parentElement;
-  while (p) {
-    const s = getComputedStyle(p).overflowY;
-    if (s === "auto" || s === "scroll" || s === "overlay") return p;
-    p = p.parentElement;
-  }
-  return null;
-}
-
 function useInView(ref) {
   const [inView, setInView] = useStateA(false);
-  const [tick, setTick] = useStateA(0);
+  const [ready, setReady] = useStateA(false);
 
-  // force a second pass so ref.current is guaranteed set
-  useEffectA(() => { if (tick === 0) setTick(1); }, [tick]);
+  useEffectA(() => { setReady(true); }, []);
 
   useEffectA(() => {
+    if (!ready) return;
     const el = ref && ref.current;
     if (!el) return;
 
-    const scrollEl = findScrollParent(el);
-
-    const check = () => {
-      const rect = el.getBoundingClientRect();
-      let vpTop, vpBot;
-      if (scrollEl) {
-        const sr = scrollEl.getBoundingClientRect();
-        vpTop = sr.top;
-        vpBot = sr.bottom;
-      } else {
-        vpTop = 0;
-        vpBot = window.innerHeight;
-      }
-      const h = vpBot - vpTop;
-      const vis = rect.top < vpTop + h * 0.9 && rect.bottom > vpTop + h * 0.05;
-      setInView(vis);
-    };
-
-    check();
-
     const io = new IntersectionObserver(
-      ([e]) => setInView(e.isIntersecting),
-      { root: scrollEl || null, threshold: [0, 0.1, 0.2], rootMargin: "0px 0px -5% 0px" }
+      (entries) => { setInView(entries[0].isIntersecting); },
+      { threshold: 0.05 }
     );
     io.observe(el);
-
-    const target = scrollEl || window;
-    target.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check);
-
-    return () => {
-      io.disconnect();
-      target.removeEventListener("scroll", check);
-      window.removeEventListener("resize", check);
-    };
-  }, [tick]);
+    return () => io.disconnect();
+  }, [ready]);
 
   return inView;
 }

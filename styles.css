@@ -753,3 +753,10 @@ b, strong { font-weight: 700; }
   .cd-modal { padding: 18px 16px 16px; }
   .cd-stats { grid-template-columns: 1fr; }
 }
+
+/* ---------- Monthly line chart legend ---------- */
+.mlc-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; padding: 8px 4px 0; }
+.mlc-leg-item { display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.mlc-leg-item i { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.mlc-leg-item img { width: 14px; height: 14px; border-radius: 3px; }
+.mlc-leg-item .ct-logo { width: 16px; height: 16px; font-size: 8px; }

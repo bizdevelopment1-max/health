@@ -214,9 +214,10 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
     .filter(a => filter === "all" || a.cat === filter)
     .filter(a => !query || a.title.toLowerCase().includes(query.toLowerCase()) || a.source.toLowerCase().includes(query.toLowerCase()));
 
+  const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date));
   const groups = [];
   const seen = {};
-  filtered.forEach(a => {
+  sorted.forEach(a => {
     if (!seen[a.date]) { seen[a.date] = { date: a.date, items: [] }; groups.push(seen[a.date]); }
     seen[a.date].items.push(a);
   });
@@ -360,8 +361,8 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>AI 주도 딜 비중 (Q1'26)</h3><span title="Rock Health Q1 2026 Funding Report, 게시 '26.4.15">Rock Health '26.4</span></div>
-          <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="62%" centerSub="AI 딜 비중" />
+          <div className="cc-head"><h3>AI 주도 딜 비중 (~2025 H2 추정)</h3><span title="CB Insights Q1'25 기준 추정 — Rock Health Q1'26에서 AI 딜 별도 추적 공식 폐지(게시 2026.04.06)">CB Insights Q1'25 · Rock Health 추적 폐지</span></div>
+          <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="~62%" centerSub="AI 딜 비중 (추정)" />
         </div>
 
         <div className="chart-card">
@@ -491,8 +492,8 @@ function OverviewCharts({ data, cats, theme }) {
           <DonutChart data={data.SHARE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="$7.4B" centerSub="Q1 글로벌 펀딩" />
         </div>
         <div className="ov-chart-card">
-          <div className="cc-head"><h3>AI 딜 비중 (Q1'26)</h3><span title="Rock Health Q1 2026 Funding Report, 게시 '26.4.15">Rock Health '26.4</span></div>
-          <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="62%" centerSub="AI 딜 비중" />
+          <div className="cc-head"><h3>AI 딜 비중 (~2025 H2 추정)</h3><span title="CB Insights Q1'25 기준 추정 — Rock Health Q1'26에서 AI 딜 별도 추적 공식 폐지">CB Insights Q1'25 · Rock Health 추적 폐지</span></div>
+          <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="~62%" centerSub="AI 딜 비중 (추정)" />
         </div>
         <div className="ov-chart-card">
           <div className="cc-head"><h3>Q1'26 펀딩 집계 비교</h3><span title="Rock Health '26.4.15 · CB Insights '26.4">$B · Rock Health vs CB Insights</span></div>
@@ -813,20 +814,20 @@ function MonthlyTrendsBoard({ data, cats, theme, sectionRef }) {
       <div className="chart-grid">
         {tab === "downloads" && (
           <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
-            <div className="cc-head"><h3>월별 앱 다운로드 추이</h3><span>M(백만) · iOS+Android 합산 · SensorTower 추정</span></div>
-            <MonthlyLineChart series={buildDownloadSeries()} months={months} colors={appColors} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" />
+            <div className="cc-head"><h3>월별 앱 다운로드 추이</h3><span>M(백만) · iOS+Android 합산 · SensorTower App Intelligence 2026 (유료 구독 데이터, 원문 검증 불가)</span></div>
+            <MonthlyLineChart series={buildDownloadSeries()} months={months} colors={appColors} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" companies={data.COMPANIES} />
           </div>
         )}
         {tab === "platform" && (
           <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
             <div className="cc-head"><h3>iOS vs Android 다운로드</h3><span>M(백만) · 플랫폼별 분리 · SensorTower 추정</span></div>
-            <MonthlyLineChart series={buildPlatformSeries()} months={months} colors={["#1428A0", "#0E8F6E", "#7A38D6", "#D23B3B", "#F59E0B", "#0891B2", "#2D6BFF", "#C026D3"]} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" />
+            <MonthlyLineChart series={buildPlatformSeries()} months={months} colors={["#1428A0", "#0E8F6E", "#7A38D6", "#D23B3B", "#F59E0B", "#0891B2", "#2D6BFF", "#C026D3"]} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" companies={data.COMPANIES} />
           </div>
         )}
         {tab === "revenue" && (
           <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
-            <div className="cc-head"><h3>월별 매출 추이</h3><span>$M · 공시/추정 기반</span></div>
-            <MonthlyLineChart series={buildRevenueSeries()} months={revMonths} colors={appColors} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" valuePrefix="$" />
+            <div className="cc-head"><h3>월별 매출 추이 (* 추정치 포함)</h3><span>$M · 공시/추정 혼재 — 실측 vs 추정 구분은 데이터 포인트 호버 참조</span></div>
+            <MonthlyLineChart series={buildRevenueSeries()} months={revMonths} colors={appColors} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" valuePrefix="$" companies={data.COMPANIES} />
           </div>
         )}
       </div>

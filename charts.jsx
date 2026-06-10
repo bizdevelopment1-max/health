@@ -204,13 +204,15 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
   );
 }
 
-// ---- Monthly line chart (multi-series, iOS+Android or revenue) ----
-function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valuePrefix }) {
+const SHORT_NAMES = { "MyFitnessPal": "MFP", "Flo Health": "Flo", "AllTrails": "Trails", "Garmin Fitness": "Garmin" };
+function shortName(n) { return SHORT_NAMES[n] || n.split(" ")[0]; }
+
+function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valuePrefix, companies }) {
   const inView = useCtxC(AnimCtx);
   const [nonce, bump] = useHoverReplay();
   const prog = useProgress(inView, 1400, 0, nonce);
 
-  const W = 520, H = 220, padL = 46, padR = 16, padT = 18, padB = 30;
+  const W = 520, H = 200, padL = 46, padR = 16, padT = 18, padB = 24;
   const iw = W - padL - padR, ih = H - padT - padB;
   const allVals = series.flatMap(s => s.values);
   const ticks = niceTicks(Math.max(...allVals), 4);
@@ -220,42 +222,49 @@ function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valu
   const pre = valuePrefix || "";
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
-      onMouseMove={bump} onMouseEnter={bump}>
-      {ticks.map((t, i) => (
-        <g key={i}>
-          <line x1={padL} x2={padL + iw} y1={y(t)} y2={y(t)} stroke={grid} strokeWidth="1" />
-          <text x={padL - 8} y={y(t) + 3} textAnchor="end" fontSize="10" fill={muted} style={{ fontVariantNumeric: "tabular-nums" }}>{pre}{t}{unit}</text>
-        </g>
-      ))}
-      {months.map((m, i) => (
-        <text key={i} x={x(i)} y={padT + ih + 18} textAnchor="middle" fontSize="9" fill={muted}>{m.replace("2026-", "")}</text>
-      ))}
-      {series.map((s, si) => {
-        const pts = s.values.map((v, i) => `${x(i)},${y(v)}`);
-        const visiblePts = Math.floor(prog * pts.length) + 1;
-        const shownPts = pts.slice(0, visiblePts).join(" ");
-        return (
-          <g key={si}>
-            <polyline points={shownPts} fill="none" stroke={colors[si % colors.length]} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" opacity={0.85} />
-            {s.values.slice(0, visiblePts).map((v, i) => (
-              <g key={i}>
-                <title>{s.name} {months[i]}: {pre}{v}{unit} — {s.srcs && s.srcs[i] || ""}</title>
-                <circle cx={x(i)} cy={y(v)} r="3" fill="#fff" stroke={colors[si % colors.length]} strokeWidth="1.8" />
-              </g>
-            ))}
-          </g>
-        );
-      })}
-      <g style={{ fontSize: 10 }}>
-        {series.map((s, si) => (
-          <g key={si} transform={`translate(${padL + si * 100}, ${H - 4})`}>
-            <rect width="8" height="8" rx="1.5" fill={colors[si % colors.length]} y="-7" />
-            <text x="12" y="0" fill={ink} fontWeight="600">{s.name}</text>
+    <div>
+      <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
+        onMouseMove={bump} onMouseEnter={bump}>
+        {ticks.map((t, i) => (
+          <g key={i}>
+            <line x1={padL} x2={padL + iw} y1={y(t)} y2={y(t)} stroke={grid} strokeWidth="1" />
+            <text x={padL - 8} y={y(t) + 3} textAnchor="end" fontSize="9" fill={muted} style={{ fontVariantNumeric: "tabular-nums" }}>{pre}{t}{unit}</text>
           </g>
         ))}
-      </g>
-    </svg>
+        {months.map((m, i) => (
+          <text key={i} x={x(i)} y={padT + ih + 16} textAnchor="middle" fontSize="8.5" fill={muted}>{m.replace("2026-", "")}</text>
+        ))}
+        {series.map((s, si) => {
+          const pts = s.values.map((v, i) => `${x(i)},${y(v)}`);
+          const visiblePts = Math.floor(prog * pts.length) + 1;
+          const shownPts = pts.slice(0, visiblePts).join(" ");
+          return (
+            <g key={si}>
+              <polyline points={shownPts} fill="none" stroke={colors[si % colors.length]} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" opacity={0.85} />
+              {s.values.slice(0, visiblePts).map((v, i) => (
+                <g key={i}>
+                  <title>{s.name} {months[i]}: {pre}{v}{unit} — {s.srcs && s.srcs[i] || ""}</title>
+                  <circle cx={x(i)} cy={y(v)} r="2.5" fill="#fff" stroke={colors[si % colors.length]} strokeWidth="1.5" />
+                </g>
+              ))}
+            </g>
+          );
+        })}
+      </svg>
+      <div className="mlc-legend">
+        {series.map((s, si) => {
+          const co = companies && companies.find(c => s.name.startsWith(c.name.split(" (")[0]) || s.name.startsWith(shortName(c.name)));
+          const domain = co && co.domain;
+          return (
+            <span key={si} className="mlc-leg-item">
+              <i style={{ background: colors[si % colors.length] }} />
+              {domain && <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`} alt="" loading="lazy" />}
+              <span>{shortName(s.name)}</span>
+            </span>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
