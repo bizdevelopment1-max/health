@@ -284,7 +284,7 @@ function InsightsBoard({ insights, sectionRef }) {
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
           <h2>핵심 인사이트 <span className="board-en">Key Insights · 2026.06</span></h2>
-          <p>검증 데이터 기반 시장 핵심 동향 8선 · Grand View Research · Rock Health · 공식 발표</p>
+          <p>검증 데이터 기반 시장 핵심 동향 9선 · Grand View Research · Rock Health · 공식 발표</p>
         </div>
       </div>
       <div className="insight-grid">
