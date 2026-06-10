@@ -71,8 +71,8 @@
       ] },
 
     // ── AI Native ──
-    { cat: "ai", name: "OpenAI Health", domain: "openai.com", unit: "Health Agent", valuation: "$300B~$340B+ (세컨더리 추정, S-1 공개 전 미확정)", valAsof: "26.6 S-1 제출", funding: "내부 투자", metric: "헬스 파일럿", value: "S-1 제출", metricAsof: "26.6", trend: +0,
-      note: "S-1 비밀 제출(2026.06.08) · 세컨더리 마켓 $300B~$340B+ 보도(Bloomberg) · 공모 전 밸류에이션은 S-1 공식 공개 시 확정 예정 · 개인 헬스 어시스턴트 개발 · 의료기관 파트너십 확대",
+    { cat: "ai", name: "OpenAI Health", domain: "openai.com", unit: "Health Agent", valuation: "$300B~$340B+", valAsof: "26.6 S-1 제출", funding: "내부 투자", metric: "헬스 파일럿", value: "S-1 제출", metricAsof: "26.6", trend: +0,
+      note: "S-1 비밀 제출(2026.06.08) · $300B~$340B+ 보도(Bloomberg) · 개인 헬스 어시스턴트 개발 · 의료기관 파트너십 확대",
       vp: "범용 LLM의 추론 능력을 개인 건강 데이터에 연결 — 파편화된 웨어러블·진료 기록을 통합 해석하는 단일 에이전트",
       direction: "의료기관·보험사 데이터 파트너십 확보 · HIPAA 준수 파이프라인 구축 · ChatGPT Health로 소비자 접점 선점",
       url: "https://openai.com/news/",
