@@ -198,7 +198,7 @@ function App() {
             <footer className="foot">
               <span>Health Intelligence Dashboard</span>
               <span className="foot-update">{today} 업데이트</span>
-              <span>원출처: Grand View Research · Rock Health · CB Insights · CNBC · TechCrunch · Peloton IR · Garmin PR · 각 기업 공식 발표</span>
+              <span>원출처: Grand View Research · Rock Health · CB Insights · CNBC · TechCrunch · 각 기업 공식 발표</span>
             </footer>
           </div>
         </main>
