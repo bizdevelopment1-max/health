@@ -1,0 +1,93 @@
+# ============================================================
+# 일일 자동 업데이트 파이프라인
+# 매일 새벽 03:00 KST(18:00 UTC) 시작 → 08:00 KST 전 배포 완료
+#
+# 단계 (에이전트 단위):
+#   1. 수집 (병렬 3개): news-collector / quant-collector / report-collector
+#   2. 검증: fact-verifier — 원문 대조 교차 검증
+#   3. 구성: composer — 검증 통과분만 data.js에 통합
+#   4. 감사: final-auditor — 전체 정합성 PASS 시에만 커밋
+#   5. 배포: main 푸시 → GitHub Pages 자동 반영
+# ============================================================
+name: Daily Dashboard Update
+
+on:
+  schedule:
+    - cron: "0 18 * * *"   # 03:00 KST — 새벽 수집 시작
+  workflow_dispatch: {}     # 수동 실행 허용
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240   # 새벽 3시 시작, 최대 4시간 — 07:00 KST 전 종료 보장
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Prepare pipeline workspace
+        run: mkdir -p pipeline
+
+      # ── 1~4단계: Claude Code 오케스트레이터가 서브에이전트를 순차/병렬 호출 ──
+      - name: Run agent pipeline
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            당신은 헬스케어 인텔리전스 대시보드의 일일 업데이트 오케스트레이터입니다.
+            .claude/agents/ 에 정의된 서브에이전트를 아래 순서로 실행하십시오.
+
+            ## 1단계 — 수집 (3개 에이전트를 병렬 실행)
+            - news-collector → pipeline/collected-news.json
+            - quant-collector → pipeline/collected-quant.json
+            - report-collector → pipeline/collected-reports.json
+
+            ## 2단계 — 검증
+            - fact-verifier 로 3개 수집 결과를 원문 대조 검증 → pipeline/verified.json
+            - REJECT 항목은 사유와 함께 기록
+
+            ## 3단계 — 구성
+            - composer 로 verified.json을 data.js에 통합
+            - 변경 요약 → pipeline/compose-summary.md
+
+            ## 4단계 — 최종 감사
+            - final-auditor 로 data.js 전체 정합성 감사 → pipeline/audit-result.md
+            - FAIL 이면: composer에 수정 지시 후 재구성 → 재감사 (최대 2회 반복)
+            - 2회 후에도 FAIL 이면: data.js 변경을 모두 되돌리고(git checkout data.js) 종료
+
+            ## 절대 규칙
+            - 삼성(Samsung/갤럭시) 관련 내용은 수집·반영 금지 (영구 정책)
+            - 모든 기사 date는 실제 발표일 — 수집일 금지
+            - 모든 수치에 출처 기관·게시일 명시
+            - 변경할 내용이 없으면 data.js를 건드리지 말고 그대로 종료
+          claude_args: "--max-turns 200"
+
+      # ── 5단계: 감사 PASS 시에만 커밋·배포 ──
+      - name: Commit and push if audit passed
+        run: |
+          if grep -q "PASS" pipeline/audit-result.md 2>/dev/null && ! git diff --quiet data.js; then
+            git config user.name "health-dashboard-bot"
+            git config user.email "bot@users.noreply.github.com"
+            git add data.js
+            git commit -m "daily: $(date -u -d '+9 hours' '+%Y-%m-%d') 자동 업데이트 (뉴스·정량·리포트)"
+            git push origin main
+            echo "✅ 배포 완료 — GitHub Pages 자동 반영"
+          else
+            echo "ℹ️ 변경 없음 또는 감사 미통과 — 커밋 생략"
+          fi
+
+      - name: Upload pipeline artifacts (감사 추적용)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-${{ github.run_id }}
+          path: pipeline/
+          retention-days: 14
