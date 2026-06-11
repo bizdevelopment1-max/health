@@ -164,7 +164,7 @@ function App() {
             {/* Overview — market-level only */}
             <section ref={refs.overview} data-screen-label="Overview">
               <div className="ov-head">
-                <h2 className="ov-title">Market Overview</h2>
+                <h2 className="ov-title">Executive Summary</h2>
                 <div className="ov-legend">
                   {cats.map(c => (
                     <span key={c.id} className="ov-leg"><i style={{ background: c.accent }} />{c.ko}</span>
@@ -197,7 +197,7 @@ function App() {
 
             <footer className="foot">
               <span>Health Intelligence Dashboard</span>
-              <span className="foot-update">자료 기준일: 2026-06-10 · 최종 팩트체크: 2026-06-11 · 렌더링: {renderTime}</span>
+              <span className="foot-update">자료 기준일: 2026-06-11 · 최종 팩트체크: 2026-06-11 · 렌더링: {renderTime}</span>
               <span>원출처: Grand View Research · Rock Health · CB Insights · CNBC · TechCrunch · 각 기업 공식 발표</span>
             </footer>
           </div>

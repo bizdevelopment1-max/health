@@ -53,7 +53,7 @@ function Trend({ v, small, animate }) {
 
 // ---- Sidebar ------------------------------
 const NAV = [
-  { id: "overview", ko: "오버뷰", en: "Overview", icon: "grid" },
+  { id: "overview", ko: "Executive Summary", en: "Executive Summary", icon: "grid" },
   { id: "device", ko: "디바이스 헬스", en: "Device Health", icon: "device" },
   { id: "ai", ko: "AI 네이티브", en: "AI Native", icon: "ai" },
   { id: "startup", ko: "체중·피트니스", en: "Weight & Fitness", icon: "spark" },
