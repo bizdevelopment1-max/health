@@ -18,6 +18,30 @@ function useHoverReplay() {
   return [nonce, bump];
 }
 
+// Floating description tooltip that follows the cursor (per-line / per-bar / per-segment).
+function useTip() {
+  const [tip, setTip] = useStateC(null);
+  const show = (e, content) => setTip({ x: e.clientX, y: e.clientY, content });
+  const move = (e) => setTip(t => (t ? { x: e.clientX, y: e.clientY, content: t.content } : t));
+  const hide = () => setTip(null);
+  const node = tip ? (
+    <div className="chart-tip" style={{
+      left: Math.min(tip.x + 16, (typeof window !== "undefined" ? window.innerWidth : 1200) - 260),
+      top: tip.y + 18,
+    }}>{tip.content}</div>
+  ) : null;
+  return { show, move, hide, node };
+}
+
+// lighten a hex color toward white (for gradient stops)
+function liteC(c, f) {
+  if (!c || c[0] !== "#" || (c.length !== 7)) return c;
+  const n = c.replace("#", "");
+  const r = parseInt(n.slice(0, 2), 16), g = parseInt(n.slice(2, 4), 16), b = parseInt(n.slice(4, 6), 16);
+  const m = x => Math.round(x + (255 - x) * f);
+  return `rgb(${m(r)},${m(g)},${m(b)})`;
+}
+
 function niceTicks(max, count) {
   const step = max / count;
   const mag = Math.pow(10, Math.floor(Math.log10(step)));
@@ -32,14 +56,15 @@ function niceTicks(max, count) {
 
 // ---- Combo: market size (area+line draws L→R) + growth markers count up ---
 function MarketGrowthChart({ data, accent, ink, grid, muted }) {
-  const inView = useCtxC(AnimCtx);
+  const [ref, inView] = useEyeLevel();
   const [nonce, bump] = useHoverReplay();
-  const prog = useProgress(inView, 1400, 0, nonce);
+  const tip = useTip();
+  const prog = useProgress(inView, 2000, 0, nonce);
 
-  const W = 520, H = 235, padL = 46, padR = 16, padT = 22, padB = 30;
+  const W = 520, H = 235, padL = 46, padR = 16, padT = 26, padB = 30;
   const iw = W - padL - padR, ih = H - padT - padB;
   const maxSize = Math.max(...data.map(d => d.size));
-  const ticks = niceTicks(maxSize, 4);
+  const ticks = niceTicks(maxSize * 1.08, 4);
   const tMax = ticks[ticks.length - 1];
   const x = i => padL + (iw * i) / (data.length - 1);
   const y = v => padT + ih - (ih * v) / tMax;
@@ -49,12 +74,17 @@ function MarketGrowthChart({ data, accent, ink, grid, muted }) {
   const n = data.length;
 
   return (
+    <div ref={ref} style={{ position: "relative" }}>
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
       onMouseMove={bump} onMouseEnter={bump}>
       <defs>
         <linearGradient id="mg-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={accent} stopOpacity="0.30" />
+          <stop offset="0%" stopColor={accent} stopOpacity="0.34" />
           <stop offset="100%" stopColor={accent} stopOpacity="0.02" />
+        </linearGradient>
+        <linearGradient id="mg-line" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor={liteC(accent, 0.5)} />
+          <stop offset="100%" stopColor={accent} />
         </linearGradient>
         <clipPath id="mg-clip"><rect x={padL} y="0" width={iw * prog} height={H} /></clipPath>
       </defs>
@@ -66,7 +96,7 @@ function MarketGrowthChart({ data, accent, ink, grid, muted }) {
       ))}
       <g clipPath="url(#mg-clip)">
         <polygon points={areaPts} fill="url(#mg-fill)" />
-        <polyline points={linePts} fill="none" stroke={accent} strokeWidth="2.5" strokeLinejoin="round" />
+        <polyline points={linePts} fill="none" stroke="url(#mg-line)" strokeWidth="3" strokeLinejoin="round" />
       </g>
       {data.map((d, i) => {
         const frac = i / (n - 1);
@@ -78,12 +108,17 @@ function MarketGrowthChart({ data, accent, ink, grid, muted }) {
           <g key={i} style={{ opacity: reveal ? 1 : 0, transition: "opacity .25s" }}>
             <title>{d.src || `${d.year}: $${d.size}B`}</title>
             <circle cx={x(i)} cy={y(d.size)} r="3.4" fill="#fff" stroke={accent} strokeWidth="2" />
+            <circle cx={x(i)} cy={y(d.size)} r="12" fill="transparent" style={{ cursor: "pointer" }}
+              onMouseEnter={e => tip.show(e, <span><b>{d.year}</b> · 시장규모 <b>${d.size}B</b> · 성장률 <b>{d.growth}%</b>{d.src ? <span><br /><em>{d.src}</em></span> : null}</span>)}
+              onMouseMove={tip.move} onMouseLeave={tip.hide} />
             <text x={x(i)} y={y(d.size) - 11} textAnchor="middle" fontSize="9.5" fontWeight="700" fill={ink} style={{ fontVariantNumeric: "tabular-nums" }}>{shownGrowth}%</text>
             <text x={x(i)} y={padT + ih + 18} textAnchor="middle" fontSize="9.5" fill={muted}>{d.year}</text>
           </g>
         );
       })}
     </svg>
+    {tip.node}
+    </div>
   );
 }
 
@@ -95,9 +130,11 @@ function easeOutBack(p) {
 
 // ---- Horizontal bars (funding / users): spring widths, staggered, labels count ----
 function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
-  const inView = useCtxC(AnimCtx);
+  const [ref, inView] = useEyeLevel();
   const [nonce, bump] = useHoverReplay();
-  const prog = useProgress(inView, 1300, 0, nonce);
+  const tip = useTip();
+  const gid = useRefC("hb" + Math.random().toString(36).slice(2, 8)).current;
+  const prog = useProgress(inView, 2700, 0, nonce);
 
   const rowH = 28, padL = 4, padT = 6;
   const labelW = 108, barMaxW = 300;
@@ -106,8 +143,20 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
   const pre = valuePrefix || "";
   const stagger = 0.08;
   return (
+    <div ref={ref} style={{ position: "relative" }}>
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
       onMouseMove={bump} onMouseEnter={bump}>
+      <defs>
+        {data.map((d, i) => {
+          const c = colorOf(d);
+          return (
+            <linearGradient key={i} id={`${gid}-${i}`} x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor={liteC(c, 0.38)} />
+              <stop offset="100%" stopColor={c} />
+            </linearGradient>
+          );
+        })}
+      </defs>
       {data.map((d, i) => {
         const t0 = i * stagger;
         const local = Math.max(0, Math.min((prog - t0) / (1 - t0 || 1), 1));
@@ -118,25 +167,32 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
         const dec = (String(d.value).split(".")[1] || "").length;
         const shown = dec ? (d.value * Math.min(local * 1.15, 1)).toFixed(dec) : Math.round(d.value * Math.min(local * 1.15, 1));
         return (
-          <g key={i} style={{ opacity: local > 0 ? 1 : 0.35, transition: "opacity .2s" }}>
+          <g key={i} style={{ opacity: local > 0 ? 1 : 0.35, transition: "opacity .2s", cursor: "pointer" }}
+            onMouseEnter={e => tip.show(e, <span><b>{d.name}</b> · {pre}{d.value}{unit}{d.src ? <span><br /><em>{d.src}</em></span> : null}</span>)}
+            onMouseMove={tip.move} onMouseLeave={tip.hide}>
             <title>{d.src || d.name}</title>
+            <rect x={padL} y={yy} width={W - padL * 2} height={rowH} fill="transparent" />
             <text x={padL} y={yy + rowH / 2 + 3.5} fontSize="11.5" fill={ink} fontWeight="600">{d.name}</text>
-            <rect x={labelW} y={yy + 5} width={barMaxW} height={rowH - 13} rx="2.5" fill={grid} />
-            <rect x={labelW} y={yy + 5} width={Math.max(w, 0.5)} height={rowH - 13} rx="2.5" fill={c} />
+            <rect x={labelW} y={yy + 5} width={barMaxW} height={rowH - 13} rx="3.5" fill={grid} />
+            <rect x={labelW} y={yy + 5} width={Math.max(w, 0.5)} height={rowH - 13} rx="3.5" fill={`url(#${gid}-${i})`} />
             <text x={labelW + Math.max(w, 0.5) + 8} y={yy + rowH / 2 + 3.5} fontSize="11.5" fontWeight="800" fill={ink}
               style={{ fontVariantNumeric: "tabular-nums", opacity: Math.min(local * 2, 1) }}>{pre}{shown}{unit}</text>
           </g>
         );
       })}
     </svg>
+    {tip.node}
+    </div>
   );
 }
 
 // ---- Donut (category share): clockwise sweep + scale-in pop, center & legend count up ----
 function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
-  const inView = useCtxC(AnimCtx);
+  const [ref, inView] = useEyeLevel();
   const [nonce, bump] = useHoverReplay();
-  const prog = useProgress(inView, 1400, 0, nonce);
+  const tip = useTip();
+  const gid = useRefC("dn" + Math.random().toString(36).slice(2, 8)).current;
+  const prog = useProgress(inView, 2000, 0, nonce);
 
   const size = 184, cx = size / 2, cy = size / 2, r = 64, sw = 27;
   const total = data.reduce((s, d) => s + d.value, 0);
@@ -165,14 +221,25 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
   const centerPop = 0.7 + 0.3 * Math.min(prog * 1.8, 1);
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16, cursor: "pointer" }}
+    <div ref={ref} style={{ display: "flex", alignItems: "center", gap: 16, cursor: "pointer" }}
       onMouseMove={bump} onMouseEnter={bump}>
       <svg viewBox={`0 0 ${size} ${size}`} width="150" height="150" style={{ flexShrink: 0 }}>
+        <defs>
+          {segs.map((s, i) => (
+            <linearGradient key={i} id={`${gid}-${i}`} x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor={liteC(s.color, 0.3)} />
+              <stop offset="100%" stopColor={s.color} />
+            </linearGradient>
+          ))}
+        </defs>
         <g transform={`rotate(${ringSpin} ${cx} ${cy}) translate(${cx} ${cy}) scale(${ringScale}) translate(${-cx} ${-cy})`}
           style={{ opacity: Math.min(prog * 3 + 0.15, 1) }}>
           <circle cx={cx} cy={cy} r={r} fill="none" stroke={ink} strokeOpacity="0.06" strokeWidth={sw} />
           {segs.map((s, i) => s.path && (
-            <path key={i} d={s.path} fill="none" stroke={s.color} strokeWidth={sw} strokeLinecap="butt" />
+            <path key={i} d={s.path} fill="none" stroke={`url(#${gid}-${i})`} strokeWidth={sw} strokeLinecap="butt"
+              style={{ cursor: "pointer" }}
+              onMouseEnter={e => tip.show(e, <span><b>{s.d.label}</b> · <b>{s.d.value}%</b>{s.d.src ? <span><br /><em>{s.d.src}</em></span> : null}</span>)}
+              onMouseMove={tip.move} onMouseLeave={tip.hide} />
           ))}
         </g>
         <g transform={`translate(${cx} ${cy}) scale(${centerPop}) translate(${-cx} ${-cy})`}
@@ -189,8 +256,10 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
             <div key={i} title={s.d.src || s.d.label} style={{
               display: "flex", alignItems: "center", gap: 8, fontSize: 12,
               opacity: 0.25 + 0.75 * local, transform: `translateX(${(1 - local) * 14}px)`,
-              cursor: "default",
-            }}>
+              cursor: "pointer",
+            }}
+              onMouseEnter={e => tip.show(e, <span><b>{s.d.label}</b> · <b>{s.d.value}%</b>{s.d.src ? <span><br /><em>{s.d.src}</em></span> : null}</span>)}
+              onMouseMove={tip.move} onMouseLeave={tip.hide}>
               <span style={{ width: 10, height: 10, borderRadius: 2, background: s.color, flexShrink: 0 }}></span>
               <span style={{ color: ink, fontWeight: 500, whiteSpace: "nowrap" }}>{s.d.label}</span>
               <span style={{ color: muted, marginLeft: "auto", fontWeight: 800, fontVariantNumeric: "tabular-nums", flexShrink: 0 }}>
@@ -200,6 +269,7 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
           );
         })}
       </div>
+      {tip.node}
     </div>
   );
 }
@@ -208,21 +278,22 @@ const SHORT_NAMES = { "MyFitnessPal": "MFP", "Flo Health": "Flo", "AllTrails": "
 function shortName(n) { return SHORT_NAMES[n] || n.split(" ")[0]; }
 
 function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valuePrefix, companies }) {
-  const inView = useCtxC(AnimCtx);
+  const [ref, inView] = useEyeLevel();
   const [nonce, bump] = useHoverReplay();
-  const prog = useProgress(inView, 1400, 0, nonce);
+  const tip = useTip();
+  const prog = useProgress(inView, 2100, 0, nonce);
 
-  const W = 520, H = 200, padL = 46, padR = 16, padT = 18, padB = 24;
+  const W = 520, H = 210, padL = 46, padR = 16, padT = 26, padB = 24;
   const iw = W - padL - padR, ih = H - padT - padB;
   const allVals = series.flatMap(s => s.values);
-  const ticks = niceTicks(Math.max(...allVals), 4);
+  const ticks = niceTicks(Math.max(...allVals, 1) * 1.12, 4);
   const tMax = ticks[ticks.length - 1];
   const x = i => padL + (iw * i) / (months.length - 1 || 1);
   const y = v => padT + ih - (ih * v) / tMax;
   const pre = valuePrefix || "";
 
   return (
-    <div>
+    <div ref={ref} style={{ position: "relative" }}>
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
         onMouseMove={bump} onMouseEnter={bump}>
         {ticks.map((t, i) => (
@@ -240,11 +311,14 @@ function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valu
           const shownPts = pts.slice(0, visiblePts).join(" ");
           return (
             <g key={si}>
-              <polyline points={shownPts} fill="none" stroke={colors[si % colors.length]} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" opacity={0.85} />
+              <polyline points={shownPts} fill="none" stroke={colors[si % colors.length]} strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round" opacity={0.9} />
               {s.values.slice(0, visiblePts).map((v, i) => (
                 <g key={i}>
                   <title>{s.name} {months[i]}: {pre}{v}{unit} — {s.srcs && s.srcs[i] || ""}</title>
                   <circle cx={x(i)} cy={y(v)} r="2.5" fill="#fff" stroke={colors[si % colors.length]} strokeWidth="1.5" />
+                  <circle cx={x(i)} cy={y(v)} r="9" fill="transparent" style={{ cursor: "pointer" }}
+                    onMouseEnter={e => tip.show(e, <span><b style={{ color: colors[si % colors.length] }}>{s.name}</b> · {months[i].replace("2026-", "")}월 · <b>{pre}{v}{unit}</b>{s.srcs && s.srcs[i] ? <span><br /><em>{s.srcs[i]}</em></span> : null}</span>)}
+                    onMouseMove={tip.move} onMouseLeave={tip.hide} />
                 </g>
               ))}
             </g>
@@ -256,7 +330,9 @@ function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valu
           const co = companies && companies.find(c => s.name.startsWith(c.name.split(" (")[0]) || s.name.startsWith(shortName(c.name)));
           const domain = co && co.domain;
           return (
-            <span key={si} className="mlc-leg-item">
+            <span key={si} className="mlc-leg-item" style={{ cursor: "pointer" }}
+              onMouseEnter={e => tip.show(e, <span><b style={{ color: colors[si % colors.length] }}>{s.name}</b> — 월별 추이</span>)}
+              onMouseMove={tip.move} onMouseLeave={tip.hide}>
               <i style={{ background: colors[si % colors.length] }} />
               {domain && <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`} alt="" loading="lazy" />}
               <span>{shortName(s.name)}</span>
@@ -264,6 +340,7 @@ function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valu
           );
         })}
       </div>
+      {tip.node}
     </div>
   );
 }
