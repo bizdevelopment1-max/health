@@ -19,11 +19,19 @@ function useHoverReplay() {
 }
 
 // Floating description tooltip that follows the cursor (per-line / per-bar / per-segment).
+// Hides on container mouseleave and on any scroll, so it can never get stuck
+// when hover-replay animations unmount the element under the cursor.
 function useTip() {
   const [tip, setTip] = useStateC(null);
   const show = (e, content) => setTip({ x: e.clientX, y: e.clientY, content });
   const move = (e) => setTip(t => (t ? { x: e.clientX, y: e.clientY, content: t.content } : t));
   const hide = () => setTip(null);
+  React.useEffect(() => {
+    if (!tip) return;
+    const off = () => setTip(null);
+    window.addEventListener("scroll", off, { passive: true, capture: true });
+    return () => window.removeEventListener("scroll", off, { capture: true });
+  }, [tip !== null]);
   const node = tip ? (
     <div className="chart-tip" style={{
       left: Math.min(tip.x + 16, (typeof window !== "undefined" ? window.innerWidth : 1200) - 260),
@@ -74,7 +82,7 @@ function MarketGrowthChart({ data, accent, ink, grid, muted }) {
   const n = data.length;
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <div ref={ref} style={{ position: "relative" }} onMouseLeave={tip.hide}>
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
       onMouseMove={bump} onMouseEnter={bump}>
       <defs>
@@ -143,7 +151,7 @@ function HBarChart({ data, colorOf, ink, muted, grid, unit, valuePrefix }) {
   const pre = valuePrefix || "";
   const stagger = 0.08;
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <div ref={ref} style={{ position: "relative" }} onMouseLeave={tip.hide}>
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
       onMouseMove={bump} onMouseEnter={bump}>
       <defs>
@@ -222,7 +230,7 @@ function DonutChart({ data, colorOf, ink, muted, centerLabel, centerSub }) {
 
   return (
     <div ref={ref} style={{ display: "flex", alignItems: "center", gap: 16, cursor: "pointer" }}
-      onMouseMove={bump} onMouseEnter={bump}>
+      onMouseMove={bump} onMouseEnter={bump} onMouseLeave={tip.hide}>
       <svg viewBox={`0 0 ${size} ${size}`} width="150" height="150" style={{ flexShrink: 0 }}>
         <defs>
           {segs.map((s, i) => (
@@ -293,7 +301,7 @@ function MonthlyLineChart({ series, months, colors, ink, muted, grid, unit, valu
   const pre = valuePrefix || "";
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <div ref={ref} style={{ position: "relative" }} onMouseLeave={tip.hide}>
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ display: "block", cursor: "pointer" }}
         onMouseMove={bump} onMouseEnter={bump}>
         {ticks.map((t, i) => (
