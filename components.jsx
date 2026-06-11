@@ -147,7 +147,7 @@ const BRANDS = [
 ];
 
 // ---- Top bar ----------------------------------------------------
-function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onColorCycle, onNav }) {
+function TopBar({ dark, onTheme, onMenuToggle, onColorCycle, onNav }) {
   return (
     <header className="topbar">
       <button className="tb-menu" onClick={onMenuToggle} title="메뉴">
@@ -155,10 +155,6 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onCol
       </button>
       <div className="tb-title">
         <h1>Health Intelligence</h1>
-      </div>
-      <div className="tb-search">
-        <Icon name="search" size={15} />
-        <input value={query} onChange={e => onQuery(e.target.value)} placeholder="기업·기사 검색…" />
       </div>
       <div className="tb-tools">
         <AIChatbot onNav={onNav} />
@@ -168,10 +164,6 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onCol
         <button className="tb-theme" onClick={onTheme} title="다크모드 토글">
           <Icon name={dark ? "sun" : "moon"} size={16} />
         </button>
-        <div className="tb-date">
-          <Icon name="dot" size={9} />
-          <span>{todayLabel} 업데이트</span>
-        </div>
       </div>
     </header>
   );

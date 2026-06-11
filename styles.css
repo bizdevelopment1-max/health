@@ -252,15 +252,23 @@ a[href]:hover .rainbow-on-hover,
 .chatbot-input {
   border: none; outline: none; background: transparent; color: var(--ink);
   font-size: 13px; font-weight: 600; font-family: var(--f);
-  padding: 0 16px; width: 320px; height: 100%;
+  padding: 0 16px; width: 520px; height: 100%;
 }
 .chatbot-input::placeholder { color: var(--muted); font-weight: 600; }
-.chatbot-arrow {
-  width: 38px; height: 100%; border: none; border-left: 2px solid currentColor;
-  background: transparent; color: var(--ink-2); cursor: pointer;
-  display: grid; place-items: center; transition: color .15s, background .15s;
+@keyframes hueArrow {
+  0%   { background: #2E6BFF; }
+  25%  { background: #9B4DFF; }
+  50%  { background: #00C2A8; }
+  75%  { background: #FF3D9A; }
+  100% { background: #FFB02E; }
 }
-.chatbot-arrow:hover { color: #fff; background: var(--accent); }
+.chatbot-arrow {
+  width: 42px; height: 100%; border: none;
+  color: #fff; cursor: pointer;
+  display: grid; place-items: center; transition: filter .15s;
+  animation: hueArrow 6s linear infinite alternate;
+}
+.chatbot-arrow:hover { filter: brightness(1.18); }
 .chatbot-drop {
   position: absolute; top: calc(100% + 6px); right: 0; z-index: 200;
   width: 340px; max-height: 360px; overflow-y: auto;
@@ -278,7 +286,13 @@ a[href]:hover .rainbow-on-hover,
   padding: 9px 14px; font-size: 12.5px; font-weight: 500; color: var(--ink);
   line-height: 1.4; font-family: var(--f); transition: background .1s;
 }
-.chatbot-drop-item:hover { background: color-mix(in srgb, var(--accent) 8%, var(--panel)); color: var(--accent); }
+/* alternate row tints for readability (5-color cycle) */
+.chatbot-drop-item:nth-child(5n+1) { background: color-mix(in srgb, #2E6BFF 7%, var(--panel)); }
+.chatbot-drop-item:nth-child(5n+2) { background: color-mix(in srgb, #9B4DFF 7%, var(--panel)); }
+.chatbot-drop-item:nth-child(5n+3) { background: color-mix(in srgb, #00C2A8 8%, var(--panel)); }
+.chatbot-drop-item:nth-child(5n+4) { background: color-mix(in srgb, #FF3D9A 6%, var(--panel)); }
+.chatbot-drop-item:nth-child(5n+5) { background: color-mix(in srgb, #FFB02E 8%, var(--panel)); }
+.chatbot-drop-item:hover { background: color-mix(in srgb, var(--accent) 16%, var(--panel)); color: var(--accent); }
 .chatbot-drop-empty {
   padding: 14px; font-size: 12px; color: var(--muted); text-align: center;
 }
@@ -788,7 +802,9 @@ a[href]:hover .rainbow-on-hover,
 .cd-src-text { font-size: 11.5px; color: var(--ink-2); font-weight: 500; line-height: 1.5; word-break: break-all; user-select: all; }
 
 /* ---------- footer ---------- */
-.foot { display: flex; justify-content: space-between; align-items: center; padding: 4px 4px 0; font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 4px 4px 0; font-size: 11.5px; color: var(--muted); font-weight: 500; }
+.foot-update { color: var(--ink-2); font-weight: 700; white-space: nowrap; }
+.foot-update::before { content: "●"; color: var(--up); margin-right: 5px; font-size: 8px; animation: livePulse 1.8s ease-in-out infinite; }
 
 /* ---------- biz model board ---------- */
 .biz-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line-2); }
@@ -947,7 +963,8 @@ a[href]:hover .rainbow-on-hover,
   .chatbot { flex: 1; min-width: 0; }
   .chatbot-box { width: 100%; height: 40px; }
   .chatbot-input { width: 100%; min-width: 0; font-size: 12.5px; padding: 0 12px; }
-  .chatbot-drop { width: 88vw; right: 0; }
+  /* center the dropdown on the viewport so it never clips off-screen */
+  .chatbot-drop { position: fixed; left: 50%; right: auto; top: 60px; transform: translateX(-50%); width: 92vw; max-width: 420px; }
   .chatbot-bubble { max-width: 94vw; padding: 16px; }
 }
 @media (max-width: 480px) {

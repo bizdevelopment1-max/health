@@ -480,7 +480,7 @@ function OverviewCharts({ data, cats, theme }) {
           <DonutChart data={data.SHARE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="$7.4B" centerSub="Q1 글로벌 펀딩" />
         </div>
         <div className="ov-chart-card">
-          <div className="cc-head"><h3>AI 딜 비중 (~2025 H2 추정)</h3><span title="CB Insights Q1'25 기준 추정 — Rock Health Q1'26에서 AI 딜 별도 추적 공식 폐지">CB Insights Q1'25 · Rock Health 추적 폐지</span></div>
+          <div className="cc-head"><h3>AI 딜 비중 (~2025 H2 추정)</h3><span title="CB Insights Q1'25 기준 추정">CB Insights Q1'25</span></div>
           <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="~62%" centerSub="AI 딜 비중 (추정)" />
         </div>
         <div className="ov-chart-card">

@@ -156,7 +156,7 @@ function App() {
       />
 
       <div className="shell">
-        <TopBar dark={dark} onTheme={() => setTweak("dark", !dark)} query={query} onQuery={setQuery} todayLabel={today}
+        <TopBar dark={dark} onTheme={() => setTweak("dark", !dark)}
           onMenuToggle={() => setSidebarOpen(o => !o)} onColorCycle={cycleColor} onNav={navTo} />
 
         <main className="main" ref={scrollRef}>
@@ -164,7 +164,7 @@ function App() {
             {/* Overview — market-level only */}
             <section ref={refs.overview} data-screen-label="Overview">
               <div className="ov-head">
-                <h2 className="ov-title">마켓 오버뷰 <span>Market Overview</span></h2>
+                <h2 className="ov-title">Market Overview</h2>
                 <div className="ov-legend">
                   {cats.map(c => (
                     <span key={c.id} className="ov-leg"><i style={{ background: c.accent }} />{c.ko}</span>
@@ -197,7 +197,8 @@ function App() {
 
             <footer className="foot">
               <span>Health Intelligence Dashboard</span>
-              <span>원출처: Grand View Research · Rock Health · CB Insights · CNBC · TechCrunch · Peloton IR · Garmin PR · 각 기업 공식 발표 · 최종 검토 2026.06.10</span>
+              <span className="foot-update">{today} 업데이트</span>
+              <span>원출처: Grand View Research · Rock Health · CB Insights · CNBC · TechCrunch · Peloton IR · Garmin PR · 각 기업 공식 발표</span>
             </footer>
           </div>
         </main>

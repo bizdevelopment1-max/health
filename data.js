@@ -327,7 +327,7 @@
     { house: "Goldman Sachs", type: "Securities", date: "2026-06-06", title: "웨어러블 & RPM — 프리미엄 하드웨어 vs. AI 소프트웨어 마진", figure: "웨어러블 CAGR 14.7%", rating: "Neutral", url: "https://www.goldmansachs.com/insights",
       bullets: ["웨어러블 CAGR 14.7%(2026–2030)", "하드웨어 마진 하락 vs AI 소프트웨어 마진 상승 분기점", "구독 모델(Whoop) vs 일회성(Garmin) 수익성 비교"] },
     { house: "Rock Health", type: "Market", date: "2026-06-05", title: "Q1 2026 펀딩: $4.0B/110건 · 자본 집중 가속 · AI 시대 선언", figure: "Q1 $4.0B", rating: "Report", url: "https://rockhealth.com/insights/q1-2026-funding-overview-capital-continues-concentrating-and-four-other-market-signals/",
-      bullets: ["Q1 $4.0B/110건 · 평균 딜 $36.7M(2021 이후 최고)", "메가딜($100M+) 12건 — Q1 2022 이후 최다", "자본 집중 가속 · '있는 자/없는 자' 양극화 심화 (AI 딜 별도 추적 폐지)"] },
+      bullets: ["Q1 $4.0B/110건 · 평균 딜 $36.7M(2021 이후 최고)", "메가딜($100M+) 12건 — Q1 2022 이후 최다", "자본 집중 가속 · '있는 자/없는 자' 양극화 심화"] },
     { house: "CB Insights", type: "Market", date: "2026-06-05", title: "State of Digital Health Q1'26 — $7.4B 펀딩 · 메가라운드 60%", figure: "Q1 $7.4B", rating: "Report", url: "https://www.cbinsights.com/research/report/digital-health-trends-q1-2026/",
       bullets: ["Q1 $7.4B · 메가라운드 60%(19건)", "헬스 AI 투자 전분기 대비 +25%", "디지털 헬스 유니콘 9개 신규 탄생"] },
     { house: "Grand View Research", type: "Market", date: "2026-06-02", title: "글로벌 디지털 헬스 $347B(2025) → $1,830B(2033E) CAGR 23.4%", figure: "$347B → $1,830B", rating: "Report", url: "https://www.grandviewresearch.com/industry-analysis/digital-health-market",
@@ -532,7 +532,7 @@
     { label: "Q1 글로벌 펀딩", value: "$4.0B", delta: +33.0, sub: "Rock Health 미국 중심 $4.0B/110건 · CB Insights 글로벌 $7.4B(방법론 차이)", fill: 0.62, src: "Rock Health Q1 2026 Funding Report, 게시 2026.04.06 · CB Insights State of Digital Health Q1 2026, 게시 2026.04 — 집계 범위 차이: Rock Health는 미국 중심, CB Insights는 글로벌" },
     { label: "GLP-1 시장 (2026E)", value: "$82B", delta: +42.0, sub: "Grand View Research · 세마+티르제 $84.5B", fill: 0.85, src: "Grand View Research, 'GLP-1 Receptor Agonist Market', 게시 2026.02, 검토 2026.06.10" },
     { label: "웨어러블 CAGR", value: "14.7%", delta: +1.3, sub: "2026–2030 · RPM 성장 동력", fill: 0.74, src: "Grand View Research, 'Wearable Medical Devices Market', 게시 2025.12, 검토 2026.06.10" },
-    { label: "AI 딜 비중 (~2025 H2)", value: "~62%", delta: +8.0, sub: "CB Insights Q1'25 기준 추정 · Rock Health Q1'26 AI 딜 추적 폐지", fill: 0.62, src: "CB Insights State of Digital Health Q1'25, 게시 2025.04 — Rock Health Q1'26(게시 2026.04.06)에서 AI 딜 별도 추적 공식 폐지('AI becomes table stakes')" },
+    { label: "AI 딜 비중 (~2025 H2)", value: "~62%", delta: +8.0, sub: "CB Insights Q1'25 기준 추정", fill: 0.62, src: "CB Insights State of Digital Health Q1'25, 게시 2025.04" },
     { label: "IPO 파이프라인", value: "3건", delta: 0, sub: "Oura · Whoop · Strava S-1 제출", fill: 0.55, src: "CNBC 2026.05.21 (Oura) · TechCrunch 2026.03.31 (Whoop) · the5krunner 2026.01.09 (Strava)" },
   ];
 
