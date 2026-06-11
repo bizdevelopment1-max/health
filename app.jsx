@@ -35,6 +35,7 @@ function App() {
   const [feedFilter, setFeedFilter] = uS("all");
   const [selected, setSelected] = uS(null);
   const [sidebarOpen, setSidebarOpen] = uS(false);
+  const [collapsed, setCollapsed] = uS(false);
 
   const D = window.DASH;
   const dark = t.dark;
@@ -88,6 +89,20 @@ function App() {
     return () => sc.removeEventListener("scroll", onScroll);
   }, []);
 
+  // board fold/unfold: click a board header (not its buttons) to collapse the card
+  uE(() => {
+    const sc = scrollRef.current;
+    if (!sc) return;
+    const onClick = (e) => {
+      const head = e.target.closest(".board-head");
+      if (!head || e.target.closest("button, a, input")) return;
+      const board = head.closest(".board");
+      if (board) board.classList.toggle("folded");
+    };
+    sc.addEventListener("click", onClick);
+    return () => sc.removeEventListener("click", onClick);
+  }, []);
+
   const cycleBrand = () => {
     setBrandIdx(p => (p + 1) % BRANDS.length);
   };
@@ -103,6 +118,29 @@ function App() {
     setBrandIdx(0);
   };
 
+  // random next palette (used when the sidebar is folded by an empty-area click)
+  const randomColor = () => {
+    let next = colorIdx;
+    if (COLOR_PRESETS.length > 1) { while (next === colorIdx) next = Math.floor(Math.random() * COLOR_PRESETS.length); }
+    setColorIdx(next);
+    const p = COLOR_PRESETS[next];
+    setTweak("sidebar", p.sidebar);
+    setTweak("colDevice", p.colDevice);
+    setTweak("colAi", p.colAi);
+    setTweak("colStartup", p.colStartup);
+    setBrandIdx(0);
+  };
+
+  // empty-area click: fold/unfold the bar AND shift to the next random color
+  const onSidebarBg = () => {
+    randomColor();
+    if (window.matchMedia && window.matchMedia("(max-width: 820px)").matches) {
+      setSidebarOpen(false);
+    } else {
+      setCollapsed(c => !c);
+    }
+  };
+
   const articleCount = D.ARTICLES.filter(a => a.date === "2026-06-10").length;
   const now = new Date();
   const today = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
@@ -110,8 +148,9 @@ function App() {
   return (
     <div className={"app d-" + t.density}>
       <Sidebar
-        active={active} onNav={id => { navTo(id); setSidebarOpen(false); }} brand={brand} onCycleBrand={cycleBrand}
-        articleCount={articleCount} companies={D.COMPANIES} cats={cats} onSelectCompany={c => { setSelected(c); setSidebarOpen(false); }}
+        active={active} onNav={id => { navTo(id); }} brand={brand}
+        onLogo={() => navTo("overview")} onBgClick={onSidebarBg} collapsed={collapsed}
+        articleCount={articleCount} companies={D.COMPANIES} cats={cats} onSelectCompany={c => { setSelected(c); }}
         open={sidebarOpen} onToggle={() => setSidebarOpen(o => !o)}
       />
 
