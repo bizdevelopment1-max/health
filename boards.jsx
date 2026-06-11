@@ -17,7 +17,7 @@ function pubOf(a) {
 function fmtPubKo(ds) {
   if (!ds) return "";
   const [y, m, d] = ds.split("-").map(Number);
-  return y === 2026 ? `${m}/${d}일` : `'${String(y).slice(2)}.${m}.${d}`;
+  return y === 2026 ? `${m}/${d}` : `'${String(y).slice(2)}.${m}.${d}`;
 }
 
 // ---- Company logo (real favicon, falls back to initial) ---------

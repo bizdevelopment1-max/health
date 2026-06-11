@@ -302,20 +302,26 @@ function AIChatbot({ onNav }) {
     // Korean questions still match (e.g. "오우라성장" → "오우라","성장")
     const words = q.split(/[\s,./?!·]+/).filter(w => w.length > 1);
 
+    const strip = s => s.replace(/[의은는이가을를에서도와과로부터까지만]/g, "");
+    const qStripped = strip(q);
+    const wordsStripped = words.map(strip).filter(w => w.length > 1);
+
     const scored = QA.map(qa => {
       let score = 0;
       const kw = qa.keywords || [];
       const ql = qa.q.toLowerCase();
       const al = qa.a.toLowerCase();
       kw.forEach(k => {
-        if (q.includes(k)) score += 12;
-        else if (k.length > 1 && q.includes(k.slice(0, Math.max(2, k.length - 1)))) score += 3;
+        if (q.includes(k) || qStripped.includes(k)) score += 12;
+        wordsStripped.forEach(w => {
+          if (w === k || k === w) score += 12;
+          else if (w.length > 1 && (k.startsWith(w) || w.startsWith(k))) score += 6;
+        });
       });
       if (ql.includes(q) || q.includes(ql.slice(0, 8))) score += 8;
-      words.forEach(w => { if (ql.includes(w)) score += 3; });
-      words.forEach(w => { if (al.includes(w)) score += 1.5; });
-      // keyword token appears anywhere in the query string
-      kw.forEach(k => { words.forEach(w => { if (k.includes(w) || w.includes(k)) score += 2; }); });
+      wordsStripped.forEach(w => { if (ql.includes(w)) score += 3; });
+      wordsStripped.forEach(w => { if (al.includes(w)) score += 1; });
+      kw.forEach(k => { wordsStripped.forEach(w => { if (k.includes(w) || w.includes(k)) score += 2; }); });
       return { qa, score };
     });
     scored.sort((a, b) => b.score - a.score);
