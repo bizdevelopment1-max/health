@@ -78,44 +78,48 @@ function sbBg(hex) {
   return `linear-gradient(168deg, ${sh(0.16)} 0%, ${hex} 40%, ${sh(-0.46)} 100%)`;
 }
 
-function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, cats, onSelectCompany, open, onToggle }) {
+function Sidebar({ active, onNav, brand, onLogo, onBgClick, collapsed, articleCount, companies, cats, onSelectCompany, open, onToggle }) {
   const [openCat, setOpenCat] = useState(null);
   const isCat = id => id === "device" || id === "ai" || id === "startup";
+  const stop = fn => (e) => { e.stopPropagation(); fn && fn(e); };
   return (
     <>
     {open && <div className="sb-backdrop" onClick={onToggle} />}
-    <aside className={"sidebar" + (open ? " sb-open" : "")} style={{ background: sbBg(brand.bg) }}>
+    <aside className={"sidebar" + (open ? " sb-open" : "") + (collapsed ? " sb-collapsed" : "")}
+      style={{ background: sbBg(brand.bg) }}
+      onClick={onBgClick}>
       <div className="sb-head">
-        <button className="sb-logo" onClick={onCycleBrand} title="클릭하여 색상 변경">
+        <button className="sb-logo" onClick={stop(onLogo)} title="오버뷰로 이동">
           <span className="sb-logo-mark" style={{ color: brand.bg }}><Icon name="pulse" size={18} sw={2.4} /></span>
           <span className="sb-logo-txt">
             <b>HEALTH</b><span>INTELLIGENCE</span>
           </span>
         </button>
+        <span className="sb-fold-hint"><Icon name="collapse" size={15} sw={2.2} /></span>
       </div>
 
       <nav className="sb-nav">
         {NAV.map(n => {
           const cat = isCat(n.id) ? (cats || []).find(c => c.id === n.id) : null;
           const subs = cat ? (companies || []).filter(c => c.cat === n.id) : [];
-          const open = openCat === n.id;
+          const openS = openCat === n.id;
           return (
             <React.Fragment key={n.id}>
               <button className={"sb-item" + (active === n.id ? " on" : "")} title={n.ko}
-                onClick={() => { onNav(n.id); if (cat) setOpenCat(open ? null : n.id); }}>
+                onClick={stop(() => { onNav(n.id); if (cat) setOpenCat(openS ? null : n.id); })}>
                 <span className="sb-ic"><Icon name={n.icon} size={17} /></span>
                 <span className="sb-label">{n.ko}</span>
                 {n.id === "articles" && articleCount > 0 && (
                   <span className="sb-badge">{articleCount}</span>
                 )}
-                {cat && <span className={"sb-caret" + (open ? " open" : "")}><Icon name="chevron" size={13} sw={2.2} /></span>}
+                {cat && <span className={"sb-caret" + (openS ? " open" : "")}><Icon name="chevron" size={13} sw={2.2} /></span>}
                 {active === n.id && <span className="sb-active-bar" />}
               </button>
-              {cat && open && (
+              {cat && openS && (
                 <div className="sb-sub">
                   {subs.map((c, i) => (
                     <button key={i} className="sb-subitem" title={c.name + " 상세 보기"}
-                      onClick={() => onSelectCompany && onSelectCompany(c)}>
+                      onClick={stop(() => onSelectCompany && onSelectCompany(c))}>
                       <span className="sb-sub-dot" style={{ background: cat.accent }} />
                       <span className="sb-sub-name">{c.name}</span>
                       <span className="sb-sub-val">{c.value}</span>
@@ -128,7 +132,7 @@ function Sidebar({ active, onNav, brand, onCycleBrand, articleCount, companies, 
         })}
       </nav>
 
-      <div className="sb-foot" />
+      <div className="sb-foot"></div>
     </aside>
     </>
   );
@@ -150,13 +154,13 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onCol
         <Icon name="menu" size={18} sw={2} />
       </button>
       <div className="tb-title">
-        <h1>헬스케어 인텔리전스</h1>
+        <h1>Health Intelligence</h1>
+      </div>
+      <div className="tb-search">
+        <Icon name="search" size={15} />
+        <input value={query} onChange={e => onQuery(e.target.value)} placeholder="기업·기사 검색…" />
       </div>
       <div className="tb-tools">
-        <div className="tb-search">
-          <Icon name="search" size={15} />
-          <input value={query} onChange={e => onQuery(e.target.value)} placeholder="기업·기사 검색…" />
-        </div>
         <AIChatbot onNav={onNav} />
         <button className="tb-color" onClick={onColorCycle} title="색상 변경">
           <Icon name="palette" size={16} />
@@ -173,28 +177,85 @@ function TopBar({ dark, onTheme, query, onQuery, todayLabel, onMenuToggle, onCol
   );
 }
 
-// ---- KPI strip (numbers + gauges replay each time it enters view) -
+// ---- KPI strip: counts replay in view · cards drag-reorder & fold ----
 function KpiStrip({ kpis }) {
   const ref = useRef(null);
   const inView = useInView(ref);
+  const [order, setOrder] = useState(kpis.map((_, i) => i));
+  const [folded, setFolded] = useState({});
+  const [dragIdx, setDragIdx] = useState(null);
+  const [overIdx, setOverIdx] = useState(null);
+  const [hoverNonce, setHoverNonce] = useState({}); // bump to re-run a card's count-up on hover
+  const replay = (ki) => setHoverNonce(h => ({ ...h, [ki]: (h[ki] || 0) + 1 }));
+
+  const move = (from, to) => {
+    setOrder(o => {
+      const arr = [...o];
+      const [x] = arr.splice(from, 1);
+      arr.splice(to, 0, x);
+      return arr;
+    });
+  };
+
   return (
     <AnimCtx.Provider value={inView}>
       <div className="kpi-strip" ref={ref}>
-        {kpis.map((k, i) => (
-          <div className="kpi" key={i} title={k.src || ""}>
-            <div className="kpi-label">{k.label}</div>
-            <div className="kpi-row">
-              <AnimatedNumber className="kpi-val" value={k.value} active={inView} />
-              <Trend v={k.delta} small animate />
+        {order.map((ki, pos) => {
+          const k = kpis[ki];
+          const isFold = !!folded[ki];
+          const cls = "kpi" + (isFold ? " kpi-folded" : "")
+            + (dragIdx === pos ? " kpi-dragging" : "")
+            + (overIdx === pos && dragIdx !== null && dragIdx !== pos ? " kpi-dragover" : "");
+          return (
+            <div className={cls} key={ki} title={k.src || ""}
+              draggable
+              onMouseEnter={() => replay(ki)}
+              onDragStart={e => { setDragIdx(pos); e.dataTransfer.effectAllowed = "move"; }}
+              onDragEnter={() => setOverIdx(pos)}
+              onDragOver={e => e.preventDefault()}
+              onDrop={e => { e.preventDefault(); if (dragIdx !== null && dragIdx !== pos) move(dragIdx, pos); setDragIdx(null); setOverIdx(null); }}
+              onDragEnd={() => { setDragIdx(null); setOverIdx(null); }}>
+              <button className="kpi-fold" title={isFold ? "카드 펼치기" : "카드 접기"}
+                onClick={e => { e.stopPropagation(); setFolded(f => ({ ...f, [ki]: !f[ki] })); }}>
+                <Icon name="chevron" size={11} sw={2.4} />
+              </button>
+              <div className="kpi-label">{k.label}</div>
+              <div className="kpi-row">
+                <AnimatedNumber key={"v" + (hoverNonce[ki] || 0)} className="kpi-val" value={k.value} active={inView} dur={1100} />
+                {!isFold && <Trend v={k.delta} small animate />}
+              </div>
+              {!isFold && <MiniBar key={"b" + (hoverNonce[ki] || 0)} frac={k.fill} color="var(--accent)" />}
+              {!isFold && <div className="kpi-sub">{k.sub}</div>}
+              {!isFold && k.src && <div className="kpi-src">{k.src}</div>}
             </div>
-            <MiniBar frac={k.fill} color="var(--accent)" />
-            <div className="kpi-sub">{k.sub}</div>
-            {k.src && <div className="kpi-src">{k.src}</div>}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </AnimCtx.Provider>
   );
+}
+
+// ---- chat answer formatting (bold lead · accent terms · yellow figures) ----
+const CHAT_TERMS = ["Apple Watch","Apple","Oura Ring","Oura","Whoop MG","Whoop","Fitbit Air","Fitbit","Garmin","CIRQA","Peloton","Strava","Noom","MyFitnessPal","MFP","Cal AI","Calm","Headspace","Flo Health","Flo","AllTrails","Finch","Ultrahuman","WeightWatchers","Amazfit","OpenAI","ChatGPT","Anthropic","Claude","Google","DeepMind","MedGemini","Gemini","Amazon","GLP-1","Ozempic","Wegovy","FDA","ECG","AFib","CGM","IPO","S-1","CB Insights","Rock Health","Grand View Research","BCG","Nature","Sequence","Goldman Sachs","JPMorgan","데카콘"];
+function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+const CHAT_FIG = "\\$[\\d.,]+[BMK]?\\+?|[+-]?\\d[\\d.,]*%|\\d[\\d.,]*억\\+?|\\d[\\d.,]*만\\s?명?\\+?";
+const CHAT_TERM_PAT = CHAT_TERMS.slice().sort((a, b) => b.length - a.length).map(escRe).join("|");
+const CHAT_SPLIT = new RegExp("(" + CHAT_FIG + "|" + CHAT_TERM_PAT + ")", "g");
+const CHAT_FIG_RE = new RegExp("^(" + CHAT_FIG + ")$");
+const CHAT_TERMSET = new Set(CHAT_TERMS);
+function hlInline(str, key) {
+  return String(str).split(CHAT_SPLIT).map((p, i) => {
+    if (!p) return null;
+    if (CHAT_FIG_RE.test(p)) return <b key={key + "-" + i} className="num-hl">{p}</b>;
+    if (CHAT_TERMSET.has(p)) return <b key={key + "-" + i} className="chat-term">{p}</b>;
+    return <React.Fragment key={key + "-" + i}>{p}</React.Fragment>;
+  });
+}
+function formatAnswer(text) {
+  if (!text) return null;
+  return String(text).split(/\n\n+/).map((para, pi) => (
+    <p key={pi} className={"chat-para" + (pi === 0 ? " lead" : "")}>{hlInline(para, "p" + pi)}</p>
+  ));
 }
 
 // ---- AI Chatbot (dropdown questions + natural language search) ----
@@ -207,6 +268,7 @@ function AIChatbot({ onNav }) {
   const [answerNav, setAnswerNav] = useState(null);
   const dropRef = useRef(null);
   const typingRef = useRef(null);
+  const inputRef = useRef(null);
 
   const QA = window.DASH.QA_PAIRS || [];
 
@@ -225,7 +287,7 @@ function AIChatbot({ onNav }) {
     if (typingRef.current) clearInterval(typingRef.current);
     let i = 0;
     typingRef.current = setInterval(() => {
-      i += 2;
+      i += 1;
       if (i >= text.length) {
         setDisplayText(text);
         setTyping(false);
@@ -233,7 +295,7 @@ function AIChatbot({ onNav }) {
       } else {
         setDisplayText(text.slice(0, i));
       }
-    }, 12);
+    }, 14);
   };
 
   const selectQ = (qa) => {
@@ -244,28 +306,37 @@ function AIChatbot({ onNav }) {
   const doSearch = () => {
     if (!search.trim()) return;
     const q = search.toLowerCase().trim();
-    const words = q.split(/\s+/).filter(w => w.length > 1);
+    // tokenize: split on spaces AND pull 2-gram-ish Korean chunks so spaceless
+    // Korean questions still match (e.g. "오우라성장" → "오우라","성장")
+    const words = q.split(/[\s,./?!·]+/).filter(w => w.length > 1);
 
     const scored = QA.map(qa => {
       let score = 0;
       const kw = qa.keywords || [];
-      kw.forEach(k => { if (q.includes(k)) score += 10; });
-      if (qa.q.toLowerCase().includes(q)) score += 8;
-      words.forEach(w => { if (qa.q.toLowerCase().includes(w)) score += 3; });
-      words.forEach(w => { if (qa.a.toLowerCase().includes(w)) score += 1; });
+      const ql = qa.q.toLowerCase();
+      const al = qa.a.toLowerCase();
+      kw.forEach(k => {
+        if (q.includes(k)) score += 12;
+        else if (k.length > 1 && q.includes(k.slice(0, Math.max(2, k.length - 1)))) score += 3;
+      });
+      if (ql.includes(q) || q.includes(ql.slice(0, 8))) score += 8;
+      words.forEach(w => { if (ql.includes(w)) score += 3; });
+      words.forEach(w => { if (al.includes(w)) score += 1.5; });
+      // keyword token appears anywhere in the query string
+      kw.forEach(k => { words.forEach(w => { if (k.includes(w) || w.includes(k)) score += 2; }); });
       return { qa, score };
     });
     scored.sort((a, b) => b.score - a.score);
-    if (scored[0] && scored[0].score >= 3) { typeOut(scored[0].qa.a, scored[0].qa.nav); return; }
+    if (scored[0] && scored[0].score >= 4) { typeOut(scored[0].qa.a, scored[0].qa.nav); return; }
 
     const D = window.DASH;
     const results = [];
     (D.COMPANIES || []).forEach(c => {
-      const txt = (c.name + " " + c.note + " " + (c.vp || "")).toLowerCase();
+      const txt = (c.name + " " + c.note + " " + (c.vp || "") + " " + (c.direction || "")).toLowerCase();
       let s = 0;
       if (txt.includes(q)) s += 10;
       words.forEach(w => { if (c.name.toLowerCase().includes(w)) s += 5; if (txt.includes(w)) s += 1; });
-      if (s > 0) results.push({ text: c.name + ": " + c.note, nav: c.cat, score: s });
+      if (s > 0) results.push({ text: c.name + " — " + c.note, nav: c.cat, score: s });
     });
     (D.INSIGHTS || []).forEach(ins => {
       const txt = (ins.title + " " + ins.desc).toLowerCase();
@@ -287,7 +358,7 @@ function AIChatbot({ onNav }) {
       const answerText = top.map((r, i) => (i + 1) + ". " + r.text).join("\n\n");
       typeOut(answerText, top[0].nav);
     } else {
-      typeOut("관련 정보를 찾을 수 없습니다. 다른 키워드로 검색해 보세요.", null);
+      typeOut("질문과 정확히 일치하는 항목을 찾지 못했어요. 기업명(Oura·Whoop·Peloton·MyFitnessPal 등)이나 'GLP-1', 'IPO', '시장 규모', 'FDA' 같은 키워드로 다시 질문해 주세요.", null);
     }
   };
 
@@ -295,7 +366,22 @@ function AIChatbot({ onNav }) {
     setAnswer(null);
     setDisplayText("");
     setTyping(false);
+    setAnswerNav(null);
     if (typingRef.current) clearInterval(typingRef.current);
+    setSearch("");
+    setOpen(false);
+    setTimeout(() => { if (inputRef.current) inputRef.current.focus(); }, 30);
+  };
+
+  // click inside the open answer: while typing -> reveal full text; once done -> clear & let user re-ask
+  const onPanelClick = (e) => {
+    if (typing) {
+      e.stopPropagation();
+      if (typingRef.current) clearInterval(typingRef.current);
+      setDisplayText(answer);
+      setTyping(false);
+    }
+    // when finished, allow the click to bubble to the overlay -> closeAnswer (clears input)
   };
 
   const goToSection = () => {
@@ -315,11 +401,11 @@ function AIChatbot({ onNav }) {
       <div className="chatbot-box">
         <input
           className="chatbot-input"
+          ref={inputRef}
           value={search}
-          onChange={e => { setSearch(e.target.value); setOpen(true); }}
-          onFocus={() => setOpen(true)}
+          onChange={e => setSearch(e.target.value)}
           onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); doSearch(); } }}
-          placeholder="AI Chatbot"
+          placeholder="AI에게 물어보세요…"
         />
         <button className="chatbot-arrow" onClick={() => setOpen(!open)} title="질문 선택">
           <Icon name={open ? "up" : "down"} size={14} sw={2.2} />
@@ -327,9 +413,9 @@ function AIChatbot({ onNav }) {
       </div>
       {open && (
         <div className="chatbot-drop">
-          <div className="chatbot-drop-title">질문을 선택하세요</div>
+          <div className="chatbot-drop-title">질문을 선택하세요 · 예시 {filtered.length}개</div>
           <div className="chatbot-drop-list">
-            {filtered.slice(0, 10).map((qa, i) => (
+            {filtered.slice(0, 30).map((qa, i) => (
               <button key={i} className="chatbot-drop-item" onClick={() => selectQ(qa)}>
                 {qa.q}
               </button>
@@ -340,20 +426,35 @@ function AIChatbot({ onNav }) {
       )}
       {answer && (
         <div className="chatbot-overlay" onClick={closeAnswer}>
-          <div className="chatbot-bubble" onClick={e => e.stopPropagation()}>
-            <div className="chatbot-bubble-head">
-              <span className="chatbot-bubble-icon"><Icon name="ai" size={16} /></span>
-              <b>AI Chatbot</b>
-              {typing && <span className="chatbot-typing">입력 중...</span>}
-              <button className="chatbot-bubble-close" onClick={closeAnswer}><Icon name="x" size={14} sw={2} /></button>
+          <div className="chat-panel" onClick={onPanelClick}>
+            <div className="chat-head">
+              <span className="chat-ava"><Icon name="ai" size={16} /></span>
+              <b>AI 헬스 어시스턴트</b>
+              {typing && <span className="chat-typing">답변 작성 중…</span>}
+              <button className="chatbot-bubble-close" onClick={closeAnswer}><Icon name="x" size={15} sw={2} /></button>
             </div>
-            <div className="chatbot-bubble-q">{search}</div>
-            <div className="chatbot-bubble-a">{displayText}{typing && <span className="chatbot-cursor">|</span>}</div>
-            {!typing && answerNav && (
-              <button className="chatbot-go" onClick={goToSection}>
-                해당 섹션으로 이동 <Icon name="chevron" size={12} />
-              </button>
-            )}
+            <div className="chat-body">
+              <div className="chat-msg user">
+                <div className="chat-bubble user">{search}</div>
+              </div>
+              <div className="chat-msg bot">
+                <span className="chat-ava sm"><Icon name="ai" size={14} /></span>
+                <div className="chat-bubble bot">
+                  {typing
+                    ? <span className="chat-typetext">{displayText}<span className="chatbot-cursor">▋</span></span>
+                    : formatAnswer(answer)}
+                </div>
+              </div>
+              {!typing && answerNav && (
+                <div className="chat-msg bot">
+                  <span className="chat-ava sm" style={{ visibility: "hidden" }}></span>
+                  <button className="chatbot-go" onClick={e => { e.stopPropagation(); goToSection(); }}>
+                    해당 섹션으로 이동 <Icon name="chevron" size={12} />
+                  </button>
+                </div>
+              )}
+              {!typing && <div className="chat-hint">아무 곳이나 클릭하면 닫고 새 질문을 입력할 수 있어요</div>}
+            </div>
           </div>
         </div>
       )}
