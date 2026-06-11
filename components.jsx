@@ -89,13 +89,12 @@ function Sidebar({ active, onNav, brand, onLogo, onBgClick, collapsed, articleCo
       style={{ background: sbBg(brand.bg) }}
       onClick={onBgClick}>
       <div className="sb-head">
-        <button className="sb-logo" onClick={stop(onLogo)} title="오버뷰로 이동">
+        <span className="sb-logo">
           <span className="sb-logo-mark" style={{ color: brand.bg }}><Icon name="pulse" size={18} sw={2.4} /></span>
           <span className="sb-logo-txt">
             <b>HEALTH</b><span>INTELLIGENCE</span>
           </span>
-        </button>
-        <span className="sb-fold-hint"><Icon name="collapse" size={15} sw={2.2} /></span>
+        </span>
       </div>
 
       <nav className="sb-nav">

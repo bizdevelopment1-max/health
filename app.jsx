@@ -165,11 +165,6 @@ function App() {
             <section ref={refs.overview} data-screen-label="Overview">
               <div className="ov-head">
                 <h2 className="ov-title">Executive Summary</h2>
-                <div className="ov-legend">
-                  {cats.map(c => (
-                    <span key={c.id} className="ov-leg"><i style={{ background: c.accent }} />{c.ko}</span>
-                  ))}
-                </div>
               </div>
               <KpiStrip kpis={D.KPIS} />
               <OverviewCharts data={D} cats={cats} theme={chartTheme} />
