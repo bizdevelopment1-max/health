@@ -144,7 +144,7 @@ function App() {
   const latestArticleDate = D.ARTICLES.reduce((m, a) => (a.date > m ? a.date : m), "");
   const articleCount = D.ARTICLES.filter(a => a.date === latestArticleDate).length;
   const now = new Date();
-  const today = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+  const renderTime = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 
   return (
     <div className={"app d-" + t.density}>
@@ -197,7 +197,7 @@ function App() {
 
             <footer className="foot">
               <span>Health Intelligence Dashboard</span>
-              <span className="foot-update">{today} 업데이트</span>
+              <span className="foot-update">자료 기준일: 2026-06-10 · 최종 팩트체크: 2026-06-11 · 렌더링: {renderTime}</span>
               <span>원출처: Grand View Research · Rock Health · CB Insights · CNBC · TechCrunch · 각 기업 공식 발표</span>
             </footer>
           </div>

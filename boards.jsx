@@ -444,6 +444,7 @@ function ReportsBoard({ reports, sectionRef, query }) {
                 <span className="rep-title">{r.title}</span>
                 <span className="rep-figure"><AnimatedNumber value={r.figure} /></span>
                 <span className={"rep-rating r-" + r.rating.replace(/\s/g, "").toLowerCase()}>{r.rating}</span>
+                {r.verified === false && <span className="rep-unverified" title={r.verifyNote || "원문 미확인"}>Unverified</span>}
                 <span className="rep-date">{fmtDate(r.date)}</span>
                 <Icon name="ext" size={12} />
               </a>
@@ -785,7 +786,7 @@ function MonthlyTrendsBoard({ data, cats, theme, sectionRef }) {
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
           <h2>월별 추이 <span className="board-en">Monthly Trends · Downloads & Revenue</span></h2>
-          <p>앱 다운로드 · 매출 월별 추이 · 센서타워/공시 기반</p>
+          <p>앱 다운로드(추정) · 매출 월별 추이 · 유료 데이터/공시/내부 추정 혼재</p>
         </div>
         <div className="feed-filters">
           <button className={tab === "downloads" ? "on" : ""} onClick={() => setTab("downloads")}>다운로드(합산)</button>
@@ -804,7 +805,7 @@ function MonthlyTrendsBoard({ data, cats, theme, sectionRef }) {
       <div className="chart-grid">
         {tab === "downloads" && (
           <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
-            <div className="cc-head"><h3>월별 앱 다운로드 추이</h3><span>M(백만) · iOS+Android 합산 · SensorTower App Intelligence 2026 (유료 구독 데이터, 원문 검증 불가)</span></div>
+            <div className="cc-head"><h3>월별 앱 다운로드 추이 (Modeled Estimate)</h3><span>M(백만) · iOS+Android 합산 · SensorTower 유료 데이터 기반 · 공개 검증 불가(Paid dataset / not publicly verifiable)</span></div>
             <MonthlyLineChart series={buildDownloadSeries()} months={months} colors={appColors} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" companies={data.COMPANIES} />
           </div>
         )}
@@ -816,7 +817,7 @@ function MonthlyTrendsBoard({ data, cats, theme, sectionRef }) {
         )}
         {tab === "revenue" && (
           <div className="chart-card wide" style={{ gridColumn: "1 / -1" }}>
-            <div className="cc-head"><h3>월별 매출 추이 (* 추정치 포함)</h3><span>$M · 공시/추정 혼재 — 실측 vs 추정 구분은 데이터 포인트 호버 참조</span></div>
+            <div className="cc-head"><h3>월별 매출 추이 (Reported / ARR / Run-rate / Estimate 혼재)</h3><span>$M · 공시 매출, ARR 배분, 북킹스 런레이트, 내부 추정이 혼재됨 — 데이터 성격은 각 포인트 소스 참조</span></div>
             <MonthlyLineChart series={buildRevenueSeries()} months={revMonths} colors={appColors} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="M" valuePrefix="$" companies={data.COMPANIES} />
           </div>
         )}

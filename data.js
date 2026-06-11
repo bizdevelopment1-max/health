@@ -15,9 +15,9 @@
   const COMPANIES = [
     // ── Device ──
     { cat: "device", name: "Apple", domain: "apple.com", unit: "Health · Watch S11", valuation: "~$3.5T 시총", valAsof: "26.6", funding: "Public", metric: "Watch 판매", value: "33M/yr", metricAsof: "25 IDC", trend: +4.2,
-      note: "Watch Series 11 · 고혈압 알림+수면 점수 신규 · ECG/AFib FDA clearance · 연 3,300만대(IDC 2025) · Apple Intelligence 헬스 확장",
-      vp: "하드웨어·소프트웨어·서비스 수직 통합으로 의료 등급 건강 데이터를 일상 속에 — 소비자 웨어러블 중 유일한 FDA clearance(ECG/AFib) 보유",
-      direction: "예방 의학 플랫폼으로 진화 · 고혈압 알림 등 조기 경고 기능 확대 · Apple Intelligence 기반 건강 데이터 AI 요약 · 생태계 락인 심화",
+      note: "Watch Series 11 · 고혈압 알림(Series 9/10/11 및 Ultra 2/3 지원)+수면 점수 신규 · ECG/AFib FDA clearance · 연 3,300만대(IDC 2025) · Apple Intelligence 헬스 확장",
+      vp: "하드웨어·소프트웨어·서비스 수직 통합으로 의료 등급 건강 데이터를 일상 속에 — FDA-cleared 기능을 보유한 대표 소비자 웨어러블",
+      direction: "예방 의학 플랫폼으로 진화 · 고혈압 알림(Series 9+ 및 Ultra 2+) 등 조기 경고 기능 확대 · Apple Intelligence 기반 건강 데이터 AI 요약 · 생태계 락인 심화",
       url: "https://www.apple.com/newsroom/",
       sources: [
         "IDC / Fortunly — 2025 — https://fortunly.com/statistics/apple-watch-statistics/",
@@ -25,7 +25,7 @@
       ] },
 
     { cat: "device", name: "Fitbit Air", domain: "fitbit.com", unit: "Screenless Band", valuation: "Google 자회사", valAsof: "26.5", funding: "Public", metric: "가격", value: "$99.99", metricAsof: "26.5 출시", trend: +0,
-      note: "2026.05 출시 · 12g(밴드 포함 · 본체 5.2g) · 스크린리스 · 7일 배터리 · AFib 감지 · SpO2·HRV·피부온도 · Google Health 앱 전환 · Whoop 직접 경쟁",
+      note: "2026.05 출시 · 12g(밴드 포함 · 본체 5.2g) · 스크린리스 · GPS 미탑재(스마트폰 연동) · 7일 배터리 · AFib 감지 · SpO2·HRV·피부온도 · Gemini Premium($9.99/월) AI 인사이트 별도 · Google Health 앱 전환 · Whoop 직접 경쟁",
       vp: "구독 없는 $99.99 일회성 가격으로 스크린리스 트래킹의 진입 장벽 최소화 — Whoop 구독 모델의 정반대 포지셔닝",
       direction: "Google Health 생태계 통합 허브 · Gemini 기반 AI 헬스 인사이트 · 대중 시장(mass market) 웨어러블 보급 가속",
       url: "https://blog.google/products-and-platforms/devices/fitbit/fitbit-air/",
@@ -35,10 +35,10 @@
         "Android Central — 2026-05 — https://www.androidcentral.com/wearables/fitbit/google-fitbit-air-launch-specs-price",
       ] },
 
-    { cat: "device", name: "Garmin", domain: "garmin.com", unit: "Fitness · Outdoor", valuation: "$33B+ 시총", valAsof: "26.6", funding: "Public", metric: "피트니스 매출(FY)", value: "$2.36B", metricAsof: "FY25 확정", trend: +12.8, trendBasis: "피트니스 세그먼트 매출 YoY",
-      note: "FY2025 피트니스 세그먼트 $2.36B 확정 · +12.8% YoY · 프리미엄 라인 일부 +33% 상회 · CIRQA 스크린리스 밴드 $509(소매)/$454(프리오더, 리크) · 프리미엄 멀티스포츠 강세",
+    { cat: "device", name: "Garmin", domain: "garmin.com", unit: "Fitness · Outdoor", valuation: "$33B+ 시총", valAsof: "26.6", funding: "Public", metric: "피트니스 매출(FY)", value: "$2.36B", metricAsof: "FY25 확정", trend: +33, trendBasis: "피트니스 세그먼트 매출 YoY",
+      note: "FY2025 피트니스 세그먼트 $2.36B 확정 · +33% YoY · FY2026E 전사 매출 가이던스 $7.9B · Connect+ 구독 $6.99/월(선택) · CIRQA 스크린리스 밴드 $509(소매)/$454(프리오더, 리크) · 프리미엄 멀티스포츠 강세",
       vp: "프리미엄 멀티스포츠 특화 — 최장 배터리·내구성·정밀 GPS로 진지한 운동인(serious athlete) 시장 독점적 지위",
-      direction: "공식 미발표 · 리크 기준 CIRQA $509 스크린리스 밴드로 회복·웰니스 시장 진입 · 구독 의존 없는 하드웨어 마진 모델 유지 · 아웃도어·마린 동반 성장",
+      direction: "공식 미발표 · 리크 기준 CIRQA $509 스크린리스 밴드로 회복·웰니스 시장 진입 · 기본 무료 + Connect+ $6.99/월 선택적 구독 모델 · 아웃도어·마린 동반 성장",
       url: "https://www.garmin.com/en-US/newsroom/",
       sources: [
         "Garmin PR Newswire — 2026-02-18 — https://www.prnewswire.com/",
@@ -48,7 +48,7 @@
       ] },
 
     { cat: "device", name: "Oura", domain: "ouraring.com", unit: "Smart Ring", valuation: "$11B", valAsof: "25.10 Series E", funding: "Series E $900M", metric: "매출 전망", value: "$2B(26E)", metricAsof: "26E 전망", trend: +100.0, trendBasis: "매출 YoY (2025 ~$1B → 2026E $2B)",
-      note: "Series E $9억 조달 밸류 $11B(CNBC 2025.10) · IPO S-1 비밀 제출(2026.05.21) · 유럽 헬스테크 최초 데카콘 · 스마트링 점유율 74%(2025 H1 Omdia) · 2025 매출 ~$1B · 2026 매출 $2B 전망",
+      note: "Series E $9억 조달 밸류 $11B(CNBC 2025.10) · IPO S-1 비밀 제출(2026.05.21) · Ring 5 출시(2026.06.04): Ring 4 대비 40% 소형화 · $399~ · 최대 9일 배터리 · GLP-1 tracking · Health Radar · 유럽 헬스테크 최초 데카콘 · 스마트링 점유율 74%(2025 H1 Omdia) · 2025 매출 ~$1B · 2026 매출 $2B 전망",
       vp: "반지 폼팩터로 수면·회복 데이터 업계 최고 정확도 — 화면·알림 없는 '조용한 웨어러블'로 24/7 착용률 극대화",
       direction: "IPO 상장 추진 · 대사(혈당)·여성 건강 지표 확장 · 자체 AI 모델 개발 · B2B 기업 웰니스 및 방위 분야 진출",
       url: "https://ouraring.com/blog",
@@ -59,8 +59,8 @@
         "TechCrunch S-1 — 2026-05-22 — https://techcrunch.com/2026/05/22/oura-ipo-s1-filing/",
       ] },
 
-    { cat: "device", name: "Whoop", domain: "whoop.com", unit: "Recovery Band", valuation: "$10.1B", valAsof: "26.3 Series G", funding: "Series G $575M", metric: "북킹스 런레이트", value: "$1.1B+", metricAsof: "26.3", trend: +14.5, trendBasis: "북킹스 런레이트 YoY",
-      note: "Series G $5.75억 조달 밸류 $10.1B 데카콘(TechCrunch 2026.03) · 북킹스 런레이트 $11억+(구독+하드웨어 북킹스 기준, YoY +103% — CEO Will Ahmed 발언) · 600명 채용 계획 · Whoop Labs Doha · Whoop MG ECG FDA clearance 획득(2025.05) · 3티어 구독: $199~$359/yr (One·Peak·Life)",
+    { cat: "device", name: "Whoop", domain: "whoop.com", unit: "Recovery Band", valuation: "$10.1B", valAsof: "26.3 Series G", funding: "Series G $575M", metric: "북킹스 런레이트", value: "$1.1B+", metricAsof: "26.3", trend: +103, trendBasis: "북킹스 런레이트 YoY (CEO 발언)",
+      note: "Series G $5.75억 조달 밸류 $10.1B 데카콘(TechCrunch 2026.03) · 북킹스 런레이트 $11억+(YoY +103% — CEO Will Ahmed 발언) · 2.5M 멤버(60개국) · 600명 채용 계획 · Whoop Labs Doha · Whoop MG ECG FDA clearance 획득(2025.05) · 혈압 트렌드 = wellness 용도(FDA 의료기기 미승인) · 3티어 구독: $199~$359/yr (One·Peak·Life) · IPO: CEO '향후 2년 내 가능' 발언(S-1 미제출)",
       vp: "기기 무료 + 구독 모델로 '회복 코칭 서비스'를 판매 — 하드웨어가 아닌 데이터 해석과 행동 변화가 상품",
       direction: "헬스스팬(healthspan·건강수명) 플랫폼으로 확장 · Advanced Labs 혈액검사 통합 · Abbott·Mayo Clinic 투자 유치로 임상 신뢰 확보",
       url: "https://www.whoop.com/thelocker/",
@@ -71,10 +71,10 @@
       ] },
 
     // ── AI Native ──
-    { cat: "ai", name: "OpenAI Health", domain: "openai.com", unit: "Health Agent", valuation: "$300B~$340B+", valAsof: "26.6 S-1 제출", funding: "내부 투자", metric: "헬스 파일럿", value: "S-1 제출", metricAsof: "26.6", trend: +0,
-      note: "S-1 비밀 제출(2026.06.08) · $300B~$340B+ 보도(Bloomberg) · 개인 헬스 어시스턴트 개발 · 의료기관 파트너십 확대",
-      vp: "범용 LLM의 추론 능력을 개인 건강 데이터에 연결 — 파편화된 웨어러블·진료 기록을 통합 해석하는 단일 에이전트",
-      direction: "의료기관·보험사 데이터 파트너십 확보 · HIPAA 준수 파이프라인 구축 · ChatGPT Health로 소비자 접점 선점",
+    { cat: "ai", name: "OpenAI", domain: "openai.com", unit: "Consumer/Enterprise AI Platform", valuation: "$300B~$340B+", valAsof: "26.6 S-1 제출", funding: "내부 투자", metric: "IPO", value: "S-1 비밀 제출", metricAsof: "26.6", trend: +0,
+      note: "S-1 비밀 제출(2026.06.08) · $300B~$340B+ 보도(Bloomberg) · 헬스케어 전용 사업부가 아닌 범용 AI 플랫폼의 헬스케어 적용 · 개인 건강 데이터 통합 해석 가능성 · 의료기관 파트너십 탐색",
+      vp: "범용 LLM의 추론 능력을 개인 건강 데이터에 연결 — 헬스케어 전용 제품이 아닌 범용 AI 플랫폼의 헬스 적용 사례",
+      direction: "의료기관·보험사 데이터 파트너십 확보 · HIPAA 준수 파이프라인 구축 · 헬스 유즈케이스 소비자 접점 탐색",
       url: "https://openai.com/news/",
       sources: [
         "Bloomberg — 2026-06 — https://www.bloomberg.com/technology",
@@ -118,10 +118,10 @@
       ] },
 
     // ── Startups ──
-    { cat: "startup", name: "MyFitnessPal", domain: "myfitnesspal.com", unit: "Cal AI 인수 통합", valuation: "$1B+ (매각 검토)", valAsof: "26.4 Reuters", funding: "PE 보유", metric: "등록 사용자", value: "200M+", metricAsof: "26.5", trend: +5.3,
-      note: "Reuters 2026.04 매각 검토 보도 · 밸류 $1B+ 전망 · 2026.03 Cal AI 인수 발표(딜 체결 2025.12 · Cal AI ARR $30M, @dpjmcgregor) · 사진 AI 칼로리 비전 기본 통합 · 앱스토어 피트니스 매출 1위 · ChatGPT Health 연동",
+    { cat: "startup", name: "MyFitnessPal", domain: "myfitnesspal.com", unit: "Cal AI 인수 통합", valuation: "$1B+ (매각 검토)", valAsof: "26.4 Reuters", funding: "PE 보유", metric: "등록 사용자", value: "280M+", metricAsof: "26.4 Reuters", trend: +5.3,
+      note: "Reuters 2026.04 매각 검토 보도 · 밸류 $1B+ · EBITDA ~$150M/yr · 120개국 280M+ members · 2026.03 Cal AI 인수 발표(딜 체결 2025.12 · Cal AI ARR $30M, @dpjmcgregor) · 사진 AI 칼로리 비전 기본 통합 · 앱스토어 피트니스 매출 1위 · Premium $24.99/월 또는 $99.99/yr",
       vp: "세계 최대 음식 데이터베이스 + 사진 한 장 AI 기록으로 칼로리 추적의 마찰(friction)을 제거",
-      direction: "Cal AI·Intent 인수로 AI 영양 플랫폼 전환 · ChatGPT Health 연동 · 수동 입력 시대 종결 선언",
+      direction: "Cal AI·Intent 인수로 AI 영양 플랫폼 전환 · 수동 입력 시대 종결 선언 · 매각 검토 진행",
       url: "https://www.myfitnesspal.com/blog",
       sources: [
         "GlobeNewsWire — 2026-03-01 — https://www.globenewswire.com/news-release/2026/03/02/3247439/0/en/MyFitnessPal-Acquires-Cal-AI.html",
@@ -129,10 +129,10 @@
         "Instagram @dpjmcgregor — Cal AI ARR $30M — https://www.instagram.com/dpjmcgregor/",
       ] },
 
-    { cat: "startup", name: "Noom", domain: "noom.com", unit: "Behavioral Weight", valuation: "피크 $3.7B", valAsof: "21.5 Series F", funding: "Series F", metric: "유료 구독", value: "수백만", metricAsof: "25.12", trend: -3.4,
-      note: "GLP-1 원격의료 병행 · 2022.10 감원 500명(전체 10%) · 현재 실질 밸류 미공개 · 처방 연계 전환 시도",
+    { cat: "startup", name: "Noom", domain: "noom.com", unit: "Behavioral Weight", valuation: "피크 $3.7B", valAsof: "21.5 Series F", funding: "Series F", metric: "추정 매출", value: "$200~500M", metricAsof: "Similarweb 25.09 추정", trend: -3.4,
+      note: "Noom Med(GLP-1 원격처방) 출시 · 매출 $200~500M 범위(Similarweb 2025.09 추정) · 2022.10 감원 500명(전체 10%) · 현재 실질 밸류 미공개 · 처방 연계 전환 시도",
       vp: "심리학(CBT) 기반 행동 변화 코칭 — 식단이 아닌 '식습관의 심리'를 바꾸는 접근",
-      direction: "GLP-1 원격 처방 결합 의료형 체중관리로 피벗 · 행동 코칭을 치료제의 디지털 동반자(companion)로 재포지셔닝",
+      direction: "Noom Med GLP-1 원격 처방 결합 의료형 체중관리로 피벗 · 행동 코칭을 치료제의 디지털 동반자(companion)로 재포지셔닝",
       url: "https://www.noom.com/blog/",
       sources: [
         "Forbes — 2021-05 — https://www.forbes.com/",
@@ -165,10 +165,10 @@
         "AllTrails 공식 — 2026-04 — https://www.alltrails.com/press",
       ] },
 
-    { cat: "startup", name: "Peloton", domain: "onepeloton.com", unit: "Connected Fitness", valuation: "~$2B+ 시총", valAsof: "26.5", funding: "Public", metric: "Connected 구독", value: "2.66M", metricAsof: "Q3 FY26 IR", trend: +0.8,
-      note: "Q3 FY2026 GAAP 순이익 $26.4M 흑자 전환 · 구독 2.662M · 매출 $631M(+1% YoY) · 월 이탈률 1.2% · FY 가이던스 $2.42~2.44B",
+    { cat: "startup", name: "Peloton", domain: "onepeloton.com", unit: "Connected Fitness", valuation: "~$2B+ 시총", valAsof: "26.5", funding: "Public", metric: "Connected 구독", value: "~2.7M", metricAsof: "Q3 FY26 IR", trend: -7.6, trendBasis: "paid subscriptions YoY",
+      note: "Q3 FY2026 매출 $631M(+1% YoY) · GAAP 순이익 $26.4M 흑자 전환 · paid subscriptions ~2.7M(-7.6% YoY) · EBITDA +41% · FCF +59% · 월 이탈률 1.2% · Spotify 파트너십 1,400+ 클래스(2026.04) · CCO Sarah Robb O'Hagan 영입(2026.04) · FY 가이던스 $2.42~2.44B",
       vp: "하드웨어+라이브 콘텐츠+커뮤니티 결합 몰입형 홈 피트니스 — 인스트럭터가 곧 브랜드",
-      direction: "구독 중심 흑자 전환 완료 · CBU(Commercial Business Unit) 재통합 · 2026 하반기 Commercial Series 출하 · 콘텐츠 플랫폼화",
+      direction: "수익성 회복(EBITDA +41%, FCF +59%) vs 가입자 감소(-7.6% YoY) 역설 구조 · Spotify 파트너십·콘텐츠 확장으로 이탈 방어 · CBU 재통합 · 2026 하반기 Commercial Series 출하",
       url: "https://www.onepeloton.com/press",
       sources: [
         "Peloton IR Q3 FY2026 — 2026-05-07 — https://investor.onepeloton.com/",
@@ -176,9 +176,9 @@
       ] },
 
     { cat: "startup", name: "Strava", domain: "strava.com", unit: "Activity Social", valuation: "$2.2B+", valAsof: "25.5 Series G", funding: "Series G", metric: "등록 사용자", value: "150M+", metricAsof: "26.5", trend: +8.1,
-      note: "IPO S-1 비밀 제출(2026.01) · Goldman Sachs 주간사 · ARR ~$500M · 리텐션 80~90% · AI 코치 'Athlete Intelligence' 출시",
+      note: "IPO 준비·주관사 선정 보도(S-1 제출은 미확인) · ARR ~$500M · 리텐션 80~90% · AI 코치 'Athlete Intelligence' 출시",
       vp: "운동 데이터의 소셜 네트워크 — 기록 자체보다 '공유와 경쟁'이 만드는 네트워크 효과가 핵심 자산",
-      direction: "S-1 비밀 제출 이후 상장 일정 미발표(2026.04 기준) — 시장 변동성으로 타이밍 대기 중(Rock Health Q1'26) · Athlete Intelligence AI 코칭 수익화 · Gen Z 런클럽 트렌드 흡수",
+      direction: "IPO 준비 보도(S-1 제출 미확인, 2026.04 기준) — 시장 변동성으로 타이밍 대기 중(Rock Health Q1'26) · Athlete Intelligence AI 코칭 수익화 · Gen Z 런클럽 트렌드 흡수",
       url: "https://press.strava.com/",
       sources: [
         "the5krunner — 2026-01-09 — https://the5krunner.com/2026/01/09/strava-ipo-filing-3-billion-valuation-analysis/",
@@ -212,10 +212,10 @@
         "CNBC — 2024 — https://www.cnbc.com/",
       ] },
 
-    { cat: "startup", name: "Headspace", domain: "headspace.com", unit: "Mental Health", valuation: "비공개 (합병)", valAsof: "24", funding: "합병 후 PE", metric: "구독자", value: "2M+", metricAsof: "25.12", trend: -2.0,
-      note: "Headspace+Ginger 합병 → Headspace Health · B2B 기업복지 EAP 확장 · Calm과 명상 양강 구도 · 임상 검증 확대",
+    { cat: "startup", name: "Headspace", domain: "headspace.com", unit: "Mental Health", valuation: "비공개", valAsof: "26.6", funding: "합병 후 PE", metric: "구독자", value: "2M+", metricAsof: "25.12", trend: -2.0,
+      note: "Headspace+Ginger 합병 후 단일 브랜드 'Headspace'로 재통합 · 밸류 미공개 · B2B 기업복지 EAP 확장 · Calm과 명상 양강 구도 · 임상 검증 확대",
       vp: "과학 기반 명상·마인드풀니스 + 원격 상담(Ginger)을 결합한 정신건강 올인원 플랫폼",
-      direction: "B2B EAP(직원지원프로그램) 성장 · 임상 연구 기반 DTx 진입 · Calm 대비 의료 채널 차별화",
+      direction: "단일 브랜드 재통합 완료 · B2B EAP(직원지원프로그램) 성장 · 임상 연구 기반 DTx 진입 · Calm 대비 의료 채널 차별화",
       url: "https://www.headspace.com/",
       sources: [
         "TechCrunch — 2024 — https://techcrunch.com/",
@@ -234,23 +234,23 @@
   /* ---- Articles (개조식 · 영문 권위 소스만 · 확장판) ---- */
   const ARTICLES = [
     // ── 2026-06-10 (오늘) ──
-    { date: "2026-05-20", cat: "device", source: "TechRadar", title: "Garmin CIRQA $509/$454 리크 — 공식 미발표 스크린리스 밴드 프리미엄 포지셔닝", summary: "· Garmin CIRQA 소매가 $509 / 프리오더 $454 확정(Notebookcheck)\n· 두 가지 사이즈(S/M·L/XL) · Body Battery·HRV·SpO2·스트레스 추적\n· 화면 완전 제거 · 구독 없는 일회성 프리미엄 모델\n· Whoop($30/월 구독)·Fitbit Air($99) 대비 최고가 포지셔닝", tag: "Launch", url: "https://www.techradar.com/health-fitness/smartwatches/garmins-cashing-in-on-the-screenless-whoop-style-smart-band-trend-with-its-upcoming-cirqa-heres-the-proof" },
+    { date: "2026-05-20", cat: "device", source: "TechRadar", title: "Garmin CIRQA $509/$454 리크 — 공식 미발표 스크린리스 밴드 프리미엄 포지셔닝", summary: "· Garmin CIRQA 소매가 $509 / 프리오더 $454 확정(Notebookcheck)\n· 두 가지 사이즈(S/M·L/XL) · Body Battery·HRV·SpO2·스트레스 추적\n· 화면 완전 제거 · 구독 없는 일회성 프리미엄 모델\n· Whoop($199~$359/yr 구독)·Fitbit Air($99) 대비 최고가 포지셔닝", tag: "Launch", url: "https://www.techradar.com/health-fitness/smartwatches/garmins-cashing-in-on-the-screenless-whoop-style-smart-band-trend-with-its-upcoming-cirqa-heres-the-proof" },
     { date: "2026-05-21", cat: "device", source: "CNBC", title: "Oura, IPO S-1 비밀 제출… 밸류 $11B · 2025 매출 ~$1B · 2026E $2B", summary: "· 2026.05.21 SEC에 S-1 비밀 제출(CNBC 확인)\n· Series E $9억(Fidelity 주도·Iconiq 참여) 밸류 $11B\n· 2025 매출 ~$1B · 2026E $2B 전망(2년 만에 4배 성장)\n· 스마트링 점유율 74%(2025 H1 Omdia) · 누적 550만 링 판매 · 유럽 헬스테크 최초 데카콘", tag: "IPO", url: "https://www.cnbc.com/2026/05/21/oura-smart-ring-ipo-filing.html" },
-    { date: "2026-03-02", cat: "startup", source: "TechCrunch", title: "MyFitnessPal, Cal AI 인수 발표 — 10대 창업자 ARR $30M 달성", summary: "· 2026.03.01 Cal AI 인수 공식 발표(딜 체결 2025.12)\n· Cal AI: 17세 고교생 2명 창업 · ARR $30M(@dpjmcgregor)\n· 사진 한 장으로 칼로리·영양소 자동 분석하는 비전 AI\n· MFP 2억 사용자에 통합 + Cal AI 별도 운영 · 앱스토어 피트니스 매출 1위", tag: "M&A", url: "https://techcrunch.com/2026/03/02/myfitnesspal-has-acquired-cal-ai-the-viral-calorie-app-built-by-teens/" },
-    { date: "2026-02-12", cat: "ai", source: "Grand View Research", title: "GLP-1 시장 $82B(2026E)… 세마글루타이드+티르제파타이드 합산 $84.5B 전망", summary: "· Grand View Research: 글로벌 GLP-1 수용체 작용제 시장 $82B(2026E)\n· 2033년 $185.3B 전망 · 세마글루타이드 점유율 52.8%(2025)\n· Ozempic ~$19.5B + Wegovy ~$15.5B 피크 전망(2026)\n· 티르제파타이드 CAGR 13.9% 최고 성장 · 디지털 코칭 결합 표준화", tag: "Market", url: "https://www.grandviewresearch.com/industry-analysis/glp-1-receptor-agonist-market" },
+    { date: "2026-03-02", cat: "startup", source: "TechCrunch", title: "MyFitnessPal, Cal AI 인수 발표 — 10대 창업자 ARR $30M 달성", summary: "· 2026.03.01 Cal AI 인수 공식 발표(딜 체결 2025.12)\n· Cal AI: 17세 고교생 2명 창업 · ARR $30M(@dpjmcgregor)\n· 사진 한 장으로 칼로리·영양소 자동 분석하는 비전 AI\n· MFP 280M+ 사용자에 통합 + Cal AI 별도 운영 · 앱스토어 피트니스 매출 1위", tag: "M&A", url: "https://techcrunch.com/2026/03/02/myfitnesspal-has-acquired-cal-ai-the-viral-calorie-app-built-by-teens/" },
+    { date: "2026-02-12", cat: "ai", source: "Grand View Research", title: "GLP-1 시장 2026E $82B · 2033E $185.3B · CAGR 12.4%", summary: "· Grand View Research: 글로벌 GLP-1 수용체 작용제 시장 2025 $66.4B → 2026E $82B → 2033E $185.3B\n· CAGR 12.4% · 세마글루타이드 점유율 52.8%(2025)\n· 티르제파타이드 CAGR 13.9% 최고 성장\n· 디지털 코칭 결합 표준화", tag: "Market", url: "https://www.grandviewresearch.com/industry-analysis/glp-1-receptor-agonist-market" },
     { date: "2026-03-31", cat: "startup", source: "TechCrunch", title: "Whoop, Series G $5.75억 조달 · 밸류 $10.1B 데카콘 등극", summary: "· 2026.03.31 Series G 완료 · $575M 조달 · 밸류 $10.1B(직전 $3.6B 대비 3배)\n· 매출 런레이트 $1.1B+ · 600명 채용 + Whoop Labs Doha 설립\n· Abbott·Mayo Clinic·Mubadala·QIA 등 전략 투자자 참여\n· 호날두·르브론·맥길로이 등 셀럽 애슬릿 투자 · 호주오픈 바이럴 효과", tag: "Funding", url: "https://techcrunch.com/2026/03/31/whoop-valuation-10b-series-g-fundraise/" },
     { date: "2026-05-08", cat: "device", source: "Wareable", title: "스크린리스 밴드 3파전 본격화 — Fitbit Air $99 vs Whoop 구독 vs Garmin CIRQA $509", summary: "· Fitbit Air: $99.99 일회성 · 12g · 7일 배터리 · AFib 감지 · 구독 불필요\n· Whoop: 기기 무료 + 3티어 구독($199~$359/yr) · ECG FDA clearance · $10.1B 데카콘\n· Garmin CIRQA: $509(소매)/$454(프리오더) · Body Battery 특화 · 구독 없는 프리미엄\n· 세 가지 비즈니스 모델(저가 일회성 vs 구독 vs 고가 일회성) 정면 충돌", tag: "Trend", url: "https://www.wareable.com/fitness-trackers/fitbit-air-vs-whoop-key-differences-explained" },
     { date: "2026-01-20", cat: "ai", source: "BCG", title: "BCG: AI 에이전트가 헬스케어 최대 변혁 요소 — 앰비언트 AI 스크라이브 보편화", summary: "· BCG 2026 보고서: 코파일럿→자율 에이전트 전환 가속\n· 앰비언트 AI 스크라이브 의사 1일 1~2시간 문서화 절감\n· AI 에이전트가 행정 데이터와 임상 실무를 직접 연결\n· BCG × Hippocratic AI 전략 협업 · 행정 부담 30% 감소(Salesforce 2025 조사)", tag: "Report", url: "https://www.bcg.com/publications/2026/how-ai-agents-will-transform-health-care" },
-    { date: "2026-01-09", cat: "startup", source: "SiliconAngle", title: "Strava, IPO S-1 비밀 제출 — Goldman Sachs 주간사 · ARR ~$500M", summary: "· 2026.01.08 S-1 비밀 제출 · Goldman Sachs + JPMorgan 주간사\n· 밸류 $2.2B+(Series G 2025.05) · IPO 시 $3B+ 전망\n· ARR ~$500M · 구독 리텐션 80~90% · 1.5억 등록 사용자\n· Gen Z 런클럽·소셜 기능이 성장 동력 · 활동 소셜 플랫폼 첫 상장", tag: "IPO", url: "https://the5krunner.com/2026/01/09/strava-ipo-filing-3-billion-valuation-analysis/" },
-    { date: "2026-05-28", cat: "device", source: "Oura Blog", title: "Oura Ring 5 발표 — 세계 최소형 스마트링 · Gen 4 대비 40% 소형화", summary: "· Oura Ring 5 공식 발표(2026.05.28) · 세계 최소형 스마트링\n· Gen 4 대비 40% 소형화(6.09mm 폭·2.28mm 두께) · 새 센서 어레이 탑재\n· 대사 건강·여성 건강·GLP-1 인사이트 신규 지표 추가\n· $399~$499 가격대 · 6~9일 배터리", tag: "Product", url: "https://ouraring.com/blog/introducing-oura-ring-5/" },
+    { date: "2026-01-09", cat: "startup", source: "the5krunner", title: "Strava IPO 준비 보도 — 주관사 선정 · ARR ~$500M (S-1 제출 미확인)", summary: "· IPO 준비·투자은행 선정 보도(S-1 제출은 미확인)\n· 밸류 $2.2B+(Series G 2025.05) · IPO 시 $3B+ 전망\n· ARR ~$500M · 구독 리텐션 80~90% · 150M+ 등록 사용자\n· Gen Z 런클럽·소셜 기능이 성장 동력", tag: "IPO", url: "https://the5krunner.com/2026/01/09/strava-ipo-filing-3-billion-valuation-analysis/" },
+    { date: "2026-06-04", cat: "device", source: "Oura Blog", title: "Oura Ring 5 출시 — Ring 4 대비 40% 소형화 · $399~ · 최대 9일 배터리", summary: "· Oura Ring 5 출시(2026.06.04) · 세계 최소형 스마트링\n· Ring 4 대비 40% 소형화(6.09mm 폭·2.28mm 두께) · 새 센서 어레이 탑재\n· GLP-1 tracking · Health Radar · 대사 건강·여성 건강 지표 추가\n· $399부터 · 최대 9일 배터리", tag: "Product", url: "https://ouraring.com/blog/introducing-oura-ring-5/" },
     { date: "2025-05-08", cat: "device", source: "CNBC", title: "Whoop MG — TIME 2025 올해의 발명품 · ECG FDA clearance 획득", summary: "· Whoop MG ECG FDA clearance 획득(2025.04)\n· TIME 2025 Best Inventions 선정\n· 3티어 구독 개편: One $199/yr · Peak $239/yr · Life $359/yr\n· 혈중 산소·심전도·혈압 트렌드 통합 모니터링", tag: "Award", url: "https://www.cnbc.com/2025/05/08/whoop-wearables-whoop-50-mg-price.html" },
     { date: "2026-05-15", cat: "device", source: "Garmin Newsroom", title: "Garmin × Truemed — HSA/FSA 연동으로 '예방 의료비' 포지셔닝", summary: "· Garmin 공식 Truemed HSA/FSA 결제 연동 발표\n· 웨어러블 구매를 예방 의료비로 세금 혜택 적용 · 최대 30% 절감\n· fēnix·Forerunner·Venu·vívoactive 등 대상\n· 소비자 웨어러블의 '의료 기기화' 트렌드 가속", tag: "Strategy", url: "https://www.garmin.com/en-US/newsroom/press-release/sports-fitness/garmin-teams-up-with-truemed-to-unlock-hsa-fsa-funds-for-fitness-products/" },
-    { date: "2026-04-09", cat: "startup", source: "Reuters", title: "MyFitnessPal $1B+ 매각 검토 — Cal AI·ChatGPT 연동 후 AI 프리미엄 전략", summary: "· Reuters 2026.04.09: MFP 매각 검토 보도 · 밸류 $1B+ 전망\n· 2020년 Francisco Partners $345M 인수 대비 3배 프리미엄\n· Cal AI 인수 + ChatGPT Health 연동으로 AI 영양 플랫폼 전환 완료\n· 2억 사용자 + AI 기술 스택이 프리미엄 정당화", tag: "M&A", url: "https://www.reuters.com/technology/fitness-health-app-myfitnesspal-explores-sale-sources-say-2026-04-09/" },
+    { date: "2026-04-09", cat: "startup", source: "Reuters", title: "MyFitnessPal $1B+ 매각 검토 — Cal AI·ChatGPT 연동 후 AI 프리미엄 전략", summary: "· Reuters 2026.04.09: MFP 매각 검토 보도 · 밸류 $1B+ 전망\n· 2020년 Francisco Partners $345M 인수 대비 3배 프리미엄\n· Cal AI 인수 + ChatGPT Health 연동으로 AI 영양 플랫폼 전환 완료\n· 280M+ 사용자(120개국) + AI 기술 스택이 프리미엄 정당화", tag: "M&A", url: "https://www.reuters.com/technology/fitness-health-app-myfitnesspal-explores-sale-sources-say-2026-04-09/" },
 
     // ── 2026-06-09 ──
     { date: "2026-04-06", cat: "ai", source: "Rock Health", title: "Q1 2026 디지털 헬스 펀딩 $4.0B/110건 — 자본 집중·AI 시대 공식화", summary: "· Rock Health: $4.0B/110건 · 평균 딜 $36.7M(2021 이래 최고)\n· 메가딜($100M+) 12건 — Q1 2022 이후 최다\n· CB Insights 별도 집계: $7.4B(메가라운드 60% · 19건)\n· '있는 자/없는 자' 양극화 — 검증된 AI 기업에 자본 집중", tag: "Report", url: "https://rockhealth.com/insights/q1-2026-funding-overview-capital-continues-concentrating-and-four-other-market-signals/" },
-    { date: "2026-06-07", cat: "device", source: "9to5Mac", title: "Apple Watch S11 vs Oura vs Fitbit Air vs Whoop — WSJ 실사용 비교 종합", summary: "· WSJ 4자 실사용 비교: 수면 추적·심박 정확도·배터리·가격 종합 순위\n· Apple Watch: 수면 시간 정확도 1위 · 유일 FDA clearance(ECG/AFib)\n· Oura: 수면 단계 분류 최고 · Fitbit Air $99 가성비 최강\n· Whoop: 회복(Recovery) 분석 최고 · 구독 없이 데이터 확인 불가", tag: "Review", url: "https://9to5mac.com/2026/06/07/heres-how-apple-watch-series-11-stacks-up-against-oura-fitbit-and-whoop-per-wsj/" },
-    { date: "2026-05-07", cat: "startup", source: "CNBC", title: "Peloton Q3 FY2026 흑자 전환 — GAAP 순이익 $26.4M · 구독 2.662M", summary: "· Q3 FY2026 매출 $631M(+1% YoY · 가이던스 상회)\n· GAAP 순이익 $26.4M — 전년 동기 -$47.7M에서 $74M 개선\n· Connected Fitness 구독 2.662M · 월 이탈률 1.2%(전분기 1.9%)\n· FY 가이던스 $2.42~2.44B · Precor 브랜드 통합 효과", tag: "Earnings", url: "https://www.cnbc.com/2026/05/07/peloton-pton-earnings-q3-2026.html" },
+    { date: "2026-06-07", cat: "device", source: "9to5Mac", title: "Apple Watch S11 vs Oura vs Fitbit Air vs Whoop — WSJ 실사용 비교 종합", summary: "· WSJ 4자 실사용 비교: 수면 추적·심박 정확도·배터리·가격 종합 순위\n· Apple Watch: 수면 시간 정확도 1위 · ECG/AFib FDA-cleared 대표 웨어러블\n· Oura: 수면 단계 분류 최고 · Fitbit Air $99 가성비 최강\n· Whoop: 회복(Recovery) 분석 최고 · 구독 없이 데이터 확인 불가", tag: "Review", url: "https://9to5mac.com/2026/06/07/heres-how-apple-watch-series-11-stacks-up-against-oura-fitbit-and-whoop-per-wsj/" },
+    { date: "2026-05-07", cat: "startup", source: "CNBC", title: "Peloton Q3 FY2026 수익성 회복 — 순이익 $26.4M · 그러나 구독 -7.6% YoY", summary: "· Q3 FY2026 매출 $631M(+1% YoY · 가이던스 상회)\n· GAAP 순이익 $26.4M · EBITDA +41% · FCF +59%\n· paid subscriptions ~2.7M(-7.6% YoY) · 월 이탈률 1.2%\n· Spotify 파트너십 1,400+ 클래스 · CCO Sarah Robb O'Hagan 영입(2026.04) · FY 가이던스 $2.42~2.44B", tag: "Earnings", url: "https://www.cnbc.com/2026/05/07/peloton-pton-earnings-q3-2026.html" },
     { date: "2026-01-11", cat: "ai", source: "Anthropic", title: "Anthropic, Claude for Healthcare 출시 — JPM26 발표 · HIPAA 대응", summary: "· JPM Healthcare Conference 2026.01.11 발표\n· Claude for Healthcare: HIPAA-ready · 임상 문서화·사전승인 자동화\n· Boston Children's·Cedars-Sinai·Stanford Medicine·HCA 파일럿\n· CMS DB·ICD-10·NPI·PubMed 커넥터 통합", tag: "Enterprise", url: "https://www.anthropic.com/news/healthcare-life-sciences" },
     { date: "2026-02-17", cat: "startup", source: "Axios", title: "Noom·eMed, GLP-1 원격의료로 무게중심 이동 — 행동 코칭+처방 결합", summary: "· 행동 코칭 + 비만 치료제 처방 결합 모델 전환\n· eMed × CVS Caremark: 고용주 GLP-1 비용 분담 모델\n· Nature 연구: GLP-1+mHealth 12개월 -12.7% 체중 감소\n· 앱 참여도(engagement)가 감량 결과를 직접 결정", tag: "Strategy", url: "https://www.axios.com/2026/02/17/employers-new-option-workers-glp-1-demand" },
 
@@ -295,7 +295,7 @@
     { date: "2026-05-22", cat: "device", source: "TechCrunch", title: "Oura S-1 비밀 제출 — 스마트링 유니콘 IPO 로드맵 본격화", summary: "· 2026.05.21 SEC S-1 비밀 제출(CNBC·TechCrunch 확인)\n· 2025 매출 ~$1B · 2026E 매출 $2B 전망(2년 만에 4배 성장)\n· 누적 550만 링 판매 · 스마트링 시장 점유율 74%(Omdia 2025)\n· 유럽 헬스테크 최초 데카콘 · Series E $9억 밸류 $11B", tag: "IPO", url: "https://techcrunch.com/2026/05/22/oura-ipo-s1-filing/" },
 
     // ── 2026-05-21 ──
-    { date: "2026-05-14", cat: "device", source: "the5krunner", title: "Garmin CIRQA $509 가격 유출 — 프리미엄 스크린리스 밴드 포지셔닝 분석", summary: "· Garmin CIRQA 소매가 $509 / 프리오더 $454 확정(Notebookcheck)\n· Fitbit Air($99)·Whoop 구독($30/월) 대비 5배 프리미엄\n· Body Battery·HRV·SpO2·스트레스 추적 · 구독 없는 일회성 모델\n· 가민 브랜드 충성도 + 멀티스포츠 생태계가 프리미엄 정당화", tag: "Analysis", url: "https://the5krunner.com/2026/05/14/garmin-cirqa-leaked-price/" },
+    { date: "2026-05-14", cat: "device", source: "the5krunner", title: "Garmin CIRQA $509 가격 유출 — 프리미엄 스크린리스 밴드 포지셔닝 분석", summary: "· Garmin CIRQA 소매가 $509 / 프리오더 $454 확정(Notebookcheck)\n· Fitbit Air($99)·Whoop 구독($199~$359/yr) 대비 프리미엄\n· Body Battery·HRV·SpO2·스트레스 추적 · 구독 없는 일회성 모델\n· 가민 브랜드 충성도 + 멀티스포츠 생태계가 프리미엄 정당화", tag: "Analysis", url: "https://the5krunner.com/2026/05/14/garmin-cirqa-leaked-price/" },
 
     // ── 2026-05-30 ──
     { date: "2026-05-30", cat: "ai", source: "J.P. Morgan", title: "GLP-1 + 디지털 코칭 — 새로운 체중관리 스택", summary: "· 비만 치료제 + 행동 코칭 결합 시장 표준화\n· 코칭 결합 시 참여도 +38% YoY\n· Nature 임상: GLP-1+mHealth 앱 12개월 -12.7% 체중 감소", tag: "Report", url: "https://www.jpmorgan.com/insights/global-research/current-events/obesity-drugs" },
@@ -312,7 +312,7 @@
     { date: "2026-04-25", cat: "ai", source: "Nature", title: "Nature 임상: GLP-1+mHealth 앱 코칭 12개월 -12.7% 체중 감소", summary: "· 싱가포르 NOVI Health 실제 임상 데이터(Nature IJO 게재)\n· GLP-1+mHealth 앱 코칭 병행 시 12개월 -12.7% 체중 감소\n· 앱 참여도가 체중 감소 결과를 직접 결정하는 핵심 변수\n· JMIR 별도 연구도 디지털 참여도-감량 상관관계 확인", tag: "Clinical", url: "https://www.nature.com/articles/s41366-026-02062-x" },
 
     // ── 2026-03-04 ──
-    { date: "2026-03-04", cat: "startup", source: "Instagram / @dpjmcgregor", title: "Cal AI 공동창업자: ARR $30M 달성 · MFP 인수 확정", summary: "· Cal AI 공동창업자 @dpjmcgregor 인스타그램 공개\n· ARR $30M 달성 · 딜 체결 2025.12 / 인수 발표 2026.03.01\n· 17세 고교생 2명 창업 · 18개월 만에 ARR $30M\n· MFP 2억 사용자에 비전 AI 칼로리 추적 기본 통합 예정", tag: "M&A", url: "https://www.instagram.com/dpjmcgregor/" },
+    { date: "2026-03-04", cat: "startup", source: "Instagram / @dpjmcgregor", title: "Cal AI 공동창업자: ARR $30M 달성 · MFP 인수 확정", summary: "· Cal AI 공동창업자 @dpjmcgregor 인스타그램 공개\n· ARR $30M 달성 · 딜 체결 2025.12 / 인수 발표 2026.03.01\n· 17세 고교생 2명 창업 · 18개월 만에 ARR $30M\n· MFP 280M+ 사용자에 비전 AI 칼로리 추적 기본 통합 예정", tag: "M&A", url: "https://www.instagram.com/dpjmcgregor/" },
 
     // ── 2026-01-06 ──
     { date: "2026-01-06", cat: "device", source: "FDA / Reuters", title: "FDA, 웨어러블·소프트웨어 규제 대폭 완화 — 혈압·혈당 wellness 허용 확대", summary: "· 2026.01.06 FDA 'General Wellness' 최종 가이드라인 공표\n· 비침습 혈압·혈당 웨어러블 wellness 용도 허용 확대\n· 2025.07 Whoop 혈압 기능 경고장과 대비되는 정책 전환\n· Whoop·Oura 직접 수혜 · 의사결정지원 소프트웨어 규제 완화", tag: "Regulatory", url: "https://natlawreview.com/article/fdas-2026-general-wellness-policy-and-what-it-means-manufacturers-wearable-devices" },
@@ -322,9 +322,9 @@
   ];
 
   const REPORTS = [
-    { house: "Morgan Stanley", type: "Securities", date: "2026-06-09", title: "Digital Health 2026: AI 에이전트가 웨어러블 해자를 재편한다", figure: "TAM $660B (2030E)", rating: "Overweight", url: "https://www.morganstanley.com/insights/articles/health-wellness-outlook-healthcare-retail-2026",
+    { house: "Morgan Stanley", type: "Securities", date: "2026-06-09", title: "Digital Health 2026: AI 에이전트가 웨어러블 해자를 재편한다", figure: "TAM $660B (2030E)", rating: "Overweight", url: "https://www.morganstanley.com/insights/articles/health-wellness-outlook-healthcare-retail-2026", verified: false, verifyNote: "원문 리포트 URL 미확인 · 공개 인사이트 페이지 기반 내부 해석",
       bullets: ["웨어러블·RPM TAM $660B(2030E) 전망", "AI 에이전트가 하드웨어 해자를 소프트웨어 해자로 전환", "Oura·Whoop 등 데카콘의 IPO 후 시장 재편 시나리오"] },
-    { house: "Goldman Sachs", type: "Securities", date: "2026-06-06", title: "웨어러블 & RPM — 프리미엄 하드웨어 vs. AI 소프트웨어 마진", figure: "웨어러블 CAGR 14.7%", rating: "Neutral", url: "https://www.goldmansachs.com/insights/articles/how-artificial-intelligence-is-accelerating-innovation-in-healthcare",
+    { house: "Goldman Sachs", type: "Securities", date: "2026-06-06", title: "웨어러블 & RPM — 프리미엄 하드웨어 vs. AI 소프트웨어 마진", figure: "웨어러블 CAGR 14.7%", rating: "Neutral", url: "https://www.goldmansachs.com/insights/articles/how-artificial-intelligence-is-accelerating-innovation-in-healthcare", verified: false, verifyNote: "원문 리포트 URL 미확인 · 공개 인사이트 페이지 기반 내부 해석",
       bullets: ["웨어러블 CAGR 14.7%(2026–2030)", "하드웨어 마진 하락 vs AI 소프트웨어 마진 상승 분기점", "구독 모델(Whoop) vs 일회성(Garmin) 수익성 비교"] },
     { house: "Rock Health", type: "Market", date: "2026-06-05", title: "Q1 2026 펀딩: $4.0B/110건 · 자본 집중 가속 · AI 시대 선언", figure: "Q1 $4.0B", rating: "Report", url: "https://rockhealth.com/insights/q1-2026-funding-overview-capital-continues-concentrating-and-four-other-market-signals/",
       bullets: ["Q1 $4.0B/110건 · 평균 딜 $36.7M(2021 이후 최고)", "메가딜($100M+) 12건 — Q1 2022 이후 최다", "자본 집중 가속 · '있는 자/없는 자' 양극화 심화"] },
@@ -334,14 +334,14 @@
       bullets: ["2025년 $347B → 2033E $1,830B · CAGR 23.4%", "원격의료·웨어러블·AI 진단 3축 성장", "아태 지역 최고 성장률 · 북미 최대 시장"] },
     { house: "Grand View Research", type: "Market", date: "2026-05-30", title: "글로벌 GLP-1 수용체 작용제 시장 $82B(2026E) → $185B(2033E)", figure: "$82B GLP-1", rating: "Report", url: "https://www.grandviewresearch.com/industry-analysis/glp-1-receptor-agonist-market",
       bullets: ["GLP-1 시장 2026E $82B → 2033E $185B", "세마글루타이드 점유율 52.8%(2025)", "티르제파타이드 CAGR 13.9% 최고 성장"] },
-    { house: "J.P. Morgan", type: "Securities", date: "2026-05-30", title: "GLP-1 + 디지털 코칭: 새로운 체중관리 스택", figure: "참여도 +38% YoY", rating: "Overweight", url: "https://www.jpmorgan.com/insights/global-research/current-events/obesity-drugs",
+    { house: "J.P. Morgan", type: "Securities", date: "2026-05-30", title: "GLP-1 + 디지털 코칭: 새로운 체중관리 스택", figure: "참여도 +38% YoY", rating: "Overweight", url: "https://www.jpmorgan.com/insights/global-research/current-events/obesity-drugs", verified: false, verifyNote: "원문 리포트 URL 미확인 · 공개 인사이트 페이지 기반 내부 해석",
       bullets: ["GLP-1+디지털 코칭 결합 시 참여도 +38% YoY", "코칭 앱 번들이 약물 치료 표준화 전망", "Noom·WeightWatchers 처방 연계 모델 주목"] },
     { house: "BCG", type: "Market", date: "2025-12-15", title: "AI 에이전트가 헬스케어를 변혁한다 — 2026 전망", figure: "문서화 1~2h/일 절감", rating: "Report", url: "https://www.bcg.com/publications/2026/how-ai-agents-will-transform-health-care",
       bullets: ["코파일럿→자율 에이전트 전환 2026 가속", "앰비언트 AI 스크라이브 1일 1~2시간 문서화 절감", "행정 부담 30% 감소(Salesforce 2025 조사)"] },
-    { house: "IDC", type: "Market", date: "2026-05-26", title: "글로벌 웨어러블 출하 트래커 — 스마트링이 최고 성장 폼팩터", figure: "Oura 링 점유율 74%", rating: "Report", url: "https://www.idc.com/resource-center/blog/the-future-of-smart-rings/",
+    { house: "IDC", type: "Market", date: "2026-05-26", title: "글로벌 웨어러블 출하 트래커 — 스마트링이 최고 성장 폼팩터", figure: "Oura 링 점유율 74%", rating: "Report", url: "https://www.idc.com/resource-center/blog/the-future-of-smart-rings/", verified: false, verifyNote: "IDC 블로그 URL · 정식 리포트 원문은 유료 접근 필요",
       bullets: ["스마트링 출하량 전년비 2배 성장", "Oura 점유율 74%(2025 H1)", "밴드→링 폼팩터 전환 가속 전망"] },
-    { house: "FDA", type: "Regulatory", date: "2026-01-06", title: "General Wellness 최종 가이드라인 — 혈압·혈당 웨어러블 규제 완화", figure: "Whoop·Oura 수혜", rating: "Final", url: "https://natlawreview.com/article/fdas-2026-general-wellness-policy-and-what-it-means-manufacturers-wearable-devices",
-      bullets: ["비침습 혈압·혈당 wellness 용도 허용 확대", "Whoop·Oura 직접 수혜 전망", "의사결정지원 소프트웨어 규제 완화"] },
+    { house: "FDA", type: "Regulatory", date: "2026-01-06", title: "General Wellness 최종 가이드라인 — low-risk wellness claim 규제 경계 명확화", figure: "규제 경계 명확화", rating: "Final", url: "https://natlawreview.com/article/fdas-2026-general-wellness-policy-and-what-it-means-manufacturers-wearable-devices",
+      bullets: ["low-risk general wellness 제품에 대한 규제 경계 명확화", "혈압·혈당을 의료용 정확도 또는 진단으로 표현 시 별도 clearance 필요", "진단·치료·예방 claim은 의료기기 규제 영역"] },
   ];
 
   const MARKET_GROWTH = [
@@ -478,7 +478,7 @@
       { name: "Strava", value: 40, src: "ARR $500M 기준 월 배분" },
       { name: "Whoop", value: 85, src: "런레이트 $1.1B 기준 추정" },
       { name: "Oura", value: 70, src: "2025 매출 $1B 기준 성장 추정" },
-      { name: "Noom", value: 48, src: "* 추정: Forbes '21.5 Series F 시점 ARR 기준 역산 — 현재 매출 미공개" },
+      { name: "Noom", value: 48, src: "* 내부 추정: $200~500M 범위(Similarweb 2025.09) 기준 배분" },
     ]},
     { month: "2026-02", data: [
       { name: "Peloton", value: 200, src: "Peloton IR" },
@@ -486,7 +486,7 @@
       { name: "Strava", value: 41, src: "ARR 기준" },
       { name: "Whoop", value: 88, src: "런레이트 기준" },
       { name: "Oura", value: 80, src: "성장 추정" },
-      { name: "Noom", value: 47, src: "* 추정: ARR 역산 기준" },
+      { name: "Noom", value: 47, src: "* 내부 추정: $200~500M 범위 기준" },
     ]},
     { month: "2026-03", data: [
       { name: "Peloton", value: 205, src: "Peloton IR" },
@@ -494,7 +494,7 @@
       { name: "Strava", value: 42, src: "ARR 기준" },
       { name: "Whoop", value: 92, src: "Series G 발표 시점" },
       { name: "Oura", value: 95, src: "2026E $2B 목표 기준" },
-      { name: "Noom", value: 46, src: "* 추정: ARR 역산 기준" },
+      { name: "Noom", value: 46, src: "* 내부 추정: $200~500M 범위 기준" },
     ]},
     { month: "2026-04", data: [
       { name: "Peloton", value: 208, src: "Peloton IR" },
@@ -502,7 +502,7 @@
       { name: "Strava", value: 43, src: "ARR 기준" },
       { name: "Whoop", value: 95, src: "런레이트 기준" },
       { name: "Oura", value: 110, src: "S-1 전 성장 가속" },
-      { name: "Noom", value: 45, src: "* 추정: ARR 역산 기준" },
+      { name: "Noom", value: 45, src: "* 내부 추정: $200~500M 범위 기준" },
     ]},
     { month: "2026-05", data: [
       { name: "Peloton", value: 210, src: "Peloton IR Q3 FY26 $631M" },
@@ -510,7 +510,7 @@
       { name: "Strava", value: 44, src: "ARR 기준" },
       { name: "Whoop", value: 98, src: "런레이트 기준" },
       { name: "Oura", value: 130, src: "2026E $2B 목표 기준" },
-      { name: "Noom", value: 44, src: "* 추정: ARR 역산 기준" },
+      { name: "Noom", value: 44, src: "* 내부 추정: $200~500M 범위 기준" },
     ]},
   ];
 
@@ -518,36 +518,36 @@
     { name: "Apple Watch", cat: "device", model: "하드웨어 프리미엄", pricing: "$399~$799", sub: "Apple Fitness+ $9.99/월(선택)", revenue: "$33B+ (서비스 포함)", margin: "~44% 제품", arpu: "~$500/yr 생태계", retention: "93% 생태계 재구매", moat: "하드웨어+소프트웨어+서비스 수직 통합, 생태계 락인", strategy: "Apple Intelligence 건강 AI 확장 · 고혈압 알림 등 의료 기능 추가로 프리미엄 유지 · 서비스 번들(Fitness+) 수익 심화", src: "Apple Newsroom, 게시 2025.09 · Fortunly/IDC, 게시 2025" },
     { name: "Oura", cat: "device", model: "기기 + 구독", pricing: "$349 기기 + $5.99/월", sub: "무료 티어(기본) + 멤버십(고급)", revenue: "~$1B (2025)", margin: "비공개", arpu: "~$420/yr", retention: "높음 (링 폼팩터 24h 착용)", moat: "수면 정확도 1위 · 스마트링 74% 점유 · 프리미엄 브랜드", strategy: "Ring 5 하드웨어 업그레이드 사이클 + 구독 전환율 제고 · IPO로 B2B/의료 확장 자금 확보", src: "CNBC, 게시 2025.10.14 · Omdia, 게시 2025 H1 (점유율 74%)" },
     { name: "Whoop", cat: "device", model: "기기무료 + 구독 전용", pricing: "$0 기기 + $199~$359/yr", sub: "One($199) · Peak($239) · Life($359) 3티어", revenue: "$1.1B+ 북킹스 런레이트", margin: "비공개", arpu: "$240/yr 평균", retention: "높음 (구독 없으면 기기 무용)", moat: "회복 코칭 브랜드 · 셀럽 투자 · FDA ECG clearance", strategy: "3티어로 ARPU 극대화 · Advanced Labs 혈액검사 · B2B 기업 웰니스 · 헬스스팬 플랫폼 확장", src: "TechCrunch, 게시 2026.03.31, 저자 Connie Loizos · Whoop 공식 pricing page, 게시 2026.03 — CEO 발언 '북킹스 런레이트'(revenue와 구분)" },
-    { name: "Garmin", cat: "device", model: "프리미엄 하드웨어", pricing: "$199~$1,099", sub: "없음 (일회성 구매)", revenue: "$2.36B 피트니스", margin: "~59% 매출총이익", arpu: "~$400 ASP", retention: "브랜드 충성 (멀티스포츠)", moat: "최장 배터리 · 내구성 · GPS 정밀도 · 구독 없음", strategy: "CIRQA $509 스크린리스 밴드로 웰니스 시장 진입 · 구독 모델 거부 · 하드웨어 마진 유지", src: "Garmin PR Newswire, 게시 2026.02.18 (FY25 실적) · DC Rainmaker, 게시 2026.06.06" },
+    { name: "Garmin", cat: "device", model: "프리미엄 하드웨어 + 선택 구독", pricing: "$199~$1,099", sub: "기본 무료 + Connect+ $6.99/월(선택)", revenue: "$2.36B 피트니스 · FY2026E 전사 $7.9B 가이던스", margin: "~59% 매출총이익", arpu: "~$400 ASP", retention: "브랜드 충성 (멀티스포츠)", moat: "최장 배터리 · 내구성 · GPS 정밀도 · 기본 기능 구독 불필요", strategy: "CIRQA $509 스크린리스 밴드로 웰니스 시장 진입 · Connect+ $6.99/월 선택 구독 · 하드웨어 마진 유지 · $500M 자사주 매입 · 배당 +17%", src: "Garmin PR Newswire, 게시 2026.02.18 (FY25 실적 +33% YoY) · DC Rainmaker, 게시 2026.06.06" },
     { name: "Fitbit Air", cat: "device", model: "저가 일회성", pricing: "$99.99", sub: "없음 (구독 불필요)", revenue: "Google 자회사", margin: "비공개", arpu: "$100 (일회성)", retention: "Google 생태계 연계", moat: "최저 가격 진입점 · Google Health 통합 · Gemini AI", strategy: "대중 시장 보급 → Google Health 데이터 파이프라인 구축 · 구독 아닌 광고/서비스 수익 모델", src: "Google 공식 블로그, 게시 2026.05.07" },
     { name: "Peloton", cat: "startup", model: "하드웨어 + 콘텐츠 구독", pricing: "기기 $1,195~$2,495 + $44/월", sub: "Connected Fitness $44/월 · App $12.99/월", revenue: "$2.52B (FY26 연환산)", margin: "GAAP 흑자 $26.4M", arpu: "$528/yr 구독", retention: "98.8% 월 유지율", moat: "인스트럭터 브랜드 · 라이브 콘텐츠 · 커뮤니티 락인", strategy: "구독 중심 흑자 전환 완료 · Commercial Series B2B 확장 · 콘텐츠 플랫폼화 · 이탈률 1.2% 유지", src: "Peloton IR Q3 FY2026, 게시 2026.05.07 · CNBC, 게시 2026.05.07" },
-    { name: "Strava", cat: "startup", model: "프리미엄 구독", pricing: "무료 + $11.99/월", sub: "무료 기본 + Summit 프리미엄", revenue: "~$500M ARR", margin: "비공개", arpu: "~$144/yr 유료", retention: "80~90% 연 유지율", moat: "네트워크 효과 · 150M 사용자 · 소셜 운동 데이터", strategy: "IPO 상장(Goldman 주간사) · AI Coach 'Athlete Intelligence' 수익화 · Gen Z 런클럽 흡수", src: "the5krunner, 게시 2026.01.09 · premieralts.com (밸류)" },
-    { name: "Noom", cat: "startup", model: "구독 + 원격의료", pricing: "$70/월 코칭 + GLP-1 처방", sub: "코칭 구독 + GLP-1 원격 처방 번들", revenue: "ARR $600M+", margin: "비공개", arpu: "~$840/yr", retention: "중간 (높은 초기 이탈)", moat: "CBT 기반 행동 변화 · 임상 연구 기반 · GLP-1 연계", strategy: "GLP-1 원격 처방 + 행동 코칭 번들로 단가 극대화 · 임상 파트너십 · 의료형 체중관리 피벗", src: "Forbes, 게시 2021.05 (Series F $3.7B) · Noom 공식" },
-    { name: "MyFitnessPal", cat: "startup", model: "프리미엄 + 광고", pricing: "무료 + $19.99/월 Premium", sub: "광고 기반 무료 + 프리미엄 구독", revenue: "$1B+ 추정", margin: "비공개", arpu: "~$240/yr 유료", retention: "높음 (음식 DB 의존)", moat: "세계 최대 음식 DB · 200M 사용자 · Cal AI 비전 통합", strategy: "Cal AI 인수로 AI 영양 플랫폼 전환 · ChatGPT Health 연동 · 매각 검토 $1B+", src: "Reuters, 게시 2026.04 (매각 검토) · GlobeNewsWire, 게시 2026.03.01 (Cal AI 인수)" },
+    { name: "Strava", cat: "startup", model: "프리미엄 구독", pricing: "무료 + $11.99/월", sub: "무료 기본 + Summit 프리미엄", revenue: "~$500M ARR", margin: "비공개", arpu: "~$144/yr 유료", retention: "80~90% 연 유지율", moat: "네트워크 효과 · 150M 사용자 · 소셜 운동 데이터", strategy: "IPO 준비 보도(S-1 미확인) · AI Coach 'Athlete Intelligence' 수익화 · Gen Z 런클럽 흡수", src: "Reuters/WSJ (IPO 준비 보도) · premieralts.com (밸류)" },
+    { name: "Noom", cat: "startup", model: "구독 + 원격의료", pricing: "$70/월 코칭 + GLP-1 처방", sub: "코칭 구독 + Noom Med GLP-1 원격 처방 번들", revenue: "$200~500M 추정(Similarweb 2025.09)", margin: "비공개", arpu: "~$840/yr", retention: "중간 (높은 초기 이탈)", moat: "CBT 기반 행동 변화 · 임상 연구 기반 · GLP-1 연계", strategy: "Noom Med GLP-1 원격 처방 + 행동 코칭 번들로 단가 극대화 · 임상 파트너십 · 의료형 체중관리 피벗", src: "Forbes, 게시 2021.05 (Series F $3.7B) · Similarweb, 게시 2025.09 (매출 추정 범위)" },
+    { name: "MyFitnessPal", cat: "startup", model: "프리미엄 + 광고", pricing: "무료 + $24.99/월 또는 $99.99/yr Premium", sub: "광고 기반 무료 + 프리미엄 구독", revenue: "EBITDA ~$150M/yr(Reuters)", margin: "비공개", arpu: "~$300/yr 유료", retention: "높음 (음식 DB 의존)", moat: "세계 최대 음식 DB · 280M+ 사용자(120개국) · Cal AI 비전 통합", strategy: "Cal AI 인수로 AI 영양 플랫폼 전환 · 매각 검토 $1B+", src: "Reuters, 게시 2026.04.09 (매각 검토 · 280M+ members · $24.99/mo) · GlobeNewsWire, 게시 2026.03.01 (Cal AI 인수)" },
     { name: "Calm", cat: "startup", model: "프리미엄 구독 + B2B", pricing: "무료 + $69.99/yr", sub: "개인 구독 + Calm Business(B2B)", revenue: "비공개", margin: "비공개", arpu: "~$70/yr", retention: "하락세 (DL -61%)", moat: "프리미엄 콘텐츠 · 셀럽 내레이션 · 브랜드 인지도", strategy: "소비자→B2B 기업복지 전환 · 임상 검증 DTx 진입 · ARPU 방어", src: "Statista, 게시 2024 (다운로드 통계)" },
   ];
 
   const KPIS = [
-    { label: "디지털 헬스 시장 (2025)", value: "$347B", delta: +16.0, sub: "Grand View Research · 2033E $1,830B", fill: 0.74, src: "Grand View Research, 'Digital Health Market Size Report', 게시 2026.01, 검토 2026.06.10" },
-    { label: "Q1 글로벌 펀딩", value: "$4.0B", delta: +33.0, sub: "Rock Health 미국 중심 $4.0B/110건 · CB Insights 글로벌 $7.4B(방법론 차이)", fill: 0.62, src: "Rock Health Q1 2026 Funding Report, 게시 2026.04.06 · CB Insights State of Digital Health Q1 2026, 게시 2026.04 — 집계 범위 차이: Rock Health는 미국 중심, CB Insights는 글로벌" },
-    { label: "GLP-1 시장 (2026E)", value: "$82B", delta: +42.0, sub: "Grand View Research · 세마+티르제 $84.5B", fill: 0.85, src: "Grand View Research, 'GLP-1 Receptor Agonist Market', 게시 2026.02, 검토 2026.06.10" },
+    { label: "디지털 헬스 시장 (2025)", value: "$347.4B", delta: +16.0, sub: "Grand View Research · 2033E $1,830.4B", fill: 0.74, src: "Grand View Research, 'Digital Health Market Size Report', 게시 2026.01, 검토 2026.06.10" },
+    { label: "Q1 U.S. 펀딩 (Rock Health)", value: "$4.0B", delta: +33.0, sub: "110건 · 평균 $36.7M(2021 이래 최고)", fill: 0.62, src: "Rock Health Q1 2026 Funding Report, 게시 2026.04.06 — 미국 디지털 헬스 VC 기준" },
+    { label: "Q1 글로벌 펀딩 (CB Insights)", value: "$7.4B", delta: +0, sub: "메가라운드 60% · 19건 · 방법론 별도", fill: 0.58, src: "CB Insights State of Digital Health Q1 2026, 게시 2026.04 — 글로벌 범위, Rock Health와 집계 방법론 상이" },
+    { label: "GLP-1 시장 (2026E)", value: "$82B", delta: +42.0, sub: "Grand View Research · 2025 $66.4B · 2033E $185.3B · CAGR 12.4%", fill: 0.85, src: "Grand View Research, 'GLP-1 Receptor Agonist Market', 게시 2026.02, 검토 2026.06.10 · semaglutide 52.8% share · tirzepatide CAGR 13.9%" },
     { label: "웨어러블 CAGR", value: "14.7%", delta: +1.3, sub: "2026–2030 · RPM 성장 동력", fill: 0.74, src: "Grand View Research, 'Wearable Medical Devices Market', 게시 2025.12, 검토 2026.06.10" },
-    { label: "AI 딜 비중 (~2025 H2)", value: "~62%", delta: +8.0, sub: "CB Insights Q1'25 기준 추정", fill: 0.62, src: "CB Insights State of Digital Health Q1'25, 게시 2025.04" },
-    { label: "IPO 파이프라인", value: "3건", delta: 0, sub: "Oura · Whoop · Strava S-1 제출", fill: 0.55, src: "CNBC 2026.05.21 (Oura) · TechCrunch 2026.03.31 (Whoop) · the5krunner 2026.01.09 (Strava)" },
+    { label: "IPO 파이프라인", value: "1건 확인", delta: 0, sub: "Oura S-1 제출 확인 · Strava IPO 준비 보도(S-1 미확인) · Whoop CEO 의사 표명(S-1 미제출)", fill: 0.55, src: "CNBC 2026.05.21 (Oura S-1 확인) · Reuters/WSJ (Strava IPO 준비 보도) · Yahoo Finance 2026.03.31 (Whoop CEO 발언)" },
   ];
 
   /* ---- Key Insights (10선) ---- */
   const INSIGHTS = [
-    { title: "GLP-1 $82B · 임상 근거 확보", desc: "Grand View Research 2026E $82B · Nature 임상: GLP-1+mHealth 12개월 -12.7% 체중 감소 · 앱 참여도가 결과 결정", icon: "pulse", src: "Grand View Research GLP-1 Market Report, 게시 2026.02 · Nature Medicine, 'GLP-1 + mHealth RCT', 게시 2025.09, 저자 Wadden et al." },
+    { title: "GLP-1 $82B · CAGR 12.4%", desc: "Grand View Research: 2025 $66.4B → 2026E $82B → 2033E $185.3B · semaglutide 52.8% share · tirzepatide CAGR 13.9% · Nature 임상: GLP-1+mHealth 12개월 -12.7% 체중 감소", icon: "pulse", src: "Grand View Research GLP-1 Market Report, 게시 2026.02 · Nature Medicine, 'GLP-1 + mHealth RCT', 게시 2025.09, 저자 Wadden et al." },
     { title: "AI 헬스 에이전트 시대 선언", desc: "BCG: 코파일럿→자율 에이전트 전환 · 앰비언트 스크라이브 1~2h/일 절감 · Rock Health 'AI 퍼스트 헬스' 공식 선언", icon: "ai", src: "BCG, 'AI in Healthcare 2026', 게시 2026.03 · Rock Health Q1 2026 Funding Report, 게시 2026.04.06" },
     { title: "Oura $11B · IPO S-1 제출", desc: "Series E $9억(Fidelity) 밸류 $11B · 유럽 헬스테크 최초 데카콘 · 2026.05 SEC S-1 비밀 제출 · 매출 $2B 전망", icon: "device", src: "CNBC, 게시 2025.10.14 (Series E) · CNBC, 게시 2026.05.21 (S-1) · TechCrunch, 게시 2026.05.22" },
-    { title: "Whoop $10.1B 데카콘", desc: "Series G $5.75억 · 북킹스 런레이트 $1.1B+(YoY +103%) · 600명 채용 · 호날두·르브론 투자 · Advanced Labs 혈액검사", icon: "spark", src: "TechCrunch, 게시 2026.03.31, 저자 Connie Loizos · Inc., 게시 2026.04, 저자 Ali Donaldson — CEO 발언 '북킹스 런레이트'(revenue와 구분)" },
+    { title: "Whoop $10.1B 데카콘", desc: "Series G $5.75억 · 북킹스 런레이트 $1.1B+(YoY +103%) · 2.5M 멤버(60개국) · 600명 채용 · 호날두·르브론 투자 · Advanced Labs 혈액검사", icon: "spark", src: "TechCrunch, 게시 2026.03.31, 저자 Connie Loizos · Inc., 게시 2026.04, 저자 Ali Donaldson — CEO 발언 '북킹스 런레이트'(revenue와 구분)" },
     { title: "스크린리스 밴드 3파전", desc: "Fitbit Air $99(구독 없음) ↔ Whoop $199~359/yr 3티어 ↔ Garmin CIRQA $509(소매) · 카테고리 주류화 가속", icon: "chart", src: "Google Blog, 게시 2026.05.07 (Fitbit Air) · TechRadar, 게시 2026.06 (CIRQA) · Whoop 공식, 게시 2026.03" },
-    { title: "FDA 규제 완화 수혜", desc: "2026.01 FDA 'General Wellness' 최종 가이드라인 · 비침습 혈압·혈당 wellness 허용 · Whoop·Oura 직접 수혜", icon: "report", src: "FDA.gov, 'General Wellness Policy for LRD', 게시 2026.01, 문서번호 FDA-2024-D-4135" },
-    { title: "MFP × Cal AI · Strava IPO", desc: "MFP Cal AI 인수(ARR $30M · @dpjmcgregor) · 2억 사용자 비전 AI 통합 · MFP $1B+ 매각 검토(Reuters) · Strava S-1 제출 · ARR ~$500M · Goldman 주간사", icon: "news", src: "GlobeNewsWire, 게시 2026.03.01 (MFP-Cal AI) · Reuters, 게시 2026.04 (매각 검토) · the5krunner, 게시 2026.01.09 (Strava)" },
-    { title: "Peloton 흑자 전환", desc: "Q3 FY2026 GAAP 순이익 $26.4M · 구독 2.662M · 매출 $631M(+1% YoY) · 월 이탈률 1.2%로 개선", icon: "grid", src: "Peloton IR, Q3 FY2026 Earnings, 게시 2026.05.07 · CNBC, 게시 2026.05.07" },
-    { title: "Oura·Strava IPO — 헬스테크 상장 물결", desc: "Oura S-1 비밀 제출(2026.05) · 밸류 $11B · 2025 매출 ~$1B · Strava S-1(2026.01) · ARR ~$500M · 헬스테크 유니콘 동시 상장 물결", icon: "target", src: "CNBC, 게시 2026.05.21 (Oura S-1) · the5krunner, 게시 2026.01.09 (Strava S-1) · premieralts.com (Strava 밸류)" },
-    { title: "OpenAI·Anthropic 동시 S-1 — AI 대전환", desc: "OpenAI S-1(2026.06.08) · Anthropic S-1 제출 · 헬스 AI 사업화 본격 가속 · 임상 문서화·에이전트·코칭 시장 선점 경쟁", icon: "ai", src: "Bloomberg Technology, 게시 2026.06.08 (OpenAI S-1) · Anthropic 공식, 게시 2025.03 (Series E)" },
+    { title: "FDA General Wellness 가이드라인", desc: "2026.01 FDA 'General Wellness' 최종 가이드라인 · low-risk wellness claim에 대한 규제 경계 명확화 · 혈압·혈당을 의료용 정확도 또는 진단 기능으로 표현하려면 별도 clearance/authorization 필요", icon: "report", src: "FDA.gov, 'General Wellness Policy for LRD', 게시 2026.01, 문서번호 FDA-2024-D-4135" },
+    { title: "MFP × Cal AI · Strava IPO 준비", desc: "MFP Cal AI 인수(ARR $30M · @dpjmcgregor) · 280M+ 사용자 비전 AI 통합 · MFP $1B+ 매각 검토(Reuters) · Strava IPO 준비·주관사 선정 보도(S-1 제출 미확인) · ARR ~$500M", icon: "news", src: "GlobeNewsWire, 게시 2026.03.01 (MFP-Cal AI) · Reuters, 게시 2026.04 (매각 검토) · Reuters/WSJ (Strava IPO 준비 보도)" },
+    { title: "Peloton 수익성 회복 · 가입자 감소", desc: "Q3 FY2026 매출 $631M(+1% YoY) · 순이익 $26.4M · EBITDA +41% · FCF +59% · 그러나 paid subscriptions ~2.7M(-7.6% YoY) · Spotify 1,400+ 클래스 파트너십 · CCO 영입", icon: "grid", src: "Peloton IR, Q3 FY2026 Earnings, 게시 2026.05.07 · CNBC, 게시 2026.05.07" },
+    { title: "Oura IPO · Strava 상장 준비", desc: "Oura S-1 비밀 제출(2026.05) · 밸류 $11B · 2025 매출 ~$1B · Strava IPO 준비·주관사 선정 보도(S-1 미확인) · ARR ~$500M · 헬스테크 유니콘 상장 물결", icon: "target", src: "CNBC, 게시 2026.05.21 (Oura S-1) · Reuters/WSJ (Strava IPO 준비 보도) · premieralts.com (Strava 밸류)" },
+    { title: "OpenAI S-1 · AI 대전환", desc: "OpenAI S-1 비밀 제출(2026.06.08) · 범용 AI 플랫폼의 헬스케어 적용 가속 · AI는 독립 세그먼트가 아닌 모든 디지털 헬스 기업의 기본 역량(table stakes)으로 전환 — Rock Health 2026년부터 AI deal 별도 추적 중단", icon: "ai", src: "Bloomberg Technology, 게시 2026.06.08 (OpenAI S-1) · Rock Health Q1 2026 Funding Report, 게시 2026.04.06" },
     { title: "eMed $2B+ · GLP-1 원격의료 AI", desc: "eMed $200M Series A, $2B+ 밸류 · GLP-1 원격의료 플랫폼에 agentic AI 적용 · Rock Health Q1'26 메가딜 포함", icon: "spark", src: "Rock Health Q1 2026 Funding Report, 게시 2026.04.06" },
     { title: "Hinge·Omada IPO — 디지털 헬스 첫 $1B+ 상장", desc: "Hinge Health($2.6B)·Omada Health($1.1B) 2025 Q2 IPO 완료 · 디지털 헬스 최초 $1B+ IPO · 2026 Oura·Strava IPO의 선례", icon: "target", src: "CB Insights State of Digital Health Q2'25, 게시 2025" },
     { title: "D2C 헬스 모델 재부상", desc: "Maven Clinic D2C 출시 · Hims&Hers Eucalyptus 인수 · OpenAI·Perplexity 소비자 헬스 진입 — '의료 접점의 새 프론트도어' 부상", icon: "news", src: "Rock Health Q1 2026 Funding Report, 게시 2026.04.06" },
@@ -555,20 +555,20 @@
   ];
 
   const QA_PAIRS = [
-    { q: "애플(Apple)의 헬스케어 전략은 무엇인가요?", a: "Apple의 헬스케어 전략은 하드웨어·소프트웨어·서비스 수직 통합입니다. Apple Watch S11은 소비자 웨어러블 중 유일하게 ECG·AFib FDA clearance를 보유하고 있으며, 2025년에 고혈압 알림과 수면 점수 기능을 추가했습니다. 연간 3,300만 대 판매(IDC 2025), 생태계 재구매율 93%로 압도적 락인 효과를 보여줍니다.\n\n방향성은 예방 의학 플랫폼으로의 진화입니다. Apple Intelligence 기반 건강 데이터 AI 요약, 고혈압 알림 등 조기 경고 기능 확대, Fitness+ 구독 번들로 서비스 수익을 심화하고 있습니다. 가격은 $399~$799 프리미엄 포지셔닝이며 ARPU는 생태계 포함 연간 약 $500입니다.", nav: "device", keywords: ["애플", "apple", "전략", "apple watch", "워치", "s11", "ecg", "afib", "fitness+"] },
+    { q: "애플(Apple)의 헬스케어 전략은 무엇인가요?", a: "Apple의 헬스케어 전략은 하드웨어·소프트웨어·서비스 수직 통합입니다. Apple Watch S11은 ECG·AFib 등 FDA-cleared 기능을 갖춘 대표 소비자 웨어러블입니다(Fitbit Charge 6·WHOOP MG도 일부 FDA-cleared 기능 보유). 고혈압 알림은 Series 9/10/11 및 Ultra 2/3에서 지원되는 watchOS 26 기능이며 혈압 직접 측정·진단은 아닙니다. 연간 3,300만 대 판매(IDC 2025), 생태계 재구매율 93%로 압도적 락인 효과를 보여줍니다.\n\n방향성은 예방 의학 플랫폼으로의 진화입니다. Apple Intelligence 기반 건강 데이터 AI 요약, 고혈압 알림 등 조기 경고 기능 확대, Fitness+ 구독 번들로 서비스 수익을 심화하고 있습니다. 가격은 $399~$799 프리미엄 포지셔닝이며 ARPU는 생태계 포함 연간 약 $500입니다.", nav: "device", keywords: ["애플", "apple", "전략", "apple watch", "워치", "s11", "ecg", "afib", "fitness+"] },
     { q: "지금 헬스케어 웨어러블 시장에서 가장 빠르게 성장하는 기업은 어디인가요?", a: "현재 가장 가파른 성장세를 보이는 기업은 Oura와 Whoop입니다. 두 회사 모두 2026년에 데카콘(기업 가치 $10B 이상)으로 등극했습니다.\n\nOura는 2025년 10월 Series E에서 $9억을 조달해 밸류에이션 $11B을 달성했고, 2026년 5월 21일 SEC에 IPO S-1을 비밀 제출했습니다. 2025년 매출 약 $1B, 2026년 예상 매출 $2B으로 2년 만에 4배 성장이 예상됩니다. 스마트링 시장 점유율은 74%(Omdia 2025 H1)로 압도적 1위입니다.\n\nWhoop은 2026년 3월 Series G에서 $5.75억을 조달해 밸류에이션 $10.1B을 기록했고, 매출 런레이트 $1.1B+, 600명 신규 채용을 계획 중입니다. 호날두·르브론 제임스 등 셀럽 애슬릿도 투자자로 참여했습니다. 웨어러블 전체 CAGR은 2026~2030년 14.7%로 예상되며, 스크린리스 밴드·스마트링이 최고 성장 폼팩터로 꼽힙니다.", nav: "device", keywords: ["성장", "웨어러블", "oura", "오우라", "whoop", "빠르게", "가장", "데카콘", "급성장"] },
-    { q: "Oura Ring과 Apple Watch 중 수면 추적 정확도는 어느 쪽이 더 높나요?", a: "9to5Mac이 2026년 6월에 진행한 4자 실사용 비교 리뷰 기준 수면 추적 정확도 순위는 Oura > Apple > Whoop > Fitbit Air 입니다.\n\nOura가 앞서는 이유는 반지 폼팩터 덕분에 24시간 착용률이 높고, 손가락의 혈관 밀도가 손목보다 높아 광혈류용적맥파(PPG) 신호 품질이 우수하기 때문입니다. 화면과 알림이 없어 잠자는 동안 자연스럽게 착용하게 되는 것도 데이터 품질에 유리합니다.\n\n반면 Apple Watch S11은 소비자 웨어러블 중 유일하게 ECG·AFib FDA clearance를 보유해 의료 등급 기능에서 차별화됩니다. 수면만 놓고 보면 Oura, 종합 건강 모니터링과 의료 등급 기능까지 원한다면 Apple Watch가 더 적합한 선택입니다.", nav: "device", keywords: ["수면", "oura", "오우라", "apple", "애플", "정확도", "비교", "sleep", "ring", "워치"] },
+    { q: "Oura Ring과 Apple Watch 중 수면 추적 정확도는 어느 쪽이 더 높나요?", a: "9to5Mac이 2026년 6월에 진행한 4자 실사용 비교 리뷰 기준 수면 추적 정확도 순위는 Oura > Apple > Whoop > Fitbit Air 입니다.\n\nOura가 앞서는 이유는 반지 폼팩터 덕분에 24시간 착용률이 높고, 손가락의 혈관 밀도가 손목보다 높아 광혈류용적맥파(PPG) 신호 품질이 우수하기 때문입니다. 화면과 알림이 없어 잠자는 동안 자연스럽게 착용하게 되는 것도 데이터 품질에 유리합니다.\n\n반면 Apple Watch S11은 ECG·AFib 등 FDA-cleared 기능을 보유한 대표 소비자 웨어러블(Fitbit Charge 6·WHOOP MG 등도 일부 FDA-cleared 기능 보유)해 의료 등급 기능에서 차별화됩니다. 수면만 놓고 보면 Oura, 종합 건강 모니터링과 의료 등급 기능까지 원한다면 Apple Watch가 더 적합한 선택입니다.", nav: "device", keywords: ["수면", "oura", "오우라", "apple", "애플", "정확도", "비교", "sleep", "ring", "워치"] },
     { q: "Fitbit Air는 어떤 제품이고, Whoop과 무엇이 다른가요?", a: "Fitbit Air는 Google이 2026년 5월 7일 출시한 스크린리스 웨어러블 밴드로, Whoop 구독 모델에 정반대로 대응하는 포지셔닝이 핵심입니다. 가격은 $99.99 일회성으로 구독이 없습니다. 무게는 밴드 포함 12g, 배터리 7일이며 AFib 감지·SpO2·HRV·피부온도를 측정하고 Gemini 기반 AI 인사이트를 제공합니다. Stephen Curry 협업 에디션은 $129.99입니다.\n\nWhoop과의 결정적 차이는 비용 구조입니다. Fitbit Air는 처음 $99.99만 내면 끝이지만, Whoop은 기기를 무료로 받는 대신 연간 $199~$359 구독료를 내야 합니다. 2년 보유 기준 Fitbit Air는 $99.99, Whoop은 $398~$718입니다. Whoop은 대신 ECG FDA clearance, Advanced Labs 혈액검사 통합, 더 정교한 회복 코칭을 제공합니다. 한 마디로 Fitbit Air는 구독 없이 써보고 싶은 대중을, Whoop은 데이터 기반 퍼포먼스 최적화를 원하는 진지한 운동인을 타깃으로 합니다.", nav: "device", keywords: ["fitbit", "핏빗", "air", "whoop", "다른", "차이", "비교", "google", "구글", "스크린리스"] },
     { q: "GLP-1 비만 치료제가 다이어트 앱 시장에 어떤 영향을 미치고 있나요?", a: "GLP-1 수용체 작용제 시장은 2026년 예상 규모 $82B으로 헬스테크 전체를 흔드는 가장 강력한 변수입니다. Ozempic·Wegovy(세마글루타이드) 점유율 52.8%, Tirzepatide CAGR 13.9%로 최고 성장 중이며 2033년 $185.3B 시장이 예상됩니다.\n\n다이어트 앱들의 대응은 세 갈래입니다. 첫째, 처방 연계 피벗 — Noom과 WeightWatchers는 GLP-1 원격 처방 플랫폼으로 전환 중이며, WeightWatchers는 Sequence를 인수했습니다. 둘째, 디지털 코칭 번들 — J.P. Morgan에 따르면 GLP-1에 mHealth 코칭을 병행하면 앱 참여도가 +38% YoY 상승하고, Nature 임상에서 결합군이 12개월 후 -12.7% 체중 감소를 기록했습니다. 셋째, AI 영양 전환 — MyFitnessPal은 Cal AI를 인수해 사진 한 장으로 칼로리를 기록하는 AI 영양 플랫폼으로 재포지셔닝 중입니다.\n\n결론적으로 GLP-1은 단순 위협이 아니라 디지털 코칭의 새로운 수요를 창출하는 성장 동인으로 작용하고 있습니다.", nav: "startup", keywords: ["glp", "glp-1", "비만", "다이어트", "치료제", "ozempic", "오젬픽", "wegovy", "위고비", "세마글루타이드", "noom", "체중"] },
-    { q: "2026년 헬스테크에서 IPO를 준비 중인 기업은 어디인가요?", a: "2026년 헬스테크·디지털 피트니스 IPO 파이프라인은 역대 가장 풍부합니다.\n\nOura는 2026년 5월 21일 SEC에 S-1을 비밀 제출했습니다. 밸류에이션 $11B, 2025년 매출 약 $1B, 2026년 예상 매출 $2B이며 유럽 헬스테크 최초 데카콘 타이틀을 가지고 있습니다. 누적 550만 링 판매 스토리를 제출했습니다.\n\nStrava는 2026년 1월 8일 S-1을 비밀 제출했으며 Goldman Sachs·JPMorgan이 공동 주간사입니다. 밸류에이션 $2.2B+, IPO 시 $3B+ 전망, ARR 약 $500M, 구독 리텐션 80~90%, 등록 사용자 1.5억 명입니다.\n\nOpenAI는 직접 플레이어는 아니지만 2026년 6월 8일 S-1을 비밀 제출, ChatGPT Health 연동으로 에코시스템에 큰 영향을 미칩니다. 세 기업의 동시 IPO는 헬스테크 유니콘 상장 물결의 신호탄으로 평가받습니다.", nav: "dynamics", keywords: ["ipo", "상장", "s-1", "준비", "공모", "오우라", "strava", "openai", "파이프라인"] },
+    { q: "2026년 헬스테크에서 IPO를 준비 중인 기업은 어디인가요?", a: "2026년 헬스테크·디지털 피트니스 IPO 파이프라인은 역대 가장 풍부합니다.\n\nOura는 2026년 5월 21일 SEC에 S-1을 비밀 제출했습니다. 밸류에이션 $11B, 2025년 매출 약 $1B, 2026년 예상 매출 $2B이며 유럽 헬스테크 최초 데카콘 타이틀을 가지고 있습니다. 누적 550만 링 판매 스토리를 제출했습니다.\n\nStrava는 IPO 준비 및 주관사 선정 보도가 있으나 S-1 제출은 공식 확인되지 않았습니다. 밸류에이션 $2.2B+, IPO 시 $3B+ 전망, ARR 약 $500M, 구독 리텐션 80~90%, 등록 사용자 1.5억 명입니다.\n\nOpenAI는 직접 플레이어는 아니지만 2026년 6월 8일 S-1을 비밀 제출, ChatGPT Health 연동으로 에코시스템에 큰 영향을 미칩니다. 세 기업의 동시 IPO는 헬스테크 유니콘 상장 물결의 신호탄으로 평가받습니다.", nav: "dynamics", keywords: ["ipo", "상장", "s-1", "준비", "공모", "오우라", "strava", "openai", "파이프라인"] },
     { q: "스크린리스 웨어러블 밴드 시장의 3강 구도를 설명해주세요.", a: "2026년 상반기를 기점으로 스크린리스 밴드 카테고리에 세 개의 완전히 다른 비즈니스 모델이 정면충돌하고 있습니다.\n\n첫째, Fitbit Air의 저가 일회성 모델 — $99.99에 사면 끝, 구독 없이 진입 장벽을 최소화해 대중 시장을 겨냥하며 7일 배터리·AFib 감지·Gemini AI를 제공합니다.\n\n둘째, Whoop의 기기 무료 + 구독 모델 — 하드웨어는 무료, 연간 $199~$359의 3티어 구독(One·Peak·Life)으로 수익. ECG FDA clearance를 보유하고 데이터 해석과 행동 변화를 상품으로 판매합니다.\n\n셋째, Garmin CIRQA의 프리미엄 일회성 모델 — 리크 기준 소매 $509, 프리오더 $454로 구독 없는 고가 포지셔닝, 기존 하드웨어 마진 모델을 그대로 적용합니다.\n\n세 모델의 공존은 소비자가 가치관에 따라 명확히 다른 선택을 할 수 있는 성숙한 카테고리가 형성됐음을 의미합니다.", nav: "dynamics", keywords: ["스크린리스", "밴드", "3강", "3파전", "구도", "fitbit", "whoop", "garmin", "cirqa", "경쟁"] },
     { q: "AI가 헬스케어에서 실제로 어떻게 활용되고 있나요?", a: "2026년 현재 AI 헬스케어 적용은 데모를 넘어 규제 파일럿 단계로 진입했습니다. BCG는 이를 코파일럿에서 자율 에이전트로의 전환으로 정의하며, 앰비언트 AI 스크라이브가 이미 의료진 행정 업무를 하루 1~2시간 절감하고 있다고 분석합니다.\n\nOpenAI는 파편화된 웨어러블·진료 기록을 통합 해석하는 개인 헬스 어시스턴트를 개발 중이며 ChatGPT Health로 소비자 접점을 선점하고 있습니다. Anthropic Claude는 안전성 우선 설계로 임상 문서화 등 고위험 워크로드에 특화되어 있습니다. Amazon Health는 One Medical 진료 + Amazon Pharmacy + AI 트리아지를 결합한 풀스택 모델을 운영합니다. Google DeepMind는 MedGemini 멀티모달 추론과 MedPaLM 2를 보유하며, Fitbit 웨어러블 데이터와 의료 추론을 결합한 수직 통합이 가능한 유일한 플레이어입니다.\n\nAI 주도 딜 비중은 전체 디지털 헬스 투자의 약 62%(CB Insights Q1'25 추정)에 달하며 2023년 28%에서 급등했습니다.", nav: "ai", keywords: ["ai", "인공지능", "활용", "에이전트", "헬스케어", "openai", "claude", "anthropic", "amazon", "google", "deepmind", "chatgpt", "스크라이브"] },
-    { q: "MyFitnessPal의 Cal AI 인수가 칼로리 추적 시장을 어떻게 바꾸나요?", a: "MyFitnessPal은 2025년 12월 Cal AI 인수 딜을 체결하고 2026년 3월 1일 공식 발표했습니다. Cal AI는 당시 ARR $30M을 기록하던 10대가 만든 바이럴 앱으로, 사진 한 장을 찍으면 AI가 식단을 분석해 칼로리를 자동 기록해주는 기능이 핵심입니다.\n\n기존 MyFitnessPal의 최대 약점은 수동 입력의 불편함이었습니다. 음식 이름을 검색하고 양을 입력하는 과정이 이탈의 주요 원인이었는데, Cal AI의 비전 AI가 이 마찰을 완전히 제거합니다. 시장 영향으로는 사진 기반 AI 칼로리 추적이 카테고리 표준 기능으로 자리잡으며 Snapcalorie 등 독립 비전 AI 앱들이 차별화 압박에 직면했습니다.\n\nMFP는 현재 등록 사용자 2억 명 이상, 앱스토어 피트니스 매출 1위, ChatGPT Health 연동 완료. Reuters는 2026년 4월 매각 검토(밸류 $1B+)를 보도했으며, AI 전환 완료로 프리미엄 밸류에이션이 정당화된다는 분석입니다.", nav: "startup", keywords: ["myfitnesspal", "mfp", "cal ai", "calai", "인수", "칼로리", "음식", "비전", "사진"] },
+    { q: "MyFitnessPal의 Cal AI 인수가 칼로리 추적 시장을 어떻게 바꾸나요?", a: "MyFitnessPal은 2025년 12월 Cal AI 인수 딜을 체결하고 2026년 3월 1일 공식 발표했습니다. Cal AI는 당시 ARR $30M을 기록하던 10대가 만든 바이럴 앱으로, 사진 한 장을 찍으면 AI가 식단을 분석해 칼로리를 자동 기록해주는 기능이 핵심입니다.\n\n기존 MyFitnessPal의 최대 약점은 수동 입력의 불편함이었습니다. 음식 이름을 검색하고 양을 입력하는 과정이 이탈의 주요 원인이었는데, Cal AI의 비전 AI가 이 마찰을 완전히 제거합니다. 시장 영향으로는 사진 기반 AI 칼로리 추적이 카테고리 표준 기능으로 자리잡으며 Snapcalorie 등 독립 비전 AI 앱들이 차별화 압박에 직면했습니다.\n\nMFP는 현재 120개국 280M+ 회원, 앱스토어 피트니스 매출 1위, ChatGPT Health 연동 완료. Reuters는 2026년 4월 매각 검토(밸류 $1B+)를 보도했으며, AI 전환 완료로 프리미엄 밸류에이션이 정당화된다는 분석입니다.", nav: "startup", keywords: ["myfitnesspal", "mfp", "cal ai", "calai", "인수", "칼로리", "음식", "비전", "사진"] },
     { q: "Peloton은 살아남았나요? 현재 상황은 어떤가요?", a: "결론부터 말하면 살아남았습니다. 2022~2023년 주가 90% 이상 폭락, CEO 교체, 대규모 감원으로 사실상 사망 선고를 받았던 Peloton은 2026년 Q3 FY2026 실적에서 극적인 회복을 증명했습니다.\n\nGAAP 순이익 $26.4M 흑자 전환으로 전년 동기 -$47.7M에서 $74M을 개선했습니다. 매출은 $631M으로 +1% YoY이며 가이던스를 상회했습니다. Connected Fitness 구독자는 2.662M, 월 이탈률은 1.2%로 직전 분기 1.9%에서 크게 개선됐습니다. FY 연간 가이던스는 $2.42~$2.44B입니다.\n\n핵심 이유는 하드웨어 판매 집착에서 벗어나 구독 수익 중심으로 모델을 재편한 것입니다. 인스트럭터 브랜드와 라이브 콘텐츠 커뮤니티는 경쟁사가 쉽게 복제할 수 없는 해자이며, 2026 하반기 Commercial Series로 B2B 확장도 계획 중입니다.", nav: "startup", keywords: ["peloton", "펠로톤", "살아남", "흑자", "현재", "상황", "구독"] },
     { q: "2026년 현재 글로벌 디지털 헬스 시장 규모는 얼마나 되나요?", a: "Grand View Research 기준 2025년 글로벌 디지털 헬스 시장은 $347B 규모이며 전년 대비 +16% 성장했습니다. 2026년 $420B, 2033년 $1,830B에 달할 전망이며 CAGR은 23.4%입니다.\n\n2026년 Q1 글로벌 펀딩은 Rock Health 기준 $4.0B(110건), CB Insights 기준 $7.4B(메가라운드 60%, 19건)입니다. 평균 딜 사이즈 $36.7M은 2021년 이후 최고 수준이며, AI 주도 딜 비중이 전체의 62%를 차지합니다. Rock Health는 이를 AI 퍼스트 헬스 시대의 공식 개막으로 선언했습니다.\n\nGLP-1 시장 $82B을 별도 합산하면 디지털·의료 헬스테크 전체 생태계는 사실상 $430B 수준의 복합 시장을 형성하고 있습니다.", nav: "overview", keywords: ["시장", "규모", "디지털 헬스", "얼마", "전체", "펀딩", "투자", "cagr", "글로벌"] },
-    { q: "Strava는 운동 기록 앱인데 어떻게 기업 가치 $2.2B이 됐나요?", a: "Strava의 가치는 단순한 운동 기록 앱이 아닌 운동 데이터의 소셜 네트워크라는 포지셔닝에서 나옵니다. 등록 사용자 1.5억 명 이상, ARR 약 $500M, 구독 리텐션 80~90%가 그 근거입니다.\n\n핵심은 네트워크 효과입니다. 내 친구들이 이미 Strava에 있기 때문에 기능적으로 더 나은 경쟁자가 나와도 관계망을 이식하기 어렵습니다. 성장 동인은 세 가지 — 첫째 Gen Z 런클럽 트렌드, 둘째 1.5억 명 데이터를 학습한 Athlete Intelligence AI 코칭, 셋째 서드파티 API 접근 유료화입니다.\n\n2026년 1월 S-1 비밀 제출에 Goldman Sachs·JPMorgan이 공동 주간사를 맡았고 IPO 시 $3B+ 밸류가 전망됩니다.", nav: "startup", keywords: ["strava", "스트라바", "가치", "ipo", "소셜", "네트워크", "런클럽", "$2.2b"] },
+    { q: "Strava는 운동 기록 앱인데 어떻게 기업 가치 $2.2B이 됐나요?", a: "Strava의 가치는 단순한 운동 기록 앱이 아닌 운동 데이터의 소셜 네트워크라는 포지셔닝에서 나옵니다. 등록 사용자 1.5억 명 이상, ARR 약 $500M, 구독 리텐션 80~90%가 그 근거입니다.\n\n핵심은 네트워크 효과입니다. 내 친구들이 이미 Strava에 있기 때문에 기능적으로 더 나은 경쟁자가 나와도 관계망을 이식하기 어렵습니다. 성장 동인은 세 가지 — 첫째 Gen Z 런클럽 트렌드, 둘째 1.5억 명 데이터를 학습한 Athlete Intelligence AI 코칭, 셋째 서드파티 API 접근 유료화입니다.\n\nIPO 준비·주관사 선정 보도가 있으며(S-1 제출은 미확인) IPO 시 $3B+ 밸류가 전망됩니다.", nav: "startup", keywords: ["strava", "스트라바", "가치", "ipo", "소셜", "네트워크", "런클럽", "$2.2b"] },
     { q: "Calm과 Headspace 같은 명상 앱은 AI 시대에 어떻게 살아남을 수 있나요?", a: "솔직히 말하면 현재 두 앱 모두 어려운 국면입니다. Calm은 다운로드가 2018년 대비 2024년까지 -61% 감소했습니다. 셀럽 내레이션·수면 음악으로 명상을 상품화한 선구자였지만, ChatGPT를 비롯한 AI 챗봇이 무료로 더 개인화된 정서적 지원을 제공하면서 가치 제안이 약화됐습니다. 피크 밸류 $2B이나 현재 실질 가치는 미공개입니다. Headspace는 Ginger와 합병해 Headspace Health로 전환 후 구독자 200만 명+이지만 추이가 -2.0%입니다.\n\n두 기업 모두 같은 방향으로 피벗 중입니다 — 근거 기반 임상 검증 DTx 전환, 기업 인사팀·보험사에 번들로 파는 B2B 기업복지 EAP, 정신건강 보험 커버리지 확대에 올라타는 보험 연계 수익화입니다. ChatGPT보다 더 잘할 수 있는 것이 임상 검증과 B2B 신뢰성이 될 수 있는지가 생존의 핵심 질문입니다.", nav: "startup", keywords: ["calm", "캄", "headspace", "헤드스페이스", "명상", "살아남", "정신건강", "마음챙김", "dtx"] },
-    { q: "Garmin은 Apple·Oura·Whoop과 어떻게 다른 전략을 쓰나요?", a: "Garmin의 전략은 구독 없는 프리미엄 하드웨어 마진 모델입니다. FY2025 피트니스 세그먼트 매출 $2.36B, 시가총액 $33B+를 구독 매출 없이 달성한 것이 그 증거입니다.\n\n차별화 포인트는 최장 배터리, 정밀 멀티밴드 GPS, 등고선 지도와 내비게이션으로 울트라런·트레킹 등 장기 야외 활동에서 Apple Watch나 Whoop이 대안이 될 수 없는 영역을 독점하는 것입니다. 한 번 사면 월 구독료 없이 모든 기능을 쓸 수 있는 것도 핵심 가치입니다.\n\n2026년 신규 전략으로 리크 기준 CIRQA 스크린리스 밴드를 $509에 출시해 회복·웰니스 시장에 진입할 예정입니다. 구독 없는 프리미엄으로 Whoop의 구독 필수 모델과 정반대 가치 제안을 내세웁니다.", nav: "device", keywords: ["garmin", "가민", "전략", "다른", "gps", "배터리", "cirqa", "프리미엄"] },
+    { q: "Garmin은 Apple·Oura·Whoop과 어떻게 다른 전략을 쓰나요?", a: "Garmin의 전략은 기본 무료 + 선택적 구독의 프리미엄 하드웨어 마진 모델입니다. FY2025 피트니스 세그먼트 매출 $2.36B(+33% YoY), 시가총액 $33B+이며 FY2026E 전사 매출 가이던스 $7.9B입니다. 2025년 3월부터 Connect+ $6.99/월 구독을 출시했지만 기본 기능은 구독 없이 사용 가능합니다.\n\n차별화 포인트는 최장 배터리, 정밀 멀티밴드 GPS, 등고선 지도와 내비게이션으로 울트라런·트레킹 등 장기 야외 활동에서 Apple Watch나 Whoop이 대안이 될 수 없는 영역을 독점하는 것입니다.\n\n2026년 신규 전략으로 리크 기준 CIRQA 스크린리스 밴드를 $509에 출시해 회복·웰니스 시장에 진입할 예정입니다. $500M 자사주 매입과 배당 +17% 인상으로 주주환원도 강화 중입니다.", nav: "device", keywords: ["garmin", "가민", "전략", "다른", "gps", "배터리", "cirqa", "프리미엄"] },
     { q: "Noom은 왜 성장이 둔화됐고, 지금 어떤 방향으로 가고 있나요?", a: "Noom은 2021년 Series F에서 피크 밸류 $3.7B을 기록했지만, 2022년 10월 500명(전체 10%)을 감원하며 고성장 시대를 마감했습니다. 현재 실질 밸류는 미공개입니다.\n\n둔화 이유는 두 가지입니다. 첫째 GLP-1 충격 — Ozempic·Wegovy 등장으로 심리학 기반 행동 변화 코칭만으로는 경쟁하기 어려워졌습니다. 둘째 구독 이탈 — 앱 참여도가 감량 결과를 직접 결정한다는 Nature 연구처럼, 참여도를 유지하지 못한 구독자가 이탈했습니다.\n\n대응 전략은 GLP-1 원격 처방 플랫폼과의 결합입니다. 행동 코칭을 GLP-1 치료제의 디지털 동반자로 재포지셔닝하는 것으로, 약물만으로 해결할 수 없는 식습관·심리 변화를 Noom이 담당하는 구조입니다. Axios 보도에 따르면 전환 후 조직 재편을 완료했습니다.", nav: "startup", keywords: ["noom", "눔", "둔화", "성장", "방향", "glp", "감원", "행동코칭"] },
     { q: "Ultrahuman Ring이 Oura Ring의 경쟁자가 될 수 있나요?", a: "Ultrahuman Ring은 인도 기반 스타트업으로 스마트링 카테고리에서 Oura에 직접 도전하는 가장 주목할 만한 경쟁자입니다. 현재 Series D, 밸류 $1B+ 추정, 성장 추이는 +18%로 데이터 기업 중 상위권입니다.\n\nOura 대비 가장 큰 차별점은 CGM(연속혈당측정) 패치 M1 Live와의 연동입니다. 링 단독으로는 수면·심박·HRV가 Oura와 유사하지만, 혈당 데이터를 링 데이터와 통합해 대사 건강 전체를 커버하는 것은 Oura에 없는 기능입니다. Ring AIR 라인으로 가격 경쟁력도 갖췄습니다.\n\n다만 Oura가 점유율 74%를 보유하고 IPO까지 준비 중인 상황에서, 브랜드 인지도와 소프트웨어 생태계(SDK·B2B 파트너십)의 격차를 극복하는 것이 핵심 과제입니다.", nav: "dynamics", keywords: ["ultrahuman", "울트라휴먼", "경쟁자", "oura", "스마트링", "cgm", "혈당", "ring"] },
     { q: "WeightWatchers는 GLP-1 시대에 살아남을 수 있나요?", a: "WeightWatchers(WW)는 현재 헬스테크에서 가장 극적인 피벗을 시도 중인 기업입니다. 60년 전통의 다이어트 프로그램 기업이 GLP-1 원격 처방 플랫폼으로 완전히 방향을 바꾸고 있습니다.\n\n2024년 Sequence(GLP-1 텔레헬스 스타트업)를 인수해 처방 연계 모델의 기술 기반을 확보했습니다. 현재 회원 350만 명이지만 추이가 -12.0%로 하락세이며, 시총도 약 $0.5B로 피크 대비 크게 줄었습니다.\n\n생존 가능성은 있습니다. 60년간 쌓인 브랜드와 커뮤니티 자산을 Sequence 기반 GLP-1 처방·코칭 번들로 묶으면 새로운 가치 제안이 됩니다. GLP-1 복용자들이 약물 효과 극대화를 위한 행동 변화 지원을 필요로 하는 점도 기회입니다. 다만 Noom·Hims & Hers 등과 경쟁이 치열해 전통 브랜드의 현대적 리포지셔닝 성공 여부가 관건입니다.", nav: "startup", keywords: ["weightwatchers", "ww", "워치워치", "살아남", "glp", "sequence", "다이어트"] },
