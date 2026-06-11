@@ -104,7 +104,8 @@ function App() {
   };
 
   const articleCount = D.ARTICLES.filter(a => a.date === "2026-06-10").length;
-  const today = "6/10 18:58";
+  const now = new Date();
+  const today = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
 
   return (
     <div className={"app d-" + t.density}>
