@@ -2,6 +2,24 @@
    boards.jsx — content sections
    ============================================================ */
 
+// ---- Real publication date (not the crawl date) ----------------
+// Prefers an explicit a.pub, then a dated URL (/YYYY/MM/DD/), then the
+// first YYYY.MM.DD found in the summary, falling back to a.date.
+function pubOf(a) {
+  if (a && a.pub) return a.pub;
+  const pad = (s) => String(s).padStart(2, "0");
+  let m = (a && a.url || "").match(/\/(20\d\d)\/(\d{1,2})\/(\d{1,2})(?:\/|$|\?)/);
+  if (m) return `${m[1]}-${pad(m[2])}-${pad(m[3])}`;
+  m = (a && a.summary || "").match(/(20\d\d)[.\-](\d{1,2})[.\-](\d{1,2})/);
+  if (m) return `${m[1]}-${pad(m[2])}-${pad(m[3])}`;
+  return (a && a.date) || "";
+}
+function fmtPubKo(ds) {
+  if (!ds) return "";
+  const [y, m, d] = ds.split("-").map(Number);
+  return y === 2026 ? `${m}/${d}일` : `'${String(y).slice(2)}.${m}.${d}`;
+}
+
 // ---- Company logo (real favicon, falls back to initial) ---------
 function CoLogo({ name, domain, accent }) {
   const [failed, setFailed] = React.useState(false);
@@ -19,6 +37,7 @@ function CoLogo({ name, domain, accent }) {
 // ---- Category company board (dense table) ----------------------
 function CompanyBoard({ cat, companies, density, sectionRef, query, onSelect }) {
   const inView = useInView(sectionRef);
+  const prog = useProgress(inView, 1000);
   const rows = companies.filter(c => c.cat === cat.id)
     .filter(c => !query || (c.name + c.unit + c.note).toLowerCase().includes(query.toLowerCase()));
   const open = c => onSelect && onSelect(c);
@@ -29,7 +48,7 @@ function CompanyBoard({ cat, companies, density, sectionRef, query, onSelect }) 
         <span className="board-tab" style={{ background: cat.accent }} />
         <div className="board-titles">
           <h2>{cat.ko} <span className="board-en">{cat.en}</span></h2>
-          <p>{cat.desc} · 기업 클릭 시 상세 정보</p>
+          <p>{cat.desc} · 업체명 클릭 시 상세 정보</p>
         </div>
         <div className="board-count" style={{ color: cat.accent, background: cat.accentSoft }}>{rows.length} 社</div>
       </div>
@@ -43,10 +62,14 @@ function CompanyBoard({ cat, companies, density, sectionRef, query, onSelect }) 
           <span className="num">추이</span>
           <span>코멘트</span>
         </div>
-        {rows.map((c, i) => (
-          <div className="ct-row" key={i} role="button" tabIndex={0} style={{ "--accent": cat.accent }}
-            onClick={() => open(c)} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c); } }}>
-            <span className="ct-name">
+        {rows.map((c, i) => {
+          const local = staggerP(prog, i, rows.length);
+          return (
+          <div className="ct-row" key={i}
+            style={{ "--accent": cat.accent, opacity: 0.1 + 0.9 * local, transform: `translateY(${(1 - local) * 12}px)` }}>
+            <span className="ct-name" role="button" tabIndex={0} title={c.name + " 상세 보기"}
+              onClick={() => open(c)}
+              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(c); } }}>
               <CoLogo name={c.name} domain={c.domain} accent={cat.accent} />
               <b>{c.name}</b>
               <Icon name="chevron" size={12} />
@@ -67,7 +90,8 @@ function CompanyBoard({ cat, companies, density, sectionRef, query, onSelect }) 
             </span>
             <span className="ct-note"><BoldSummary text={c.note} /></span>
           </div>
-        ))}
+          );
+        })}
       </div>
      </AnimCtx.Provider>
     </section>
@@ -95,7 +119,6 @@ function CompanyDetail({ company, cats, articles, onClose }) {
       return am - bm || (a.date < b.date ? 1 : -1);
     })
     .slice(0, 6);
-  const fmtD = ds => `${+ds.slice(5, 7)}/${+ds.slice(8, 10)}`;
   return (
     <div className="cd-overlay" onClick={onClose}>
      <AnimCtx.Provider value={true}>
@@ -165,7 +188,7 @@ function CompanyDetail({ company, cats, articles, onClose }) {
               <a key={i} className="cd-art" href={a.url} target="_blank" rel="noopener">
                 <span className="cd-art-dot" style={{ background: cat.accent }} />
                 <span className="cd-art-body">
-                  <span className="cd-art-meta"><em>{a.source}</em><span className="cd-art-date">{fmtD(a.date)}</span><span className="cd-art-tag" style={{ color: cat.accent, background: cat.accentSoft }}>{a.tag}</span></span>
+                  <span className="cd-art-meta"><em>{a.source}</em><span className="cd-art-date">{fmtPubKo(pubOf(a))}</span><span className="cd-art-tag" style={{ color: cat.accent, background: cat.accentSoft }}>{a.tag}</span></span>
                   <span className="cd-art-title">{a.title}</span>
                   {a.summary && <span className="cd-art-sum"><BoldSummary text={a.summary} /></span>}
                 </span>
@@ -196,38 +219,25 @@ function CompanyDetail({ company, cats, articles, onClose }) {
   );
 }
 
-// ---- Bold key numbers helper -----------------------------------
+// ---- Bold key numbers helper (accent bold + yellow marker) -----
 function BoldSummary({ text }) {
   if (!text) return null;
   const parts = text.split(/(\$[\d,.]+[BMK]?(?:\+|~)?|\d+\.?\d*%|\+\d+\.?\d*%|-\d+\.?\d*%)/g);
   return parts.map((part, i) =>
     /^\$|^\d+\.?\d*%$|^[+-]\d+\.?\d*%$/.test(part)
-      ? <b key={i} style={{ color: 'var(--accent)' }}>{part}</b>
+      ? <b key={i} className="num-hl">{part}</b>
       : part
   );
 }
 
-// ---- Article feed grouped by date ------------------------------
+// ---- Article feed (flat, sorted by publication date) -----------
 function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
   const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
   const filtered = articles
     .filter(a => filter === "all" || a.cat === filter)
     .filter(a => !query || a.title.toLowerCase().includes(query.toLowerCase()) || a.source.toLowerCase().includes(query.toLowerCase()));
 
-  const sorted = [...filtered].sort((a, b) => b.date.localeCompare(a.date));
-  const groups = [];
-  const seen = {};
-  sorted.forEach(a => {
-    if (!seen[a.date]) { seen[a.date] = { date: a.date, items: [] }; groups.push(seen[a.date]); }
-    seen[a.date].items.push(a);
-  });
-
-  const fmtDate = ds => {
-    const d = new Date(ds + "T00:00:00");
-    const wd = ["일", "월", "화", "수", "목", "금", "토"][d.getDay()];
-    return `${d.getMonth() + 1}월 ${d.getDate()}일 (${wd})`;
-  };
-  const isToday = ds => ds === "2026-06-10";
+  const sorted = [...filtered].sort((a, b) => pubOf(b).localeCompare(pubOf(a)));
 
   return (
     <section className="board feed" ref={sectionRef} data-screen-label="Daily Articles">
@@ -235,7 +245,7 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
         <span className="board-tab" style={{ background: "var(--ink)" }} />
         <div className="board-titles">
           <h2>데일리 기사 피드 <span className="board-en">Daily Articles · 글로벌 외신 큐레이션</span></h2>
-          <p>매일 최신 기사가 날짜별로 상단에 쌓입니다 · 클릭 시 원문 이동</p>
+          <p>기사 발표일 기준 최신순 정렬 · 클릭 시 원문 이동</p>
         </div>
         <div className="feed-filters">
           <button className={filter === "all" ? "on" : ""} onClick={() => onFilter("all")}>전체</button>
@@ -249,38 +259,28 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
       </div>
 
       <div className="feed-body">
-        {groups.length === 0 && <div className="feed-empty">검색 결과가 없습니다.</div>}
-        {groups.map((g, gi) => (
-          <div className="feed-day" key={g.date}>
-            <div className="feed-date">
-              <span className="fd-line" />
-              <span className={"fd-label" + (isToday(g.date) ? " today" : "")}>
-                {isToday(g.date) && <span className="fd-new">NEW</span>}
-                {fmtDate(g.date)}
-                <em>{g.items.length}건</em>
-              </span>
-              <span className="fd-line" />
-            </div>
-            {g.items.map((a, i) => {
-              const c = catMap[a.cat];
-              return (
-                <a className="art" key={i} href={a.url} target="_blank" rel="noopener">
-                  <span className="art-cat" style={{ background: c.accent }} />
-                  <span className="art-body">
-                    <span className="art-meta">
-                      <em className="art-src">{a.source}</em>
-                      <span className="art-tag" style={{ color: c.accent, background: c.accentSoft }}>{a.tag}</span>
-                      <span className="art-catname">{c.ko}</span>
-                    </span>
-                    <span className="art-title">{a.title}</span>
-                    {a.summary && <span className="art-summary"><BoldSummary text={a.summary} /></span>}
+        {sorted.length === 0 && <div className="feed-empty">검색 결과가 없습니다.</div>}
+        <div className="feed-list">
+          {sorted.map((a, i) => {
+            const c = catMap[a.cat];
+            return (
+              <a className="art" key={i} href={a.url} target="_blank" rel="noopener">
+                <span className="art-cat" style={{ background: c.accent }} />
+                <span className="art-body">
+                  <span className="art-meta">
+                    <em className="art-src">{a.source}</em>
+                    <span className="art-tag" style={{ color: c.accent, background: c.accentSoft }}>{a.tag}</span>
+                    <span className="art-date">{fmtPubKo(pubOf(a))} 발표</span>
+                    <span className="art-catname">{c.ko}</span>
                   </span>
-                  <Icon name="ext" size={13} />
-                </a>
-              );
-            })}
-          </div>
-        ))}
+                  <span className="art-title">{a.title}</span>
+                  {a.summary && <span className="art-summary"><BoldSummary text={a.summary} /></span>}
+                </span>
+                <Icon name="ext" size={13} />
+              </a>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -289,6 +289,7 @@ function ArticleFeed({ articles, cats, sectionRef, filter, onFilter, query }) {
 // ---- Insights board (10선) ------------------------------------
 function InsightsBoard({ insights, sectionRef }) {
   const inView = useInView(sectionRef);
+  const prog = useProgress(inView, 1300);
   return (
     <section className="board" ref={sectionRef} data-screen-label="Key Insights">
      <AnimCtx.Provider value={inView}>
@@ -301,9 +302,9 @@ function InsightsBoard({ insights, sectionRef }) {
       </div>
       <div className="insight-grid">
         {insights.map((ins, i) => {
-          const prog = useProgress(inView, 700, i * 100);
+          const local = staggerP(prog, i, insights.length);
           return (
-            <div className="insight-card" key={i} style={{ opacity: prog, transform: `translateY(${(1 - prog) * 16}px)` }}>
+            <div className="insight-card" key={i} style={{ opacity: local, transform: `translateY(${(1 - local) * 16}px)` }}>
               <div className="insight-icon"><Icon name={ins.icon || "spark"} size={18} /></div>
               <div className="insight-body">
                 <div className="insight-title">{ins.title}</div>
@@ -329,22 +330,12 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
       <div className="board-head">
         <span className="board-tab" style={{ background: "var(--ink)" }} />
         <div className="board-titles">
-          <h2>정량 분석 <span className="board-en">Market Quant · Reports</span></h2>
-          <p>증권사·시장조사 리포트 기반 시장규모·펀딩·점유율·사용자 지표</p>
+          <h2>정량 분석 <span className="board-en">Company Quant · 기업별 지표</span></h2>
+          <p>기업별 밸류에이션 · 사용자 · 가격 · 매출 정량 비교 (시장 규모·점유율은 상단 오버뷰 참조)</p>
         </div>
       </div>
 
       <div className="chart-grid">
-        <div className="chart-card">
-          <div className="cc-head"><h3>디지털 헬스 시장 규모 & 성장률</h3><span title="Grand View Research '26.01 Digital Health Market Report">$B · YoY% · Grand View Research</span></div>
-          <MarketGrowthChart data={data.MARKET_GROWTH} accent={theme.accent} ink={theme.ink} grid={theme.grid} muted={theme.muted} />
-        </div>
-
-        <div className="chart-card">
-          <div className="cc-head"><h3>2026 펀딩 점유율</h3><span title="CB Insights Q1'26 State of Digital Health">카테고리 · CB Insights</span></div>
-          <DonutChart data={data.SHARE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="$7.4B" centerSub="Q1 글로벌 펀딩" />
-        </div>
-
         <div className="chart-card">
           <div className="cc-head"><h3>기업별 밸류에이션</h3><span title="CNBC · TechCrunch · Crunchbase 등 공시 기준">$B · 공시 기준</span></div>
           <HBarChart data={data.FUNDING} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
@@ -361,11 +352,6 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
         </div>
 
         <div className="chart-card">
-          <div className="cc-head"><h3>AI 주도 딜 비중 (~2025 H2 추정)</h3><span title="CB Insights Q1'25 기준 추정 — Rock Health Q1'26에서 AI 딜 별도 추적 공식 폐지(게시 2026.04.06)">CB Insights Q1'25 · Rock Health 추적 폐지</span></div>
-          <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="~62%" centerSub="AI 딜 비중 (추정)" />
-        </div>
-
-        <div className="chart-card">
           <div className="cc-head"><h3>매출 비교</h3><span title="Garmin PR · Peloton IR · TechCrunch · CNBC 공시 기준">$B · 연환산 · 공시 기준</span></div>
           <HBarChart data={data.REVENUE} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
         </div>
@@ -379,6 +365,7 @@ function ChartsBoard({ data, cats, theme, sectionRef }) {
 // ---- Value Proposition board (3 categories × company VP cards) ---
 function VPBoard({ companies, cats, sectionRef, onSelect, query }) {
   const inView = useInView(sectionRef);
+  const prog = useProgress(inView, 1300);
   return (
     <section className="board" ref={sectionRef} data-screen-label="Value Proposition">
      <AnimCtx.Provider value={inView}>
@@ -386,7 +373,7 @@ function VPBoard({ companies, cats, sectionRef, onSelect, query }) {
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
           <h2>Value Proposition <span className="board-en">Value Proposition · Direction</span></h2>
-          <p>3대 카테고리 기업별 핵심 가치 제안과 방향성 · 카드 클릭 시 상세 정보</p>
+          <p>3대 카테고리 기업별 핵심 가치 제안과 방향성 · 업체명 클릭 시 상세 정보</p>
         </div>
       </div>
       {cats.map(cat => {
@@ -402,15 +389,15 @@ function VPBoard({ companies, cats, sectionRef, onSelect, query }) {
             </div>
             <div className="vp-grid">
               {rows.map((c, i) => {
-                const prog = useProgress(inView, 700, i * 90);
+                const local = staggerP(prog, i, rows.length);
                 return (
-                  <div className="vp-card" key={c.name} role="button" tabIndex={0}
-                    onClick={() => onSelect && onSelect(c)}
-                    onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelect && onSelect(c); } }}
-                    style={{ opacity: prog, transform: `translateY(${(1 - prog) * 14}px)` }}>
+                  <div className="vp-card" key={c.name}
+                    style={{ opacity: local, transform: `translateY(${(1 - local) * 14}px)` }}>
                     <div className="vp-head">
                       <CoLogo name={c.name} domain={c.domain} accent={cat.accent} />
-                      <b className="vp-name">{c.name}</b>
+                      <b className="vp-name" role="button" tabIndex={0} title={c.name + " 상세 보기"}
+                        onClick={() => onSelect && onSelect(c)}
+                        onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onSelect && onSelect(c); } }}>{c.name}</b>
                       <Trend v={c.trend} small animate />
                     </div>
                     <div className="vp-prop">{c.vp}</div>
@@ -430,6 +417,7 @@ function VPBoard({ companies, cats, sectionRef, onSelect, query }) {
 // ---- Reports list ----------------------------------------------
 function ReportsBoard({ reports, sectionRef, query }) {
   const inView = useInView(sectionRef);
+  const prog = useProgress(inView, 1200);
   const rows = reports.filter(r => !query || (r.title + r.house).toLowerCase().includes(query.toLowerCase()));
   const fmtDate = ds => {
     const y = ds.slice(2, 4), m = +ds.slice(5, 7), d = +ds.slice(8, 10);
@@ -447,9 +435,9 @@ function ReportsBoard({ reports, sectionRef, query }) {
       </div>
       <div className="report-list">
         {rows.map((r, i) => {
-          const prog = useProgress(inView, 600, i * 60);
+          const local = staggerP(prog, i, rows.length);
           return (
-            <div className="report-card" key={i} style={{ opacity: prog, transform: `translateY(${(1 - prog) * 12}px)` }}>
+            <div className="report-card" key={i} style={{ opacity: local, transform: `translateY(${(1 - local) * 12}px)` }}>
               <a className="report" href={r.url} target="_blank" rel="noopener">
                 <span className={"rep-type " + (r.type === "Securities" ? "sec" : r.type === "Regulatory" ? "reg" : "mkt")}>{r.type === "Securities" ? "증권사" : r.type === "Regulatory" ? "규제" : "시장조사"}</span>
                 <span className="rep-house">{r.house}</span>
@@ -496,7 +484,7 @@ function OverviewCharts({ data, cats, theme }) {
           <DonutChart data={data.AI_DEALS} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} centerLabel="~62%" centerSub="AI 딜 비중 (추정)" />
         </div>
         <div className="ov-chart-card">
-          <div className="cc-head"><h3>Q1'26 펀딩 집계 비교</h3><span title="Rock Health '26.4.15 · CB Insights '26.4">$B · Rock Health vs CB Insights</span></div>
+          <div className="cc-head"><h3>분기별 펀딩 추이</h3><span title="CB Insights State of Digital Health, 분기별 글로벌 디지털 헬스 펀딩">$B · CB Insights 분기 집계</span></div>
           <HBarChart data={data.FUNDING_TREND} colorOf={d => catColor(d.cat)} ink={theme.ink} muted={theme.muted} grid={theme.grid} unit="B" valuePrefix="$" />
         </div>
       </div>
@@ -507,6 +495,7 @@ function OverviewCharts({ data, cats, theme }) {
 // ---- Dynamics Board (competitive landscape visualization) ------
 function DynamicsBoard({ companies, cats, sectionRef }) {
   const inView = useInView(sectionRef);
+  const dynProg = useProgress(inView, 1400);
   const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
 
   const arenas = [
@@ -581,9 +570,9 @@ function DynamicsBoard({ companies, cats, sectionRef }) {
       </div>
       <div className="dyn-grid">
         {arenas.map((arena, ai) => {
-          const prog = useProgress(inView, 800, ai * 120);
+          const local = staggerP(dynProg, ai, arenas.length);
           return (
-            <div className="dyn-arena" key={ai} style={{ opacity: prog, transform: `translateY(${(1 - prog) * 20}px)` }}>
+            <div className="dyn-arena" key={ai} style={{ opacity: local, transform: `translateY(${(1 - local) * 20}px)` }}>
               <div className="dyn-arena-head">
                 <h3>{arena.title}</h3>
                 <span className="dyn-arena-en">{arena.en}</span>
@@ -624,6 +613,7 @@ function DynamicsBoard({ companies, cats, sectionRef }) {
 // ---- Biz Model Board (monetization / revenue model per company) ----
 function BizModelBoard({ companies, cats, sectionRef, theme }) {
   const inView = useInView(sectionRef);
+  const bizProg = useProgress(inView, 1400);
   const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
   const models = window.DASH.BIZ_MODELS || [];
 
@@ -653,12 +643,12 @@ function BizModelBoard({ companies, cats, sectionRef, theme }) {
 
       <div className="biz-grid">
         {models.map((m, i) => {
-          const prog = useProgress(inView, 800, i * 80);
+          const local = staggerP(bizProg, i, models.length);
           const cat = catMap[m.cat];
           const co = companies.find(c => c.name.startsWith(m.name.split(" (")[0]));
           return (
             <div className="biz-card" key={i} style={{
-              opacity: prog, transform: `translateY(${(1 - prog) * 18}px)`,
+              opacity: local, transform: `translateY(${(1 - local) * 18}px)`,
               "--biz-accent": cat ? cat.accent : "var(--accent)",
             }}>
               <div className="biz-card-head">
