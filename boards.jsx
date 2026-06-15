@@ -494,70 +494,290 @@ function OverviewCharts({ data, cats, theme }) {
 }
 
 // ---- Dynamics Board (competitive landscape visualization) ------
+// ---- Knowledge Graph (interactive force-directed) ----
+const EDGES = [
+  { from: "Whoop", to: "Fitbit Air", type: "경쟁", label: "스크린리스 밴드 경쟁" },
+  { from: "Whoop", to: "Garmin", type: "경쟁", label: "스크린리스 밴드 경쟁" },
+  { from: "Fitbit Air", to: "Garmin", type: "경쟁", label: "프리미엄 vs 대중" },
+  { from: "Fitbit Air", to: "Google DeepMind", type: "생태계", label: "Google Health 통합" },
+  { from: "Oura", to: "Ultrahuman Ring", type: "경쟁", label: "스마트링 시장 경쟁" },
+  { from: "Oura", to: "Whoop", type: "경쟁", label: "웨어러블 데카콘 경쟁" },
+  { from: "Oura", to: "Apple", type: "경쟁", label: "수면 추적 경쟁" },
+  { from: "Apple", to: "Garmin", type: "경쟁", label: "프리미엄 웨어러블" },
+  { from: "Apple", to: "Google DeepMind", type: "경쟁", label: "헬스 AI 플랫폼 경쟁" },
+  { from: "OpenAI", to: "MyFitnessPal", type: "파트너", label: "ChatGPT Health 연동" },
+  { from: "OpenAI", to: "Anthropic Claude", type: "경쟁", label: "의료 AI 경쟁" },
+  { from: "OpenAI", to: "Google DeepMind", type: "경쟁", label: "AI 플랫폼 경쟁" },
+  { from: "Anthropic Claude", to: "Amazon Health", type: "파트너", label: "AWS Bedrock 통합" },
+  { from: "Amazon Health", to: "Noom", type: "경쟁", label: "GLP-1 프로그램 경쟁" },
+  { from: "Noom", to: "WeightWatchers", type: "경쟁", label: "GLP-1 코칭 경쟁" },
+  { from: "Noom", to: "Hims & Hers", type: "경쟁", label: "GLP-1 D2C 경쟁" },
+  { from: "WeightWatchers", to: "Hims & Hers", type: "경쟁", label: "체중관리 경쟁" },
+  { from: "MyFitnessPal", to: "Noom", type: "경쟁", label: "영양/체중관리 경쟁" },
+  { from: "MyFitnessPal", to: "Strava", type: "보완재", label: "운동+영양 생태계" },
+  { from: "Strava", to: "Garmin", type: "파트너", label: "데이터 연동" },
+  { from: "Strava", to: "Apple", type: "파트너", label: "HealthKit 연동" },
+  { from: "Strava", to: "AllTrails", type: "경쟁", label: "아웃도어 앱 경쟁" },
+  { from: "Peloton", to: "Apple", type: "경쟁", label: "Fitness+ 경쟁" },
+  { from: "Peloton", to: "Ladder", type: "경쟁", label: "홈 피트니스 경쟁" },
+  { from: "Calm", to: "Headspace", type: "경쟁", label: "명상 앱 양강" },
+  { from: "Calm", to: "Finch", type: "경쟁", label: "정신건강 앱 경쟁" },
+  { from: "Flo Health", to: "Apple", type: "보완재", label: "여성건강 데이터 연동" },
+  { from: "eMed", to: "Noom", type: "경쟁", label: "GLP-1 원격의료 경쟁" },
+  { from: "eMed", to: "Hims & Hers", type: "경쟁", label: "D2C 텔레헬스 경쟁" },
+];
+
+function KnowledgeGraph({ companies, cats, catMap, progress, mode }) {
+  const canvasRef = React.useRef(null);
+  const containerRef = React.useRef(null);
+  const [hovered, setHovered] = React.useState(null);
+  const [selected, setSelected] = React.useState(null);
+  const [tooltip, setTooltip] = React.useState(null);
+  const nodesRef = React.useRef([]);
+  const edgesRef = React.useRef([]);
+  const dragRef = React.useRef(null);
+  const frameRef = React.useRef(null);
+  const mouseRef = React.useRef({ x: 0, y: 0 });
+
+  const edgeColors = { "경쟁": "#FF4D4D", "파트너": "#00C2A8", "생태계": "#2D6BFF", "보완재": "#FFB02E", "M&A": "#C026D3" };
+  const edgeDash = { "경쟁": [], "파트너": [6, 4], "생태계": [3, 3], "보완재": [8, 3], "M&A": [2, 2] };
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+    const W = container.offsetWidth;
+    const H = Math.min(520, Math.max(380, W * 0.5));
+    canvas.width = W * 2; canvas.height = H * 2;
+    canvas.style.width = W + "px"; canvas.style.height = H + "px";
+    const ctx = canvas.getContext("2d");
+    ctx.scale(2, 2);
+
+    const valScale = (c) => {
+      const v = parseFloat(String(c.valuation).replace(/[^0-9.]/g, "")) || 1;
+      return Math.max(18, Math.min(42, 14 + Math.sqrt(v) * 4));
+    };
+
+    if (nodesRef.current.length === 0) {
+      const cx = W / 2, cy = H / 2;
+      nodesRef.current = companies.map((c, i) => {
+        const angle = (i / companies.length) * Math.PI * 2;
+        const radius = 120 + Math.random() * 60;
+        return {
+          id: c.name, x: cx + Math.cos(angle) * radius, y: cy + Math.sin(angle) * radius,
+          vx: 0, vy: 0, r: valScale(c), co: c,
+          cat: catMap[c.cat], fixed: false,
+        };
+      });
+      edgesRef.current = EDGES.filter(e =>
+        nodesRef.current.some(n => n.id === e.from) && nodesRef.current.some(n => n.id === e.to)
+      );
+    }
+    const nodes = nodesRef.current;
+    const edges = edgesRef.current;
+
+    const dark = document.documentElement.dataset.theme === "dark";
+    const bg = dark ? "#0E1525" : "#FAFBFE";
+    const gridC = dark ? "#1E2636" : "#EAEDF3";
+    const textC = dark ? "#E8ECF4" : "#0E1525";
+    const mutedC = dark ? "#6F7B90" : "#8A93A4";
+
+    function tick() {
+      const damp = 0.88;
+      for (const n of nodes) {
+        if (n.fixed) continue;
+        let fx = 0, fy = 0;
+        for (const m of nodes) {
+          if (m === n) continue;
+          let dx = n.x - m.x, dy = n.y - m.y;
+          let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          let repel = 2800 / (dist * dist);
+          fx += (dx / dist) * repel;
+          fy += (dy / dist) * repel;
+        }
+        for (const e of edges) {
+          let other = null;
+          if (e.from === n.id) other = nodes.find(m => m.id === e.to);
+          if (e.to === n.id) other = nodes.find(m => m.id === e.from);
+          if (!other) continue;
+          let dx = other.x - n.x, dy = other.y - n.y;
+          let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+          let attract = (dist - 140) * 0.008;
+          fx += (dx / dist) * attract;
+          fy += (dy / dist) * attract;
+        }
+        let dx = W / 2 - n.x, dy = H / 2 - n.y;
+        fx += dx * 0.0008;
+        fy += dy * 0.0008;
+        n.vx = (n.vx + fx) * damp;
+        n.vy = (n.vy + fy) * damp;
+        n.x = Math.max(n.r + 4, Math.min(W - n.r - 4, n.x + n.vx));
+        n.y = Math.max(n.r + 4, Math.min(H - n.r - 4, n.y + n.vy));
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+      for (let x = 40; x < W; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.strokeStyle = gridC; ctx.lineWidth = 0.5; ctx.stroke(); }
+      for (let y = 40; y < H; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+      for (const e of edges) {
+        const a = nodes.find(n => n.id === e.from), b = nodes.find(n => n.id === e.to);
+        if (!a || !b) continue;
+        const isHl = hovered && (e.from === hovered || e.to === hovered);
+        const isSel = selected && (e.from === selected || e.to === selected);
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = (isHl || isSel) ? edgeColors[e.type] || "#888" : (dark ? "rgba(255,255,255,.08)" : "rgba(0,0,0,.06)");
+        ctx.lineWidth = (isHl || isSel) ? 2.5 : 1;
+        ctx.setLineDash((isHl || isSel) ? (edgeDash[e.type] || []) : []);
+        ctx.stroke(); ctx.setLineDash([]);
+        if (isHl || isSel) {
+          const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+          ctx.font = "bold 9px sans-serif"; ctx.fillStyle = edgeColors[e.type] || "#888"; ctx.textAlign = "center";
+          ctx.fillText(e.label, mx, my - 5);
+        }
+      }
+
+      for (const n of nodes) {
+        const isH = n.id === hovered;
+        const isS = n.id === selected;
+        const accent = n.cat ? n.cat.accent : "#888";
+        const connected = isH || isS ? edges.some(e => e.from === n.id || e.to === n.id) : false;
+        const faded = (hovered || selected) && !isH && !isS && !edges.some(e =>
+          (e.from === (hovered || selected) && e.to === n.id) || (e.to === (hovered || selected) && e.from === n.id)
+        );
+        ctx.globalAlpha = faded ? 0.2 : 1;
+        if (isH || isS) {
+          ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 6, 0, Math.PI * 2);
+          ctx.fillStyle = accent + "18"; ctx.fill();
+          ctx.strokeStyle = accent + "50"; ctx.lineWidth = 1.5; ctx.stroke();
+        }
+        ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        const g = ctx.createRadialGradient(n.x - n.r * 0.3, n.y - n.r * 0.3, n.r * 0.1, n.x, n.y, n.r);
+        g.addColorStop(0, accent + "DD"); g.addColorStop(1, accent);
+        ctx.fillStyle = g; ctx.fill();
+        ctx.strokeStyle = isH || isS ? "#fff" : accent + "60"; ctx.lineWidth = isH || isS ? 2.5 : 1; ctx.stroke();
+        ctx.font = `bold ${Math.max(9, n.r * 0.42)}px sans-serif`;
+        ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        const label = n.id.length > 10 ? n.id.slice(0, 9) + "…" : n.id;
+        ctx.fillText(label, n.x, n.y);
+        ctx.globalAlpha = 1;
+      }
+
+      const legendItems = Object.entries(edgeColors);
+      ctx.font = "bold 10px sans-serif"; ctx.textBaseline = "top";
+      legendItems.forEach(([type, color], i) => {
+        const lx = 12, ly = H - 14 - (legendItems.length - 1 - i) * 16;
+        ctx.beginPath(); ctx.arc(lx, ly + 4, 4, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+        ctx.fillStyle = mutedC; ctx.textAlign = "left"; ctx.fillText(type, lx + 10, ly);
+      });
+    }
+
+    function animate() {
+      tick(); draw();
+      frameRef.current = requestAnimationFrame(animate);
+    }
+    animate();
+
+    const getNode = (x, y) => {
+      const rect = canvas.getBoundingClientRect();
+      const mx = (x - rect.left), my = (y - rect.top);
+      mouseRef.current = { x: mx, y: my };
+      for (let i = nodes.length - 1; i >= 0; i--) {
+        const n = nodes[i];
+        const dx = mx - n.x, dy = my - n.y;
+        if (dx * dx + dy * dy < (n.r + 4) * (n.r + 4)) return n;
+      }
+      return null;
+    };
+
+    const onMove = (e) => {
+      const pt = e.touches ? e.touches[0] : e;
+      const n = getNode(pt.clientX, pt.clientY);
+      if (dragRef.current) {
+        const rect = canvas.getBoundingClientRect();
+        dragRef.current.x = pt.clientX - rect.left;
+        dragRef.current.y = pt.clientY - rect.top;
+        dragRef.current.vx = 0; dragRef.current.vy = 0;
+      }
+      setHovered(n ? n.id : null);
+      canvas.style.cursor = n ? "grab" : "default";
+      if (n) {
+        const rect = canvas.getBoundingClientRect();
+        setTooltip({ x: pt.clientX - rect.left, y: pt.clientY - rect.top, co: n.co });
+      } else { setTooltip(null); }
+    };
+    const onDown = (e) => {
+      const pt = e.touches ? e.touches[0] : e;
+      const n = getNode(pt.clientX, pt.clientY);
+      if (n) { dragRef.current = n; n.fixed = true; canvas.style.cursor = "grabbing"; setSelected(n.id); e.preventDefault(); }
+    };
+    const onUp = () => { if (dragRef.current) { dragRef.current.fixed = false; dragRef.current = null; canvas.style.cursor = "default"; } };
+
+    canvas.addEventListener("mousemove", onMove);
+    canvas.addEventListener("mousedown", onDown);
+    canvas.addEventListener("mouseup", onUp);
+    canvas.addEventListener("mouseleave", () => { setHovered(null); setTooltip(null); onUp(); });
+    canvas.addEventListener("touchmove", onMove, { passive: false });
+    canvas.addEventListener("touchstart", onDown, { passive: false });
+    canvas.addEventListener("touchend", onUp);
+
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      canvas.removeEventListener("mousemove", onMove);
+      canvas.removeEventListener("mousedown", onDown);
+      canvas.removeEventListener("mouseup", onUp);
+      canvas.removeEventListener("touchmove", onMove);
+      canvas.removeEventListener("touchstart", onDown);
+      canvas.removeEventListener("touchend", onUp);
+    };
+  }, [companies, cats, hovered, selected]);
+
+  const selCo = selected ? companies.find(c => c.name === selected) : null;
+  const selEdges = selected ? EDGES.filter(e => e.from === selected || e.to === selected) : [];
+
+  return (
+    <div className="kg-wrap" style={{ opacity: Math.min(1, progress * 2) }}>
+      <div className="kg-container" ref={containerRef}>
+        <canvas ref={canvasRef} className="kg-canvas" />
+        {tooltip && (
+          <div className="kg-tooltip" style={{ left: tooltip.x, top: tooltip.y - 10 }}>
+            <b>{tooltip.co.name}</b>
+            <span>{tooltip.co.unit}</span>
+            <span>{tooltip.co.valuation}</span>
+          </div>
+        )}
+      </div>
+      {selCo && (
+        <div className="kg-detail" onClick={() => setSelected(null)}>
+          <div className="kg-detail-head">
+            <b>{selCo.name}</b>
+            <span className="kg-detail-cat">{catMap[selCo.cat] ? catMap[selCo.cat].ko : selCo.cat}</span>
+            <span className="kg-detail-val">{selCo.valuation}</span>
+          </div>
+          <p className="kg-detail-note">{selCo.note}</p>
+          {selEdges.length > 0 && (
+            <div className="kg-detail-edges">
+              <em>관계 네트워크</em>
+              {selEdges.map((e, i) => (
+                <span key={i} className="kg-edge-tag" style={{ borderColor: edgeColors[e.type] || "#888", color: edgeColors[e.type] || "#888" }}>
+                  <b>{e.type}</b> {e.from === selected ? e.to : e.from} — {e.label}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      <div className="kg-hint">노드를 드래그하여 이동 · 클릭하여 상세 관계 보기 · 범례: 원 크기 = 밸류에이션</div>
+    </div>
+  );
+}
+
 function DynamicsBoard({ companies, cats, sectionRef }) {
   const inView = useInView(sectionRef);
   const dynProg = useProgress(inView, 1400);
   const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
-
-  const arenas = [
-    {
-      title: "스크린리스 밴드 3파전",
-      en: "Screenless Band Battle",
-      desc: "Whoop 4.0 vs Fitbit Air vs Garmin CIRQA — 구독 vs 일회성 vs 프리미엄 하드웨어",
-      players: ["Whoop", "Fitbit Air", "Garmin"],
-      dims: [
-        { label: "가격 모델", values: ["구독 $199~$359/yr", "$99.99 일회성", "$509 일회성(리크)"] },
-        { label: "FDA 인증", values: ["MG ECG clearance", "AFib 감지", "미확인"] },
-        { label: "배터리", values: ["4~5일", "7일", "미공개"] },
-        { label: "AI 코칭", values: ["스트레인 코치", "Gemini 기반", "Body Battery"] },
-      ],
-    },
-    {
-      title: "AI 헬스 에이전트 경쟁",
-      en: "AI Health Agent Layer",
-      desc: "OpenAI · Google · 애플 — 누가 건강 데이터 AI를 지배할 것인가",
-      players: ["OpenAI", "Google Health", "Apple Intelligence"],
-      dims: [
-        { label: "접근 방식", values: ["범용 에이전트 → 헬스", "Gemini + Fitbit", "온디바이스 + HealthKit"] },
-        { label: "데이터 소스", values: ["API 파트너십", "Fitbit+Pixel", "Watch+iPhone+HealthKit"] },
-        { label: "차별화", values: ["S-1 filed · $340B+", "대중 시장 접근", "프라이버시 + 생태계"] },
-      ],
-    },
-    {
-      title: "GLP-1 + 디지털 코칭 스택",
-      en: "GLP-1 & Digital Coaching · $82B Market",
-      desc: "GLP-1 시장 $82B(2026E) — 체중관리 앱이 약물 치료 동반자로 재편",
-      players: ["Noom", "WeightWatchers", "MFP"],
-      dims: [
-        { label: "포지셔닝", values: ["GLP-1 동반 코칭", "GLP-1 원격 처방", "AI 칼로리 비전"] },
-        { label: "매출/규모", values: ["ARR $600M+", "~$0.5B 시총", "$1B+(매각 검토)"] },
-        { label: "전략", values: ["CBT+임상 파트너십", "Sequence 인수·처방 번들", "Cal AI 인수·AI-first"] },
-        { label: "GLP-1 연계", values: ["원격의료 병행", "직접 처방 플랫폼", "영양 추적 보완재"] },
-      ],
-    },
-    {
-      title: "스마트링 시장 경쟁",
-      en: "Smart Ring Battle",
-      desc: "Oura 74% 점유율 방어 vs Ultrahuman·Amazfit 도전",
-      players: ["Oura", "Ultrahuman Ring", "Amazfit"],
-      dims: [
-        { label: "점유율", values: ["74% (Omdia '25)", "성장 중", "신규 진입"] },
-        { label: "차별화", values: ["수면 정확도 1위", "CGM 연동 대사", "가성비 포지셔닝"] },
-        { label: "가격", values: ["$349+구독 $6/월", "$349 구독 없음", "$199 (추정)"] },
-      ],
-    },
-    {
-      title: "IPO 파이프라인",
-      en: "IPO Pipeline 2026–27",
-      desc: "헬스케어 유니콘들의 상장 경쟁 — 투자자 주목 포인트",
-      players: ["Oura ($11B)", "Whoop ($10.1B)", "Strava ($2.2B)"],
-      dims: [
-        { label: "단계", values: ["Series E 완료", "Series G 완료", "Series G 완료"] },
-        { label: "매출", values: ["$2B(26E 전망)", "$1.1B(추정)", "$0.5B(추정)"] },
-        { label: "전망", values: ["Ring 5 발표·IPO 유력", "MG ECG FDA 차별화", "130M 사용자 기반"] },
-      ],
-    },
-  ];
 
   return (
     <section className="board" ref={sectionRef} data-screen-label="Competitive Map">
@@ -565,47 +785,11 @@ function DynamicsBoard({ companies, cats, sectionRef }) {
       <div className="board-head">
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
-          <h2>경쟁 다이내믹스 <span className="board-en">Competitive Dynamics Map · 2026.06</span></h2>
-          <p>주요 경쟁 구도와 전략적 포지셔닝 한눈에 보기</p>
+          <h2>경쟁 다이내믹스 <span className="board-en">Competitive Dynamics · Knowledge Graph</span></h2>
+          <p>기업 간 경쟁·파트너십·M&A·생태계 관계를 인터랙티브 그래프로 탐색</p>
         </div>
       </div>
-      <div className="dyn-grid">
-        {arenas.map((arena, ai) => {
-          const local = staggerP(dynProg, ai, arenas.length);
-          return (
-            <div className="dyn-arena" key={ai} style={{ opacity: local, transform: `translateY(${(1 - local) * 20}px)` }}>
-              <div className="dyn-arena-head">
-                <h3>{arena.title}</h3>
-                <span className="dyn-arena-en">{arena.en}</span>
-              </div>
-              <p className="dyn-arena-desc">{arena.desc}</p>
-              <div className="dyn-table">
-                <div className="dyn-thead">
-                  <span className="dyn-dim-label"></span>
-                  {arena.players.map((p, pi) => {
-                    const co = companies.find(c => p.startsWith(c.name.split(" (")[0]));
-                    const cat = co ? catMap[co.cat] : null;
-                    return (
-                      <span key={pi} className="dyn-player" style={{ color: cat ? cat.accent : 'var(--ink)' }}>
-                        {co && <CoLogo name={co.name} domain={co.domain} accent={cat ? cat.accent : 'var(--accent)'} />}
-                        <b>{p}</b>
-                      </span>
-                    );
-                  })}
-                </div>
-                {arena.dims.map((dim, di) => (
-                  <div className="dyn-trow" key={di}>
-                    <span className="dyn-dim-label">{dim.label}</span>
-                    {dim.values.map((v, vi) => (
-                      <span key={vi} className="dyn-cell">{v}</span>
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <KnowledgeGraph companies={companies} cats={cats} catMap={catMap} progress={dynProg} mode="dynamics" />
      </AnimCtx.Provider>
     </section>
   );
@@ -618,30 +802,17 @@ function BizModelBoard({ companies, cats, sectionRef, theme }) {
   const catMap = Object.fromEntries(cats.map(c => [c.id, c]));
   const models = window.DASH.BIZ_MODELS || [];
 
-  const modelTypes = [
-    { label: "하드웨어 프리미엄", color: "#1428A0" },
-    { label: "기기 + 구독", color: "#7A38D6" },
-    { label: "기기무료 + 구독 전용", color: "#D23B3B" },
-    { label: "프리미엄 하드웨어", color: "#0E8F6E" },
-    { label: "저가 일회성", color: "#F59E0B" },
-    { label: "하드웨어 + 콘텐츠 구독", color: "#0891B2" },
-    { label: "프리미엄 구독", color: "#2D6BFF" },
-    { label: "구독 + 원격의료", color: "#C026D3" },
-    { label: "프리미엄 + 광고", color: "#16A34A" },
-  ];
-  const modelColor = m => (modelTypes.find(t => t.label === m) || {}).color || theme.ink;
-
   return (
     <section className="board" ref={sectionRef} data-screen-label="Biz Model">
      <AnimCtx.Provider value={inView}>
       <div className="board-head">
         <span className="board-tab" style={{ background: "var(--accent)" }} />
         <div className="board-titles">
-          <h2>수익화 모델 <span className="board-en">Biz Model & Monetization · 2026.06</span></h2>
-          <p>기업별 수익 구조 · 가격 전략 · ARPU · 리텐션 · 성장 전략 비교</p>
+          <h2>수익화 모델 <span className="board-en">Biz Model Network · 2026.06</span></h2>
+          <p>기업 간 수익 모델 연관성 · 가격 전략 · 생태계 연동을 그래프로 탐색</p>
         </div>
       </div>
-
+      <KnowledgeGraph companies={companies} cats={cats} catMap={catMap} progress={bizProg} mode="bizmodel" />
       <div className="biz-grid">
         {models.map((m, i) => {
           const local = staggerP(bizProg, i, models.length);
@@ -656,43 +827,18 @@ function BizModelBoard({ companies, cats, sectionRef, theme }) {
                 {co && <CoLogo name={co.name} domain={co.domain} accent={cat ? cat.accent : "var(--accent)"} />}
                 <div className="biz-card-titles">
                   <b className="biz-name">{m.name}</b>
-                  <span className="biz-model-tag" style={{ background: modelColor(m.model), color: "#fff" }}>{m.model}</span>
+                  <span className="biz-model-tag" style={{ background: cat ? cat.accent : "var(--accent)", color: "#fff" }}>{m.model}</span>
                 </div>
               </div>
-
               <div className="biz-metrics">
-                <div className="biz-metric">
-                  <em>가격</em>
-                  <b>{m.pricing}</b>
-                </div>
-                <div className="biz-metric">
-                  <em>매출</em>
-                  <b><AnimatedNumber value={m.revenue} /></b>
-                </div>
-                <div className="biz-metric">
-                  <em>ARPU</em>
-                  <b>{m.arpu}</b>
-                </div>
-                <div className="biz-metric">
-                  <em>리텐션</em>
-                  <b>{m.retention}</b>
-                </div>
+                <div className="biz-metric"><em>가격</em><b>{m.pricing}</b></div>
+                <div className="biz-metric"><em>매출</em><b><AnimatedNumber value={m.revenue} /></b></div>
+                <div className="biz-metric"><em>ARPU</em><b>{m.arpu}</b></div>
+                <div className="biz-metric"><em>리텐션</em><b>{m.retention}</b></div>
               </div>
-
-              <div className="biz-sub-row">
-                <em>구독 구조</em>
-                <span>{m.sub}</span>
-              </div>
-
-              <div className="biz-moat">
-                <em>경쟁 해자 (Moat)</em>
-                <span>{m.moat}</span>
-              </div>
-
-              <div className="biz-strategy">
-                <em>수익화 전략</em>
-                <span>{m.strategy}</span>
-              </div>
+              <div className="biz-sub-row"><em>구독 구조</em><span>{m.sub}</span></div>
+              <div className="biz-moat"><em>경쟁 해자</em><span>{m.moat}</span></div>
+              <div className="biz-strategy"><em>전략</em><span>{m.strategy}</span></div>
               {m.src && <div className="biz-src">{m.src}</div>}
             </div>
           );
