@@ -242,6 +242,45 @@ function hlInline(str, key) {
     return <React.Fragment key={key + "-" + i}>{p}</React.Fragment>;
   });
 }
+function MatrixRain() {
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+  useEffect(() => {
+    const chars = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$@#%&";
+    function initRain(canvas) {
+      if (!canvas) return null;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width = 32;
+      const h = canvas.height = canvas.parentElement ? canvas.parentElement.offsetHeight : 600;
+      const fontSize = 11;
+      const cols = Math.floor(w / fontSize);
+      const drops = Array.from({ length: cols }, () => Math.random() * -20);
+      return setInterval(() => {
+        ctx.fillStyle = "rgba(10,10,10,0.12)";
+        ctx.fillRect(0, 0, w, h);
+        for (let i = 0; i < cols; i++) {
+          const ch = chars[Math.floor(Math.random() * chars.length)];
+          const bright = Math.random() > 0.92;
+          ctx.fillStyle = bright ? "#7fff7f" : "rgba(0,255,65," + (0.25 + Math.random() * 0.35) + ")";
+          ctx.font = (bright ? "bold " : "") + fontSize + "px monospace";
+          ctx.fillText(ch, i * fontSize, drops[i] * fontSize);
+          if (drops[i] * fontSize > h && Math.random() > 0.96) drops[i] = 0;
+          drops[i] += 0.4 + Math.random() * 0.3;
+        }
+      }, 70);
+    }
+    const id1 = initRain(leftRef.current);
+    const id2 = initRain(rightRef.current);
+    return () => { if (id1) clearInterval(id1); if (id2) clearInterval(id2); };
+  }, []);
+  return (
+    <>
+      <canvas ref={leftRef} className="matrix-rain matrix-left" />
+      <canvas ref={rightRef} className="matrix-rain matrix-right" />
+    </>
+  );
+}
+
 function formatAnswer(text) {
   if (!text) return null;
   return String(text).split(/\n\n+/).map((para, pi) => (
@@ -424,10 +463,11 @@ function AIChatbot({ onNav }) {
       {answer && (
         <div className="chatbot-overlay" onClick={closeAnswer}>
           <div className="chat-panel" onClick={onPanelClick}>
+            <MatrixRain />
             <div className="chat-head">
               <span className="chat-ava"><Icon name="ai" size={16} /></span>
-              <b>AI 헬스 어시스턴트</b>
-              {typing && <span className="chat-typing">답변 작성 중…</span>}
+              <b>AI HEALTH TERMINAL</b>
+              {typing && <span className="chat-typing">PROCESSING…</span>}
               <button className="chatbot-bubble-close" onClick={closeAnswer}><Icon name="x" size={15} sw={2} /></button>
             </div>
             <div className="chat-body">
